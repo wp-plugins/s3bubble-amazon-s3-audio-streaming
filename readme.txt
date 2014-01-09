@@ -41,12 +41,10 @@ You will need an s3audbile account to use this, sign up here. http://S3Bubble.co
 
 Sign up enter your S3Bubble email and choose a bucket to loop through.
 
-<h3>If you would like to put this feed within your template please use the following code</h3>
-<code>&lt;?php $s3audible = new s3audible(); echo $s3audible->s3audible_player(array('autoplay' => 'false',
-		'bucket' => 'enter-your-bucket','folder' => '')); ?&gt;</code>
+<h3>If you would like to put this feed within your template please contact us.</h3>
 
 <h3>If you would like to put this feed within a post or page use the following code.</h3>
-<code>[s3audible autoplay="true" bucket="enter-your-bucket"]</code>
+<code>[s3bubble autoplay="true" bucket="enter-your-bucket" folder="enter-your-folder"]</code>
 
 <h3>Or simple use the widget</h3>
 
@@ -89,7 +87,5 @@ Security bug - NOW FIXED
 Force download - NOW FIXED
 
 Currently issues with flash playback off mp3 files in firefox - NOW FIXED
-
-
 
 [Any Problems Add Here](https://s3bubble.com/contact/ "problems")
