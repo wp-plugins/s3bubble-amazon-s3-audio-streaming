@@ -68,7 +68,6 @@ if (!class_exists("s3bubble_audio")) {
 			
 			add_action('admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
 			add_action( 'wp_head', array( $this, 's3bubble_audio_css' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'include_jquery' ) );
 			add_action( 'wp_footer', array( $this, 's3bubble_audio_javascript' ) );
 			add_action( 'admin_head', array( $this, 's3bubble_audio_css_admin' ) );
 			add_action( 'admin_footer', array( $this, 's3bubble_audio_javascript_admin' ) );
