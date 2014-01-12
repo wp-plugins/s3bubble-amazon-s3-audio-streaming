@@ -3,7 +3,7 @@
 Plugin Name: S3bubble Amazon S3 Cheap Secure Audio Streaming
 Plugin URI: http://www.s3bubble.com/
 Description: S3Bubble dropbox with plugins is a wordpress plugin that will allow you to stream audio and video directly from Amazon s3, sign up for a account at s3bubble.com. 
-Version: 1
+Version: 1.1
 Author: S3Bubble
 Author URI: http://s3bubble.com/
 License: GPL2
@@ -35,7 +35,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $s3audible_email = '';
 		public $bucket          = '';
 		public $folder          = '';
-		public $colour          = '#d84a38';
+		public $colour          = '#fff';
 		public $width           = '100%';
 		public $autoplay        = 'yes';
 		public $jtoggle		    = 'true';
@@ -228,24 +228,28 @@ if (!class_exists("s3bubble_audio")) {
 	
 	<div id="icon-options-general" class="icon32"></div>
 	<h2>S3Bubble Amazon S3 Media Cheap Secure Media Streaming</h2>
-	
+	<h3><span>Manage all your media audio and video in one place. Listen watch and upload with your mobile. <a href="https://itunes.apple.com/us/app/s3bubble/id720256052?ls=1&mt=8" target="_blank">iPhone App</a> ~ <a href="https://play.google.com/store/apps/details?id=com.s3bubbleAndroid&hl=en_GB" target="_blank">Android App</a></span></h3>
 	<div class="metabox-holder has-right-sidebar">
 		
 		<div class="inner-sidebar" style="width:50%">
  
      <h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? this can be grabbed from your s3bubble account it will be auto generated for you.</h3> 
                  <div class="postbox">
-				<h3><span>Audio Shortcode Example</span></h3>
-				
+				<h3><span>Audio Playlist Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
 				<div class="inside">
-					<pre class="s3bubble-pre">[s3bubble bucket="enter-your-bucket" folder="enter-your-bucket-folder" autoplay="true"]</pre>
+					<pre class="s3bubble-pre">[s3bubble bucket="enter-your-bucket" folder="enter-your-bucket-folder"]</pre>
+				</div>
+				<h3><span>Audio Single Player Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
+				<div class="inside">
+					<pre class="s3bubble-pre">[s3bubbleSingle bucket="enter-your-bucket" track="enter-your-track-name"]</pre>
 				</div>
 				<div class="inside">
 					<h3><span>Params - these can be added to the shortcode</span></h3>
 					<p>bucket: //your amazon bucket<br>
 						folder: //your amazon s3 folder<br>
 						autoplay: //true or false<br>
-					height: //height of the player<br><p>
+					    height: //height of the player<br>
+					    playlist: //hidden<p>
 				</div>
 			</div>
 			
