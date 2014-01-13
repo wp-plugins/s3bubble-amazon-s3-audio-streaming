@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: S3bubble Amazon S3 Cheap Secure Audio Streaming
+Plugin Name: S3bubble Amazon S3 Cloud Media Streaming
 Plugin URI: http://www.s3bubble.com/
 Description: S3Bubble dropbox with plugins is a wordpress plugin that will allow you to stream audio and video directly from Amazon s3, sign up for a account at s3bubble.com. 
-Version: 1.1
+Version: 1.2 
 Author: S3Bubble
 Author URI: http://s3bubble.com/
 License: GPL2
@@ -71,8 +71,10 @@ if (!class_exists("s3bubble_audio")) {
 			add_action( 'wp_footer', array( $this, 's3bubble_audio_javascript' ) );
 			add_action( 'admin_head', array( $this, 's3bubble_audio_css_admin' ) );
 			add_action( 'admin_footer', array( $this, 's3bubble_audio_javascript_admin' ) );
-			add_shortcode( 's3bubble', array( $this, 's3bubble_audio_player' ) );
-			add_shortcode( 's3bubbleSingle', array( $this, 's3bubble_audio_single_player' ) );			
+			add_shortcode( 's3bubbleAudio', array( $this, 's3bubble_audio_player' ) );
+			add_shortcode( 's3bubbleAudioSingle', array( $this, 's3bubble_audio_single_player' ) );
+			add_shortcode( 's3bubbleVideo', array( $this, 's3bubble_video_player' ) );
+			add_shortcode( 's3bubbleVideoSingle', array( $this, 's3bubble_video_single_player' ) );			
 			
 		} // function
 		
@@ -91,7 +93,7 @@ if (!class_exists("s3bubble_audio")) {
 					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;font-style: normal!important;}
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
-					div.s3-jplayer {background-color:'.stripcslashes($colour).';}   
+					}   
 					</style>';
 		}
 		// include css
@@ -167,7 +169,7 @@ if (!class_exists("s3bubble_audio")) {
 		function s3bubble_audio_admin_menu()  
     	{	
 			$icon_url = "http://s3audible.s3.amazonaws.com/icons/wps3icon.png";
-			add_menu_page( 's3bubble_audio', 'S3Bubble Audio', 10, 's3bubble_audio', array($this, 's3bubble_audio_admin'), $icon_url );
+			add_menu_page( 's3bubble_audio', 'S3Bubble Media', 10, 's3bubble_audio', array($this, 's3bubble_audio_admin'), $icon_url );
     	}
 		
 		function s3bubble_audio_admin()  
@@ -227,21 +229,37 @@ if (!class_exists("s3bubble_audio")) {
 <div class="wrap">
 	
 	<div id="icon-options-general" class="icon32"></div>
-	<h2>S3Bubble Amazon S3 Media Cheap Secure Media Streaming</h2>
+	<h2>S3Bubble Amazon S3 Media Cloud Media Streaming</h2>
 	<h3><span>Manage all your media audio and video in one place. Listen watch and upload with your mobile. <a href="https://itunes.apple.com/us/app/s3bubble/id720256052?ls=1&mt=8" target="_blank">iPhone App</a> ~ <a href="https://play.google.com/store/apps/details?id=com.s3bubbleAndroid&hl=en_GB" target="_blank">Android App</a></span></h3>
 	<div class="metabox-holder has-right-sidebar">
 		
+		
 		<div class="inner-sidebar" style="width:50%">
- 
-     <h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? this can be grabbed from your s3bubble account it will be auto generated for you.</h3> 
+			
+			<div class="postbox">
+				<h3><span>TUTORIAL SECTION</span></h3>
+				<h3><span>Add Video From Your S3Bubble.com Account. <a href="http://wordpress.org/plugins/s3bubble-amazon-s3-video-streaming/" target="_blank">Wordpress Plugin</a></span></h3>
+				<div class="inside">
+					<iframe style="width:100%;max-width:640px;" height="340" src="//s3bubble.com/watch?v=NZpmgMSQb&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen></iframe>
+				</div>
+			</div>
                  <div class="postbox">
+                 	 <h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? this can be grabbed from your s3bubble account it will be auto generated for you.</h3> 
 				<h3><span>Audio Playlist Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
 				<div class="inside">
-					<pre class="s3bubble-pre">[s3bubble bucket="enter-your-bucket" folder="enter-your-bucket-folder"]</pre>
+					<pre class="s3bubble-pre">[s3bubbleAudio bucket="enter-your-bucket" folder="enter-your-bucket-folder"]</pre>
 				</div>
 				<h3><span>Audio Single Player Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
 				<div class="inside">
 					<pre class="s3bubble-pre">[s3bubbleSingle bucket="enter-your-bucket" track="enter-your-track-name"]</pre>
+				</div>
+				<h3><span>Video Playlist Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
+				<div class="inside">
+					<pre class="s3bubble-pre">[s3bubbleVideo bucket="enter-your-bucket" folder="enter-your-bucket-folder"]</pre>
+				</div>
+				<h3><span>Video Single Player Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
+				<div class="inside">
+					<pre class="s3bubble-pre">[s3bubbleVideoSingle bucket="enter-your-bucket" track="enter-your-track-name"]</pre>
 				</div>
 				<div class="inside">
 					<h3><span>Params - these can be added to the shortcode</span></h3>
@@ -252,15 +270,7 @@ if (!class_exists("s3bubble_audio")) {
 					    playlist: //hidden<p>
 				</div>
 			</div>
-			
-			<div class="postbox">
-				<h3><span>TUTORIAL SECTION</span></h3>
-				<h3><span>Add Video From Your S3Bubble.com Account. <a href="http://wordpress.org/plugins/s3bubble-amazon-s3-video-streaming/" target="_blank">Wordpress Plugin</a></span></h3>
-				<div class="inside">
-					<iframe style="width:100%;max-width:640px;" height="340" src="//s3bubble.com/watch?v=NZpmgMSQb&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen></iframe>
-				</div>
-			</div>
-			
+
 			<div class="postbox">
 				<h3><span>If you dont already have a amazon s3 account create a free one <a href="https://portal.aws.amazon.com/gp/aws/developer/registration/index.html" target="_blank">Amazon S3 Storage</a></span></h3>
 				<div class="inside">
@@ -345,12 +355,13 @@ if (!class_exists("s3bubble_audio")) {
           <span class="description">Only allow download link for logged in users.</p></td>
       </tr>
       
-       <tr>
-          <td><span class="description">The powered by s3bubble link will only show during the trial period or if you upgrade it will be removed.</p></td>
-      </tr>
+     
+          
 
     </table>
     <br/>
+    <span class="description">The powered by s3bubble link will only show during the trial period or if you upgrade it will be removed.</p>
+    
     <span class="submit" style="border: 0;">
     <input type="submit" name="submit" class="button button-primary button-hero" value="Save Settings" />
     </span>
@@ -413,6 +424,50 @@ if (!class_exists("s3bubble_audio")) {
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
 		   return '<div class="s3audibleSingle s3bubblePlayer" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		
+        }
+        
+        function s3bubble_video_player($atts){ 
+	   
+            // get option from database
+			$s3audible_username = get_option("s3-s3audible_username");
+			$s3audible_email = get_option("s3-s3audible_email");		
+            $bucket	         = get_option("s3-bucket");
+			$loggedin        = get_option("s3-loggedin");
+			$search          = get_option("s3-search");
+			if($loggedin == 'true'){
+				if ( is_user_logged_in() ) {
+					$download = get_option("s3-download");
+				}
+			}else{
+				$download = get_option("s3-download");
+			}
+		   $array = array($s3audible_username, $s3audible_email);
+           $bind = implode("|", $array);
+		   $userdata = base64_encode($bind);
+		   return '<div class="s3video s3bubblePlayer" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		
+        }
+		
+		function s3bubble_video_single_player($atts){ 
+	   
+            // get option from database
+			$s3audible_username = get_option("s3-s3audible_username");
+			$s3audible_email = get_option("s3-s3audible_email");		
+            $bucket	         = get_option("s3-bucket");
+			$loggedin        = get_option("s3-loggedin");
+			$search          = get_option("s3-search");
+			if($loggedin == 'true'){
+				if ( is_user_logged_in() ) {
+					$download = get_option("s3-download");
+				}
+			}else{
+				$download = get_option("s3-download");
+			}
+		   $array = array($s3audible_username, $s3audible_email);
+           $bind = implode("|", $array);
+		   $userdata = base64_encode($bind);
+		   return '<div class="s3videoSingle s3bubblePlayer" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'"  data-track="'.$atts['track'].'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
 		
         }
 		
