@@ -1,4 +1,4 @@
- === S3Bubble Amazon S3 Media Cheap Secure Audio Streaming ===
+ === S3Bubble Amazon S3 Cloud Video And Audio Streaming ===
 Contributors: Samuel East
 Tags: Amazon S3, Music Player, Mp3 Player, Video Player, responsive, iphone, ipad, android, Audio Player, s3bubble, s3audible, Amazon Radio, sermons, meetings, churches, radio, youtube, coaching, business, talks, video blogging, spotify, pinterest, amazon, amazon s3, s3, player, streaming, stream, audibase, video, audio, images, media
 Requires at least: 2.0
@@ -9,6 +9,25 @@ License: GPLv2
 == Description ==
 
 S3Bubble stream music or video directly from the cloud your Amazon s3 account, sign up for a account at [S3bubble.com](http://s3bubble.com "s3bubble") you can then manage and control your playlists. S3Bubble will play on multiple devices being a html5 player it has support for iphone ipad etc. 
+
+Audio Playlists.
+Single Audio Player.
+
+Video Playlists.
+Single Video Player.
+
+Search Videos and Audio.
+Download Options.
+Only allow logged in users to download.
+
+<h3>Params - these can be added to the shortcode</h3>
+bucket: //your amazon bucket
+folder: //your amazon s3 folder
+autoplay: //true or false
+height: //height of the player
+playlist: //hidden
+
+[Examples](http://s3video.users38.interdns.co.uk/ "examples")
 
 [youtube http://www.youtube.com/watch?v=QQHvUeWrIas]
 
