@@ -21,11 +21,11 @@ Download Options.
 Only allow logged in users to download.
 
 <h3>Params - these can be added to the shortcode</h3>
-bucket: //your amazon bucket
-folder: //your amazon s3 folder
-autoplay: //true or false
-height: //height of the player
-playlist: //hidden
+<code>bucket: //your amazon bucket</code>
+<code>folder: //your amazon s3 folder</code>
+<code>autoplay: //true or false</code>
+<code>height: //height of the player</code>
+<code>playlist: //hidden</code>
 
 [Examples](http://s3video.users38.interdns.co.uk/ "examples")
 
