@@ -3,7 +3,7 @@
 Plugin Name: S3bubble Amazon S3 Cloud Media Streaming
 Plugin URI: http://www.s3bubble.com/
 Description: S3Bubble dropbox with plugins is a wordpress plugin that will allow you to stream audio and video directly from Amazon s3, sign up for a account at s3bubble.com. 
-Version: 1.2 
+Version: 1.3 
 Author: S3Bubble
 Author URI: http://s3bubble.com/
 License: GPL2
