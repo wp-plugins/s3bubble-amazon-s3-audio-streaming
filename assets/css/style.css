@@ -10,7 +10,8 @@ div.jp-video-full div.s3-jplayer{top:0;left:0;position:fixed!important;overflow:
 div.jp-video-full div.s3-gui{position:fixed!important;bottom:0;left:0;width:100%;height:40px;z-index:1001}
 div.jp-video-full div.s3-interface{position:absolute!important;bottom:0;left:0}
 .s3-video-play{position:absolute;top:42%;left:50%;margin-left:-62px;margin-top:-40px;width:124px;height:80px;background:#202020;border-radius:3px}
-.s3-video-play .s3-video-play-icon{width:30px;height:30px;display:block;color:#FFF;text-decoration:none;font-size:40px;text-align:center;margin:auto;line-height: 80px;}
+.s3-video-play .s3-video-play-icon{width:100%;height:100%;display:block;color:#FFF;text-decoration:none;font-size:40px;text-align:center;position: relative;}
+.s3-video-play .s3-video-play-icon i {font-size: 40px;position: absolute;top: 27%;left: 50px;line-height: 35px;}
 .s3-interface{height:40px;width:100%;position:relative;float:left}
 .s3-playlist{float:left;width:100%;clear:both}
 .s3-no-solution{position:absolute;text-align:center;width:100%}
