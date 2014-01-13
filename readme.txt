@@ -10,11 +10,11 @@ License: GPLv2
 
 S3Bubble stream music or video directly from the cloud your Amazon s3 account, sign up for a account at [S3bubble.com](http://s3bubble.com "s3bubble") you can then manage and control your playlists. S3Bubble will play on multiple devices being a html5 player it has support for iphone ipad etc. 
 
-Audio Playlists.
-Single Audio Player.
+<h3>Audio Playlists.</h3>
+<h3>Single Audio Player.</h3>
 
-Video Playlists.
-Single Video Player.
+<h3>Video Playlists.</h3>
+<h3>Single Video Player.</h3>
 
 Search Videos and Audio.
 Download Options.
