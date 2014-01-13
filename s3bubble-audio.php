@@ -238,7 +238,6 @@ if (!class_exists("s3bubble_audio")) {
 			
 			<div class="postbox">
 				<h3><span>TUTORIAL SECTION</span></h3>
-				<h3><span>Add Video From Your S3Bubble.com Account. <a href="http://wordpress.org/plugins/s3bubble-amazon-s3-video-streaming/" target="_blank">Wordpress Plugin</a></span></h3>
 				<div class="inside">
 					<iframe style="width:100%;max-width:640px;" height="340" src="//s3bubble.com/watch?v=NZpmgMSQb&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen></iframe>
 				</div>
@@ -251,7 +250,7 @@ if (!class_exists("s3bubble_audio")) {
 				</div>
 				<h3><span>Audio Single Player Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
 				<div class="inside">
-					<pre class="s3bubble-pre">[s3bubbleSingle bucket="enter-your-bucket" track="enter-your-track-name"]</pre>
+					<pre class="s3bubble-pre">[s3bubbleAudioSingle bucket="enter-your-bucket" track="enter-your-track-name"]</pre>
 				</div>
 				<h3><span>Video Playlist Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
 				<div class="inside">
@@ -282,7 +281,6 @@ if (!class_exists("s3bubble_audio")) {
  
 		<div id="post-body">
 			<div id="post-body-content" style="margin-right: 51%;">
- 
 				<div class="postbox">
 					<h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? if you would like us to get you started and set you up with a audio playlist and embed video in your posts please just <a href="mailto:support@S3Bubble.com" target="_blank">contact us</a>.</h3>
 					<h3><span>Please sign up for an account at <a href="http://S3Bubble.com/" target="_blank">http://S3Bubble.com</a> you will need to use the username and email you signed up with.</span></h3>
@@ -368,6 +366,11 @@ if (!class_exists("s3bubble_audio")) {
   </form>
 
 					</div> <!-- .inside -->
+					
+					<div class="postbox">
+				<iframe style="width:100%" height="340" src="//s3bubble.com/watch/?v=zchrXjGHc&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen=""></iframe>
+				</div>
+				
 				</div>
 			</div> <!-- #post-body-content -->
 		</div> <!-- #post-body -->
