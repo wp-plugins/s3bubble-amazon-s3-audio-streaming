@@ -1,0 +1,77 @@
+.s3videoSingle { height: 471px;}
+.s3audibleSingle { height: 70px;border: 1px solid #e2e2e2;}
+.s3-contain { position: relative;overflow: hidden;}
+.s3-type-playlist{border: 1px solid #e2e2e2;width:100%;height:100%;float:left;position:relative;background-color:#fff;color:#CCC;text-shadow:none;min-height:40px}
+.s3-type-playlist-single{width:100%;height:40px!important;float:left;position:relative;min-height:36px;border-radius: 3px !important;-moz-border-radius: 3px !important;-webkit-border-radius: 3px !important;}
+.s3-playlist a,.s3-playlist p,.s3-playlist h3,.s3-playlist ul,.s3-playlist li,.s3-title{color:#999!important}
+.s3bubbleBrand{background:#222;text-align:center;position:absolute;width:100%;opacity:0.8;padding:5px}
+div.jp-video-full{width:480px;height:270px;position:static!important}
+div.jp-video-full div div{z-index:1000}
+div.jp-video-full div.s3-jplayer{top:0;left:0;position:fixed!important;overflow:hidden}
+div.jp-video-full div.s3-gui{position:fixed!important;bottom:0;left:0;width:100%;height:40px;z-index:1001}
+div.jp-video-full div.s3-interface{position:absolute!important;bottom:0;left:0}
+.s3-video-play{position:absolute;top:50%;left:50%;margin-left:-62px!important;margin-top:-40px!important;width:124px;height:80px;background:#e2e2e2;border-radius:3px}
+.s3-video-play .s3-video-play-icon{width:100%;height:100%;display:block;color:#FFF;text-decoration:none;font-size:40px;text-align:center;position: relative;}
+.s3-video-play .s3-video-play-icon i {font-size: 40px;position: absolute;top: 29%;left: 50px;line-height: 35px;}
+.s3-interface{height:40px;width:100%;position:relative;float:left}
+.s3-playlist{float:left;width:100%;clear:both}
+.s3-no-solution{position:absolute;text-align:center;width:100%}
+.s3loadercenter{position:absolute!important;display:block;top:53px!important;text-align:center!important;width:100%!important;font-size:9px!important}
+.s3desccenter a{font-size:9px!important}
+.s3desccenter{text-align:center;position:absolute;top:25px;font-size:10px;left:50%;width:104px;margin-left:-52px}
+.s3bubble-rail{width:60%;height:20px;margin-top:16px;position:absolute;right:50%;margin-right:-30%;top:0px;padding:0!important}
+.s3-progress{background-color:#999!important;width:70%;height:8px;-webkit-border-radius:3px!important;-moz-border-radius:3px!important;border-radius:3px!important;border-radius: 2px;-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2) inset;box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2) inset;float:left;text-align:center;margin:auto}
+div.s3-video .s3-progress{border-top:1px solid #180a1f;border-bottom:1px solid #554560;width:100%;background-image:none;padding:0}
+.s3-seek-bar{width:0;height:100%;overflow:hidden;cursor:pointer;background-color:#fff!important;-webkit-border-radius:3px!important;-moz-border-radius:3px!important;border-radius:3px!important}
+.s3-play-bar{width:0;overflow:hidden;height:8px;}
+.s3-controls-holder{width:auto;height:30px;border-radius:6px!important;-moz-border-radius:6px!important;-webkit-border-radius:6px!important;position:absolute;top:0;right:0;float:left}
+ul.s3-controls{width:90px;height:20px;float:left;position:absolute;left:5px;margin:10px 0!important;padding:0!important}
+ul.s3-controls li{float: left;border:none!important;background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;display:inline-block;list-style:none!important;text-align:center;margin:0!important;padding:0!important}
+.s3-togcontainer{position:absolute;right:0;width:60px;height:30px;margin:0;padding:0}
+ul.s3-toggles{position:absolute;width:160px;height:40px;top:0;right:8px;margin:0!important;padding:0!important}
+.s3-playlist ul{margin:0!important;padding:0!important}
+.s3-playlist ul li{text-align: left !important;border:none!important;background:none!important;border-bottom:1px solid #e2e2e2!important;height:30px!important;line-height:16px!important;list-style:none outside none!important;position:relative;text-shadow:none!important;width:100%!important;margin:0!important;padding:0!important}
+.s3-playlist ul li:before{content:" "!important;background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;width:15px;height:15px}
+.s3-playlist ul li div{float:left;width:100%!important;margin-left:5px}
+.s3-playlist ul li a{position:absolute;top:7px;text-shadow:none!important;list-style:none!important;text-decoration:none!important;font-family:'Open Sans', sans-serif;font-size:12px!important;display:block!important;overflow:hidden;width:80%;text-overflow:ellipsis;white-space:nowrap;border:none!important;margin:0px 8px!important;padding:0!important}
+ul.s3-toggles li a.s3-repeat,ul.s3-toggles li a.s3-repeat-off{background:transparent url(https://s3.amazonaws.com/s3audible/icons/wp_icon.png) no-repeat center center scroll;width:23px;height:15px;display:block!important;position:absolute;top:7px;right:0}
+.s3-artist{font-size:10px!important;float:right!important;margin:0!important;padding:0!important}
+.s3loadercenter img,.s3-playlist ul li:last-child{border:none!important}
+.s3search{width:100%;text-align:center;height:30px;float:left;margin:10px 0}
+.tsearch{font-family:arial;-webkit-border-radius:15px!important;-moz-border-radius:15px!important;border-radius:15px!important;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);-moz-box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);box-shadow:inset 0 1px 1px rgba(0,0,0,0.075);-webkit-transition:border linear .2s box-shadow linear .2s;-moz-transition:border linear .2s box-shadow linear .2s;-o-transition:border linear .2s box-shadow linear .2s;transition:border linear .2s box-shadow linear .2s;display:inline-block;height:20px;margin-bottom:10px;font-size:12px;line-height:20px;color:#555;vertical-align:middle;width:60%;background:#e2e2e2!important;border:none!important;padding:3px 10px!important}
+.s3-togcontainer-video{text-indent:-9999em;position:absolute;right:0;width:90px;height:30px;margin:0!important;padding:0!important}
+ul.s3-toggles-video{width:160px;height:40px;float:right;position:absolute;right:0;margin:0!important;padding:0!important}
+div.s3-video-full{width:100%;height:270px;position:static!important}
+div.s3-video-full div div{z-index:1000}
+div.s3-video-full div.s3-jplayer{top:0;left:0;position:fixed!important;overflow:hidden}
+div.s3-video-full div.s3-interface{position:absolute!important;bottom:0;left:0}
+ul.s3-toggles li,ul.s3-toggles-video li{margin: 0!important;padding: 0!important;border:none!important;background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;list-style:none!important;text-align:center}
+ul.s3-toggles li a,ul.s3-toggles-video li a{line-height:0;display:inline-block;width:30px;height:20px;float:right;font-size:20px!important;text-decoration:none;text-align:center;vertical-align:middle;margin:0;padding:10px 0;text-shadow: none;}
+ul.s3-toggles li a i,ul.s3-toggles-video li a i{font-size:20px!important;}
+div.s3-video-full div.s3-gui{position:fixed!important;top:0;left:0;width:100%;height:100%;z-index:1001}
+.s3-jplayer video{background:#000}
+div.s3-video-270p,div.s3-video-360p{width:100%;overflow:hidden}
+ul.s3-controls li a{line-height:0!important;border:none;text-decoration:none;font-size:20px!important;display:inline-block;width:30px;height:20px;float:left;text-align:center;vertical-align:middle;margin:0!important;padding:0!important;text-shadow: none;}
+ul.s3-controls li a i{font-size:20px!important;}
+.s3-playlist ul li a.download{line-height:0!important;border:none;position:absolute;right:2px;top:10px;background-position:center;background-repeat:no-repeat;width:auto;height:auto}
+.s3-playlist ul li a.s3bubble_share{line-height:0!important;border:none;position:absolute;right:30px;top:10px;background-position:center;background-repeat:no-repeat;width:auto;height:auto}
+ul.s3-toggles-video li a{line-height:0!important;text-decoration:none;font-size:18px;display:inline-block;width:30px;height:30px;float:right}
+.s3-type-playlist a > *{font-style:normal;text-decoration:none}
+.videoPoster{background-repeat:no-repeat;background-position:center;text-align:center;margin:auto}
+.videoLoader{width:128px;height:128px;display:block;position:absolute;top:120px;left:50%;margin-left:-64px}
+.s3bubblePlayer,.s3audible,.s3video{margin-bottom:15px;}
+.s3-gui-video,.s3-gui-audio{height:40px;width:100%;float:left;clear:both;background:#e2e2e2}
+.s3-playlist ul li a.s3-playlist-item-remove,ul.s3-controls li a.s3-volume-max{display:none!important}
+.s3-current-time,.s3-duration{font-size:12px!important;z-index:1!important;line-height:17px!important;float:left!important;display:block;height:16px!important;margin-top:-4px!important;width:15%;text-align:center}
+.s3bubblePlayer a > *,.s3bubblePlayer a:focus{text-decoration:none!important;outline:none!important;outline-width:0!important;font-family: FontAwesome !important;}
+.s3-poweredby {background: #e2e2e2;
+padding: 8px;
+position: absolute;
+top: 0px;
+left: 0px;
+z-index: 999;
+font-size: 12px;
+}
+@media all and max-width 520px and min-width 0px {
+.s3bubble-rail{display:none}
+}
