@@ -1,11 +1,11 @@
-.s3videoSingle{height:471px}
+.s3videoSingle{height:472px}
 .s3audibleSingle{height:72px}
 .s3-contain{height:100%;overflow:hidden;position:relative;width:100%}
 .s3-type-playlist{background-color:#fff;color:#CCC;float:left;height:100%;min-height:40px;position:relative;text-shadow:none;width:100%}
 .s3-type-playlist-single{-moz-border-radius:3px!important;-webkit-border-radius:3px!important;border-radius:3px!important;float:left;height:40px!important;min-height:36px;position:relative;width:100%}
 .s3-playlist a,.s3-playlist p,.s3-playlist h3,.s3-playlist ul,.s3-playlist li,.s3-title{color:#999!important}
 .s3bubbleBrand{background:#222;opacity:0.8;padding:5px;position:absolute;text-align:center;width:100%}
-div.jp-video-full{height:270px;position:static!important;width:100%}
+div.jp-video-full{height:100%;position:static!important;width:100%}
 div.jp-video-full div div{z-index:1000}
 div.jp-video-full div.jp-jplayer{left:0;overflow:hidden;position:fixed!important;top:0}
 div.jp-video-full div.jp-gui{height:100%;left:0;position:fixed!important;top:0;width:100%;z-index:99999}
