@@ -27,12 +27,12 @@ autoplay: //true or false
 height: //height of the player
 playlist: //hidden</code>
 
-[Examples](http://s3video.users38.interdns.co.uk/ "examples")
-
-[youtube http://www.youtube.com/watch?v=QQHvUeWrIas]
+[youtube http://www.youtube.com/watch?v=4YIP2VnR7G4]
 
 Important When upgrading
 When upgrading please test if you have any issues upon upgrade please revert back to your working version and inform out team support@S3Bubble.com
+
+<h3>All shortcode is displayed within plugin admin.</h3>
 
 <h3>Tested Browsers</h3>
 Internet Explorer 7, 8, 9, 10
@@ -62,18 +62,9 @@ Sign up enter your S3Bubble email and choose a bucket to loop through.
 
 <h3>If you would like to put this feed within your template please contact us.</h3>
 
-<h3>If you would like to put this feed within a post or page use the following code.</h3>
-<code>[s3bubble autoplay="true" bucket="enter-your-bucket" folder="enter-your-folder"]</code>
-
-<h3>Or simple use the widget</h3>
-
-<h4>For Video</h4>
-
-[For Video Please Use Our Video Plugin](http://wordpress.org/plugins/s3bubble-amazon-s3-video-streaming/ "video")
-
+<h3>All shortcode is displayed within plugin admin.</h3>
 
 1, 2: You're done!
-
 
 == Frequently Asked Questions ==
 

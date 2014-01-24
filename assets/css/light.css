@@ -20,7 +20,7 @@ div.jp-video-full div.s3-gui{bottom:0;height:40px;left:0;position:fixed!importan
 .s3loadercenter{display:block;font-size:9px!important;position:absolute!important;text-align:center!important;top:53px!important;width:100%!important}
 .s3desccenter a{font-size:9px!important}
 .s3desccenter{font-size:10px;left:50%;margin-left:-52px;position:absolute;text-align:center;top:25px;width:104px}
-.s3bubble-rail{height:20px;margin-right:-30%;margin-top:16px;padding:0!important;position:absolute;right:50%;top:0;width:60%}
+.s3bubble-rail{z-index: 2;height:20px;margin-right:-30%;margin-top:16px;padding:0!important;position:absolute;right:50%;top:0;width:60%}
 .s3-progress{-moz-border-radius:3px!important;-webkit-border-radius:3px!important;-webkit-box-shadow:0 1px 1px 0 rgba(0,0,0,0.2) inset;background-color:#999!important;border-radius:3px!important;box-shadow:0 1px 1px 0 rgba(0,0,0,0.2) inset;float:left;height:8px;margin:auto;text-align:center;width:70%}
 div.s3-video .s3-progress{background-image:none;border-bottom:1px solid #554560;border-top:1px solid #180a1f;padding:0;width:100%}
 .s3-seek-bar{-moz-border-radius:3px!important;-webkit-border-radius:3px!important;background-color:#fff!important;border-radius:3px!important;cursor:pointer;height:100%;overflow:hidden;width:0}
