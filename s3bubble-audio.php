@@ -207,8 +207,8 @@ if (!class_exists("s3bubble_audio")) {
 			<div class="postbox">
 				<h3><span>TUTORIAL SECTION</span></h3>
 				<div class="inside">
-					<iframe style="width:100%;max-width:640px;" height="340" src="//s3bubble.com/watch?v=NZpmgMSQb&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen></iframe>
-				</div>
+					<iframe style="width:100%;" height="340" src="//s3bubble.com/watch?v=OBbTKGhOr&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen></iframe>
+				</div> 
 			</div>
                  <div class="postbox">
                  	 <h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? this can be grabbed from your s3bubble account it will be auto generated for you.</h3> 
