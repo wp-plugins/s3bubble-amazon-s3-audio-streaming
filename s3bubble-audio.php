@@ -3,7 +3,7 @@
 Plugin Name: S3bubble Cloud Media Streaming Amazon S3
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble the cloud with plugins a wordpress plugin that will allow you to stream audio and video directly from Amazon s3, sign up for a account at s3bubble.com. 
-Version: 1.5 
+Version: 1.6 
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -38,7 +38,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $width           = '100%';
 		public $autoplay        = 'yes';
 		public $jtoggle		    = 'true';
-		public $s3bubble_share  = 'true';
+		public $s3bubble_share  = 'false';
 		public $download		= 'false';
 		public $loggedin        = 'false';
 		public $search          = 'false';
@@ -234,7 +234,9 @@ if (!class_exists("s3bubble_audio")) {
 						folder: //your amazon s3 folder<br>
 						autoplay: //true or false<br>
 					    height: //height of the player<br>
-					    playlist: //hidden<p>
+					    playlist: //hiddenr<br>
+					    style: //plain - this will remove the bar on the single player
+					    <p>
 				</div>
 			</div>
 
@@ -417,7 +419,9 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3audibleSingle s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		  
+
+		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:40px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
 		
         }
         
