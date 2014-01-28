@@ -30,7 +30,7 @@ ul.s3-controls{float:left;height:20px;left:5px;margin:10px 0!important;padding:0
 ul.s3-controls li{background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;border:none!important;display:inline-block;float:left;list-style:none!important;margin:0!important;padding:0!important;text-align:center}
 .s3-togcontainer{height:30px;margin:0;padding:0;position:absolute;right:0;width:60px}
 ul.s3-toggles{height:40px;margin:0!important;padding:0!important;position:absolute;right:8px;top:0;width:160px}
-.s3-playlist ul{border:1px solid #e2e2e2;margin:0!important;padding:0!important}
+.s3-playlist ul{background: #ffffff;border:1px solid #e2e2e2;margin:0!important;padding:0!important}
 .s3-playlist ul li{background:none!important;border:none!important;border-bottom:1px solid #e2e2e2!important;height:30px!important;line-height:16px!important;list-style:none outside none!important;margin:0!important;padding:0!important;position:relative;text-align:left!important;text-shadow:none!important;width:100%!important}
 .s3-playlist ul li:before{background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;content:" "!important;height:15px;width:15px}
 .s3-playlist ul li div{float:left;margin-left:5px;width:100%!important}
@@ -57,7 +57,7 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 .s3bubblePlayer,.s3audible,.s3video{margin-bottom:15px;overflow:hidden}
 .s3-gui-video,.s3-gui-audio{background:#e2e2e2;clear:both;float:left;height:40px;width:100%}
 .s3-playlist ul li a.s3-playlist-item-remove,ul.s3-controls li a.s3-volume-max{display:none!important}
-.s3-current-time,.s3-duration{display:block;float:left!important;font-size:12px!important;height:16px!important;line-height:17px!important;margin-top:-4px!important;text-align:center;width:15%;z-index:1!important}
+.s3-current-time,.s3-duration{display:block;float:left!important;font-size:12px!important;height:16px!important;line-height:17px!important;margin-top:-4px!important;text-align:center;width:14%;z-index:1!important}
 .s3bubblePlayer a > *,.s3bubblePlayer a:focus{font-family:FontAwesome!important;outline:none!important;outline-width:0!important;text-decoration:none!important}
 .s3-poweredby{background:#e2e2e2;font-size:12px;left:0;padding:8px;position:absolute;top:0;z-index:999}
 div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;left:0;position:absolute!important}
