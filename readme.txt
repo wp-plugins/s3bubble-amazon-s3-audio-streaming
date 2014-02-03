@@ -3,7 +3,7 @@ Contributors: Samuel East
 Tags: Amazon S3, Music Player, Mp3 Player, Video Player, responsive, iphone, ipad, android, Audio Player, s3bubble, s3audible, Amazon Radio, sermons, meetings, churches, radio, youtube, coaching, business, talks, video blogging, spotify, pinterest, amazon, amazon s3, s3, player, streaming, stream, audibase, video, audio, images, media
 Requires at least: 2.0
 Tested up to: 3.8
-Stable tag: 1
+Stable tag: 1.6.0
 License: GPLv2
 
 == Description ==
@@ -20,28 +20,28 @@ Search Videos and Audio.
 Download Options.
 Only allow logged in users to download.
 
-<h3>Params - these can be added to the shortcode</h3>
-<code>bucket: //your amazon bucket
-folder: //your amazon s3 folder
-autoplay: //true or false
-height: //height of the player
-playlist: //hidden
-style: plain //hide bar on single audio player</code>
+= Params - these can be added to the shortcode =
+* bucket: //your amazon bucket
+* folder: //your amazon s3 folder
+* autoplay: //true or false
+* height: //height of the player
+* playlist: //hidden
+* style: plain //hide bar on single audio player
 
 [youtube http://www.youtube.com/watch?v=4YIP2VnR7G4]
 
 Important When upgrading
 When upgrading please test if you have any issues upon upgrade please revert back to your working version and inform out team support@S3Bubble.com
 
-<h3>All shortcode is displayed within plugin admin.</h3>
+= All shortcode is displayed within plugin admin. =
 
-<h3>Tested Browsers</h3>
+= Tested Browsers =
 Internet Explorer 7, 8, 9, 10
 Chrome
 Safari
 Firefox
 
-<h3>Tested Mobile Devices</h3>
+= Tested Mobile Devices =
 iPad
 iPhone
 Android
@@ -61,9 +61,7 @@ You will need an s3audbile account to use this, sign up here. http://S3Bubble.co
 
 Sign up enter your S3Bubble email and choose a bucket to loop through.
 
-<h3>If you would like to put this feed within your template please contact us.</h3>
-
-<h3>All shortcode is displayed within plugin admin.</h3>
+= All shortcode is displayed within plugin admin. =
 
 1, 2: You're done!
 
