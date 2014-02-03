@@ -10,11 +10,11 @@ License: GPLv2
 
 S3Bubble stream music or video directly from the cloud your Amazon s3 account, sign up for a account at [S3bubble.com](http://s3bubble.com "s3bubble") you can then manage and control your playlists. S3Bubble will play on multiple devices being a html5 player it has support for iphone ipad etc. 
 
-<h3>Audio Playlists.</h3>
-<h3>Single Audio Player.</h3>
+* Audio Playlists.
+* Single Audio Player.
 
-<h3>Video Playlists.</h3>
-<h3>Single Video Player.</h3>
+* Video Playlists.
+* Single Video Player.
 
 Search Videos and Audio.
 Download Options.
@@ -25,7 +25,8 @@ Only allow logged in users to download.
 folder: //your amazon s3 folder
 autoplay: //true or false
 height: //height of the player
-playlist: //hidden</code>
+playlist: //hidden
+style: plain //hide bar on single audio player</code>
 
 [youtube http://www.youtube.com/watch?v=4YIP2VnR7G4]
 
@@ -50,7 +51,7 @@ Android
 
 [youtube http://www.youtube.com/watch?v=QQHvUeWrIas]
 
-[Any Problems Add Here](https://s3bubble.com/contact/ "problems")
+[Any Problems Add Here](https://s3bubble.com/forums/ "problems")
 
 Upload the S3Bubble Amazon S3 Music and Video Player Plugin to your blog, Activate it, 
 
@@ -98,4 +99,10 @@ Force download - NOW FIXED
 
 Currently issues with flash playback off mp3 files in firefox - NOW FIXED
 
-[Any Problems Add Here](https://s3bubble.com/contact/ "problems")
+[Any Problems Add Here](https://s3bubble.com/forums/ "problems")
+
+== Upgrade Notice ==
+
+= 1.0 =
+
+Upgrade notices for S3Bubble.
