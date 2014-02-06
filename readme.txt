@@ -8,7 +8,7 @@ License: GPLv2
 
 == Description ==
 
-= S3Bubble offers simple, secure media streaming from Amazon S3 to Wordpress. In just 3 simple steps. =
+= S3Bubble offers simple, secure media streaming from Amazon S3 to Wordpress. In just 3 simple steps! =
 
 * Step 1 - Link your Amazon S3 Account to S3Bubble
 * Step 2 - Add Audio, Video and Image files through S3Bubble Admin Tools
