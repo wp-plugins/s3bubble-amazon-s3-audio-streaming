@@ -48,15 +48,19 @@ Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com
 
 == Installation ==
 
+Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along every step of the way, but if you need any extra help you can visit our friendly [support forum](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems").
+
+Once you’ve installed the S3Bubble plug-in, you’ll need to create an S3Bubble Account [(click here to do it now)](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "s3bubble sign up").
+
+= Then there’s just 3 steps to get you started: =
+
+* Step 1 - Link your Amazon S3 Account to S3Bubble
+* Step 2 - Add Audio, Video and Image files through S3Bubble Admin Tools
+* Step 3 - Embed the files in our responsive player on your website
+
+Remember if you need any extra help you can visit our friendly [support forum](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems").
+
 [youtube http://www.youtube.com/watch?v=QQHvUeWrIas]
-
-Upload the S3Bubble Amazon S3 Music and Video Player Plugin to your blog, Activate it, 
-
-Navigate to the menu.
-
-You will need an s3audbile account to use this, sign up here. http://S3Bubble.com/
-
-Sign up enter your S3Bubble email and choose a bucket to loop through.
 
 = All shortcode is displayed within plugin admin. =
 
@@ -70,21 +74,36 @@ Sign up enter your S3Bubble email and choose a bucket to loop through.
 * playlist: //hidden
 * style: plain //hide bar on single audio player
 
-[Any Problems Add Here](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems")
-
 == Frequently Asked Questions ==
 
-FOLLOW US FOR BUG REPORTS
-[@S3Bubble](https://twitter.com/#!/S3Bubble)
+Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along every step of the way, but if you need any extra help you can visit our friendly [support forum](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems").
 
-Question. The first song doesnt play.
-Answer. Fixed
+**What is S3Bubble?**
+S3Bubble is a media streaming service that allows you to serve video, audio and images from your Amazon S3 account to a widget that can be embedded within wordpress.
 
-Question. Autoplay does not work
-Answer. Fixed
+**How much does it cost?**
+[You can sign up for a 28 day free trial of the service here >](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
-Question. Why does this not work in firefox 
-Answer. Fixed
+S3Bubble costs from $5.99-$7.99 p/month plus the costs of your hosting with Amazon S3 (detailed below). For this you get an unbranded player, unlimited media streaming and all the back end tools to manage your files.
+
+**What’s Amazon S3?**
+Amazon S3 is a cloud storage platform, that charges on a per-usage basis. Essentially, a very cheap way to store and share large amounts of data. [Check their pricing out here >](http://aws.amazon.com/s3/pricing/ "S3bubble Amazon S3 Pricing")
+
+**How does the plug-in work?**
+Much the same as any other Wordpress plug-in. Simply install it as normal. [Then create your S3Bubble Account](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble Sign Up")
+
+**What are the embeddable media players?**
+The media players are fully responsive and tested with all the major mobile platforms and web browsers. [You can see a full range of them here >](https://s3bubble.com/category/embed-players/ "S3bubble Embed Players")
+
+**What about the Mobile App?**
+For premium users the mobile app offers a way to record, upload and manage their content. The app is available on both iOS and Android. 
+
+**Who are S3Bubble?**
+S3Bubble is made by a small but passionate team based [here](http://www.welshice.org/ "S3bubble Welsh ICE"), in Wales in the UK.
+We love media and technology, so we decided to make it easier for people to share their content. If you want to get in touch, you can find us here on [Twitter >](https://twitter.com/s3bubble "S3bubble Twitter")
+
+**Got another Question?**
+Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along every step of the way, but if you need any extra help you can visit our friendly [support forum](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems").
 
 == Screenshots ==
 
