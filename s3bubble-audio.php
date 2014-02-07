@@ -256,109 +256,101 @@ if (!class_exists("s3bubble_audio")) {
 			<div id="post-body-content" style="margin-right: 51%;">
 				<div class="postbox">
 					<h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? if you would like us to get you started and set you up with a audio playlist and embed video in your posts please just <a href="mailto:support@S3Bubble.com" target="_blank">contact us</a>.</h3>
-					<h3><span>Please sign up for an account at <a href="https://s3bubble.com/" target="_blank">https://s3bubble.com</a> you will need to use the username and email you signed up with.</span></h3>
+					<h3><span>Please sign up for an account at <a href="https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=pluginpage" target="_blank">https://s3bubble.com</a> you will need to use the username and email you signed up with.</span></h3>
 					<div class="inside">
 						<form action="" method="post" id="isd-config" style="overflow: hidden;">
-    <table class="form-table">
-      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('isd-updatesettings'); } ?>
-       <tr>
-        <th scope="row" valign="top"><label for="S3Bubble_username">S3Bubble Username:</label></th>
-        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
-        	<br />
-       <span class="description">Username you signed up to S3Bubble.com found <a href="http://S3Bubble.com/admin/#/profile" target="_blank">here</a></span>	
-        </td>
-        
-      </tr> 
-       <tr>
-        <th scope="row" valign="top"><label for="s3audible_email">S3Bubble Email:</label></th>
-        <td><input type="email" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
-        	<br />
-        	<span class="description">Email you signed up to S3Bubble.com found <a href="http://S3Bubble.com/admin/#/profile" target="_blank">here</a></span>
-        </td>
-      </tr> 
-      <tr>
-        <th scope="row" valign="top"><label for="colour">Brand Color:</label></th>
-        <td><input type="text" name="colour" id="colour" class="regular-text" value="<?php echo $colour; ?>"/>
-        	<br />
-        	<span class="description">Sets the brand colour for the player.</p>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row" valign="top"><label for="search">Player Theme:</label></th>
-        <td><select name="theme" id="theme">
-            <option value="<?php echo $theme; ?>"><?php echo $theme; ?></option>
-            <option value="s3bubble_default">default</option>
-            <option value="s3bubble_light">light</option>
-          </select>
-          <br />
-          <span class="description">Change the player theme.</p></td>
-      </tr>
-      <tr>
-        <th scope="row" valign="top"><label for="responsive">Make Responsive:</label></th>
-        <td><select name="responsive" id="responsive">
-            <option value="<?php echo $responsive; ?>"><?php echo $responsive; ?></option>
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
-          <br />
-          <span class="description">This will set a 100% width for the players.</p></td>
-      </tr>
-      <tr>
-        <th scope="row" valign="top"><label for="s3bubble_s3bubble">Show Share:</label></th>
-        <td><select name="s3bubble_share" id="s3bubble_share">
-            <option value="<?php echo $s3bubble_share; ?>"><?php echo $s3bubble_share; ?></option>
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
-          <br />
-          <span class="description">Allow users to share media.</p></td>
-      </tr>
-      <tr>
-        <th scope="row" valign="top"><label for="search">Show Search:</label></th>
-        <td><select name="search" id="search">
-            <option value="<?php echo $search; ?>"><?php echo $search; ?></option>
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
-          <br />
-          <span class="description">Allow users to search tracks.</p></td>
-      </tr>
-       <tr>
-        <th scope="row" valign="top"><label for="download">Show Download Links:</label></th>
-        <td><select name="download" id="download">
-            <option value="<?php echo $download; ?>"><?php echo $download; ?></option>
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
-          <br />
-          <span class="description">If set to true download links will show.</p>
-          </td>
-      </tr>
-       <tr>
-        <th scope="row" valign="top"><label for="loggedin">Download option logged in:</label></th>
-        <td><select name="loggedin" id="loggedin">
-            <option value="<?php echo $loggedin; ?>"><?php echo $loggedin; ?></option>
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
-          <br />
-          <span class="description">Only allow download link for logged in users.</p></td>
-      </tr>
-      
-     
-          
-
-    </table>
-    <br/>
-    <span class="description">The powered by s3bubble link will only show during the trial period or if you upgrade it will be removed.</p>
-    
-    <span class="submit" style="border: 0;">
-    <input type="submit" name="submit" class="button button-primary button-hero" value="Save Settings" />
-    </span>
-  </form>
-
-					</div> <!-- .inside -->
-					
+						    <table class="form-table">
+						      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('isd-updatesettings'); } ?>
+						       <tr>
+						        <th scope="row" valign="top"><label for="S3Bubble_username">S3Bubble Username:</label></th>
+						        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
+						        	<br />
+						       <span class="description">Username you signed up to S3Bubble.com found <a href="http://s3bubble.com/admin/#/profile" target="_blank">here</a></span>	
+						        </td>
+						      </tr> 
+						       <tr>
+						        <th scope="row" valign="top"><label for="s3audible_email">S3Bubble Email:</label></th>
+						        <td><input type="email" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
+						        	<br />
+						        	<span class="description">Email you signed up to S3Bubble.com found <a href="http://s3bubble.com/admin/#/profile" target="_blank">here</a></span>
+						        </td>
+						      </tr> 
+						      <tr>
+						        <th scope="row" valign="top"><label for="colour">Brand Color:</label></th>
+						        <td><input type="text" name="colour" id="colour" class="regular-text" value="<?php echo $colour; ?>"/>
+						        	<br />
+						        	<span class="description">Sets the brand colour for the player.</p>
+						        </td>
+						      </tr>
+						      <tr>
+						        <th scope="row" valign="top"><label for="search">Player Theme:</label></th>
+						        <td><select name="theme" id="theme">
+						            <option value="<?php echo $theme; ?>"><?php echo $theme; ?></option>
+						            <option value="s3bubble_default">default</option>
+						            <option value="s3bubble_light">light</option>
+						          </select>
+						          <br />
+						          <span class="description">Change the player theme.</p></td>
+						      </tr>
+						      <tr>
+						        <th scope="row" valign="top"><label for="responsive">Make Responsive:</label></th>
+						        <td><select name="responsive" id="responsive">
+						            <option value="<?php echo $responsive; ?>"><?php echo $responsive; ?></option>
+						            <option value="true">true</option>
+						            <option value="false">false</option>
+						          </select>
+						          <br />
+						          <span class="description">This will set a 100% width for the players.</p></td>
+						      </tr>
+						      <tr>
+						        <th scope="row" valign="top"><label for="s3bubble_s3bubble">Show Share:</label></th>
+						        <td><select name="s3bubble_share" id="s3bubble_share">
+						            <option value="<?php echo $s3bubble_share; ?>"><?php echo $s3bubble_share; ?></option>
+						            <option value="true">true</option>
+						            <option value="false">false</option>
+						          </select>
+						          <br />
+						          <span class="description">Allow users to share media.</p></td>
+						      </tr>
+						      <tr>
+						        <th scope="row" valign="top"><label for="search">Show Search:</label></th>
+						        <td><select name="search" id="search">
+						            <option value="<?php echo $search; ?>"><?php echo $search; ?></option>
+						            <option value="true">true</option>
+						            <option value="false">false</option>
+						          </select>
+						          <br />
+						          <span class="description">Allow users to search tracks.</p></td>
+						      </tr>
+						       <tr>
+						        <th scope="row" valign="top"><label for="download">Show Download Links:</label></th>
+						        <td><select name="download" id="download">
+						            <option value="<?php echo $download; ?>"><?php echo $download; ?></option>
+						            <option value="true">true</option>
+						            <option value="false">false</option>
+						          </select>
+						          <br />
+						          <span class="description">If set to true download links will show.</p>
+						          </td>
+						      </tr>
+						       <tr>
+						        <th scope="row" valign="top"><label for="loggedin">Download option logged in:</label></th>
+						        <td><select name="loggedin" id="loggedin">
+						            <option value="<?php echo $loggedin; ?>"><?php echo $loggedin; ?></option>
+						            <option value="true">true</option>
+						            <option value="false">false</option>
+						          </select>
+						          <br />
+						          <span class="description">Only allow download link for logged in users.</p></td>
+						      </tr>
+						    </table>
+						    <br/>
+						    <span class="description">The powered by s3bubble link will only show during the trial period or if you upgrade it will be removed.</p>
+						    <span class="submit" style="border: 0;">
+						    <input type="submit" name="submit" class="button button-primary button-hero" value="Save Settings" />
+						    </span>
+						  </form>
+					</div><!-- .inside -->
 					<div class="postbox">
 				<iframe style="width:100%" height="340" src="//s3bubble.com/watch/?v=zchrXjGHc&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen=""></iframe>
 				</div>

@@ -10,12 +10,11 @@ License: GPLv2
 
 = S3Bubble offers simple, secure media streaming from Amazon S3 to Wordpress. In just 3 simple steps! =
 
-
 * Step 1 - Link your Amazon S3 Account to S3Bubble
 * Step 2 - Add Audio, Video and Image files through S3Bubble Admin Tools
 * Step 3 - Embed the files in our responsive player on your website
 
-Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com "S3bubble")
+Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
 = Why Choose S3Bubble: =
 
@@ -28,7 +27,7 @@ Youtube is great but if you’d rather get users to pay for your content S3Bubbl
 **You could save a fortune in media streaming.**
 Hosting video, galleries and audio files is heavyweight work. S3Bubble adds powerful functionality to your existing Amazon S3 account, so you can forget about hosting issues. Because of this, you only ever pay for what you use.
 
-Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com "S3bubble")
+Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
 [youtube http://www.youtube.com/watch?v=4YIP2VnR7G4]
 
@@ -45,7 +44,7 @@ Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com
 * Simple Shortcodes (full options on Plug-In Admin Page)
 * Friendly support forum - support from our Developers and current members
 
-Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com "S3bubble")
+Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
 == Installation ==
 
@@ -71,7 +70,7 @@ Sign up enter your S3Bubble email and choose a bucket to loop through.
 * playlist: //hidden
 * style: plain //hide bar on single audio player
 
-[Any Problems Add Here](https://s3bubble.com/forums/ "problems")
+[Any Problems Add Here](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems")
 
 == Frequently Asked Questions ==
 
@@ -105,7 +104,7 @@ Force download - NOW FIXED
 
 Currently issues with flash playback off mp3 files in firefox - NOW FIXED
 
-[Any Problems Add Here](https://s3bubble.com/forums/ "problems")
+[Any Problems Add Here](https://s3bubble.com/forums/?utm_source=wordpress&utm_medium=link&utm_campaign=s3bubbleforum "problems")
 
 == Upgrade Notice ==
 
