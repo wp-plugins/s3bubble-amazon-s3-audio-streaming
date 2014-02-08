@@ -82,10 +82,10 @@ Remember if you need any extra help you can visit our friendly [support forum](h
 = Params - these can be added to the shortcode =
 * bucket: //your amazon bucket
 * folder: //your amazon s3 folder
-* autoplay: //true or false
+* autoplay: //true or false 
 * height: //height of the player
 * playlist: //hidden
-* style: plain //hide bar on single audio player
+* style: plain //hide bar on single audio player 
 
 == Frequently Asked Questions ==
 
