@@ -107,9 +107,11 @@ Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along
 
 == Screenshots ==
 
-
-Coming soon...
-
+1. Record video from mobile and directly upload
+2. Enter your S3Bubble email and password to create a sync
+3. Sync your Amazon S3 Keys with S3Bubble Admin
+4. Upload your file ready to stream
+5. All your file video,audio and image all stored securely within buckets
 
 == Changelog ==
 
