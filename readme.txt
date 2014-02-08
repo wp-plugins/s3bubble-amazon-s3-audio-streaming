@@ -62,22 +62,19 @@ Remember if you need any extra help you can visit our friendly [support forum](h
 
 [youtube http://www.youtube.com/watch?v=QQHvUeWrIas]
 
+= These are auto generated within your s3bubble admin =
 
-= Audio Playlist Shortcode Example - These are auto generated within your s3bubble admin =
+**Audio Playlist Shortcode Example.**
+`[s3bubbleAudio bucket="enter-your-bucket" folder="enter-your-bucket-folder"]`
 
-'[s3bubbleAudio bucket="enter-your-bucket" folder="enter-your-bucket-folder"]'
+**Audio Single Player Shortcode Example.**
+`[s3bubbleAudioSingle bucket="enter-your-bucket" track="enter-your-track-name"]`
 
-= Audio Single Player Shortcode Example - These are auto generated within your s3bubble admin =
+**Video Playlist Shortcode Example.**
+`[s3bubbleVideo bucket="enter-your-bucket" folder="enter-your-bucket-folder"]`
 
-'[s3bubbleAudioSingle bucket="enter-your-bucket" track="enter-your-track-name"]'
-
-= Video Playlist Shortcode Example - These are auto generated within your s3bubble admin =
-
-'[s3bubbleVideo bucket="enter-your-bucket" folder="enter-your-bucket-folder"]'
-
-= Video Single Player Shortcode Example - These are auto generated within your s3bubble admin =
-
-'[s3bubbleVideoSingle bucket="enter-your-bucket" track="enter-your-track-name"]'
+**Video Single Player Shortcode Example.**
+`[s3bubbleVideoSingle bucket="enter-your-bucket" track="enter-your-track-name"]`
 
 = Params - these can be added to the shortcode =
 * bucket: //your amazon bucket
