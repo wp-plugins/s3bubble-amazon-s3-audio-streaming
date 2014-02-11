@@ -63,7 +63,7 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 .s3-poweredby{font-size:10px;left:0;position:absolute;bottom:0;z-index:999;text-align:center;width:100%;color:#e2e2e2!important;text-decoration:none!important;font-style:italic;margin:auto}
 .s3-poweredby:hover{font-size:10px!important;font-style:italic!important}
 div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;left:0;position:absolute!important}
-ul.s3-toggles li a i,ul.s3-toggles-video li a i,ul.s3-controls li a i{font-size:20px!important}
+ul.s3-toggles li a i,ul.s3-toggles-video li a i,ul.s3-controls li a i{background: none;font-size:20px!important}
 @media all and max-width 520px and min-width 0px {
 .s3bubble-rail{display:none}
 }
