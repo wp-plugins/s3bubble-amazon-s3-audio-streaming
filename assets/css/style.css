@@ -1,5 +1,4 @@
-.s3videoSingle{height:472px}
-.s3audibleSingle{height:72px}
+.s3audibleSingle{height:90px}
 .s3-contain{height:100%;overflow:hidden;position:relative;width:100%}
 .s3-type-playlist{background-color:#222;color:#CCC;float:left;height:100%;min-height:40px;position:relative;text-shadow:none;width:100%;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 .s3-type-playlist-single{-moz-border-radius:3px!important;-webkit-border-radius:3px!important;border-radius:3px!important;float:left;height:40px!important;min-height:36px;position:relative;width:100%}
@@ -59,7 +58,7 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 .s3-gui-video,.s3-gui-audio{background:#202020;clear:both;float:left;height:40px;width:100%}
 .s3-playlist ul li a.s3-playlist-item-remove,ul.s3-controls li a.s3-volume-max{display:none!important}
 .s3-current-time,.s3-duration{display:block;float:left!important;font-size:12px!important;height:16px!important;line-height:17px!important;margin-top:-4px!important;text-align:center;width:14%;z-index:1!important}
-.s3bubblePlayer a > *,.s3bubblePlayer a:focus{font-family:FontAwesome!important;outline:none!important;outline-width:0!important;text-decoration:none!important}
+.s3bubblePlayer a > *,.s3bubblePlayer a:focus{background: none;font-family:FontAwesome!important;outline:none!important;outline-width:0!important;text-decoration:none!important}
 .s3-poweredby{font-size:10px;left:0;position:absolute;bottom:0;z-index:999;text-align:center;width:100%;color:#e2e2e2!important;text-decoration:none!important;font-style:italic;margin:auto}
 .s3-poweredby:hover{font-size:10px!important;font-style:italic!important}
 div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;left:0;position:absolute!important}
