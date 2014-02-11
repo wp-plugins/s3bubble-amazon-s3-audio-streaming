@@ -103,10 +103,10 @@ if (!class_exists("s3bubble_audio")) {
 			}
 			// updated css
 		    echo '<style type="text/css">.s3bubblePlayer {font-family: \'Open Sans\', sans-serif;border-radius: 3px !important;-moz-border-radius: 3px !important;-webkit-border-radius: 3px !important;}
-					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;font-style: normal!important;font-family: FontAwesome !important;}
-					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).'!important;font-style: normal!important;}
-					.s3bubblePlayer a:hover {color: '.stripcslashes($colour).' !important;font-style: normal!important;}
-					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;font-style: normal!important;}
+					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;font-style: normal;font-family: FontAwesome !important;}
+					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).'!important;font-style: normal;}
+					.s3bubblePlayer a:hover {color: '.stripcslashes($colour).' !important;font-style: normal;}
+					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;font-style: normal;}
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
@@ -421,7 +421,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $userdata = base64_encode($bind);
 		  
 
-		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:40px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:40px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-style="'.$atts['style'].'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
 		
         }
         
@@ -471,7 +471,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3videoSingle s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'"  data-track="'.$atts['track'].'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div class="s3videoSingle s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'"  data-track="'.$atts['track'].'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'" data-style="'.$atts['style'].'"></div>';
 		
         }
 		
