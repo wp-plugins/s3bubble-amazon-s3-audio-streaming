@@ -108,11 +108,10 @@ if (!class_exists("s3bubble_audio")) {
 			}
 			// updated css
 		    echo '<style type="text/css">
-		            .s3bubblePlayer {font-family: \'Open Sans\', sans-serif;border-radius: 3px !important;-moz-border-radius: 3px !important;-webkit-border-radius: 3px !important;}
-					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;font-style: normal;font-family: FontAwesome !important;}
-					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).';font-style: normal;}
-					.s3bubblePlayer a:hover {color: '.stripcslashes($colour).' !important;font-style: normal;}
-					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;font-style: normal;}
+					.s3bubblePlayer a > * {font-family: \'Open Sans\', sans-serif;color: '.stripcslashes($colour).' !important;}
+					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).';}
+					.s3bubblePlayer a:hover {color: '.stripcslashes($colour).' !important;}
+					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;}
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
