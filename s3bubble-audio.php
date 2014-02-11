@@ -421,7 +421,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $userdata = base64_encode($bind);
 		  
 
-		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:40px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-style="'.$atts['style'].'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:60px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-style="'.$atts['style'].'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
 		
         }
         
