@@ -91,20 +91,26 @@ if (!class_exists("s3bubble_audio")) {
 			$theme = get_option("s3-theme");
 			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__) );
 			wp_enqueue_style('font-awesome.min');
+			wp_register_style( 's3bubble-standard', plugins_url('assets/css/standard.css', __FILE__) );
+			wp_enqueue_style('s3bubble-standard');
 			if($theme == 's3bubble_default'){
 				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-default');
 			}else if($theme == 's3bubble_light'){
 				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-light');
+			}else if($theme == 's3bubble_sound'){
+				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css', __FILE__) );
+			    wp_enqueue_style('s3bubble-style-sound');
 			}else{
 				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-default');
 			}
 			// updated css
-		    echo '<style type="text/css">.s3bubblePlayer {font-family: \'Open Sans\', sans-serif;border-radius: 3px !important;-moz-border-radius: 3px !important;-webkit-border-radius: 3px !important;}
+		    echo '<style type="text/css">
+		            .s3bubblePlayer {font-family: \'Open Sans\', sans-serif;border-radius: 3px !important;-moz-border-radius: 3px !important;-webkit-border-radius: 3px !important;}
 					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;font-style: normal;font-family: FontAwesome !important;}
-					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).'!important;font-style: normal;}
+					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).';font-style: normal;}
 					.s3bubblePlayer a:hover {color: '.stripcslashes($colour).' !important;font-style: normal;}
 					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;font-style: normal;}
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
@@ -293,6 +299,7 @@ if (!class_exists("s3bubble_audio")) {
 						            <option value="<?php echo $theme; ?>"><?php echo $theme; ?></option>
 						            <option value="s3bubble_default">default</option>
 						            <option value="s3bubble_light">light</option>
+						            <option value="s3bubble_sound">sound</option>
 						          </select>
 						          <br />
 						          <span class="description">Change the player theme.</p></td>
