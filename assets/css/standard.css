@@ -1,4 +1,8 @@
-.s3-contain{height:100%;overflow:hidden;position:relative;width:100%}
+div.s3bubble-video-270p{width:480px}
+div.s3bubble-video-360p{width:640px}
+div.s3bubble-video-responsive{width:100%}
+div.s3bubble-video-responsive .s3bubble-force{min-height:500px!important;margin-top:5px}
+.s3-contain{height:100%;overflow:hidden;position:relative;width:100%;background:#000}
 .s3-type-playlist{color:#CCC;float:left;height:100%;min-height:40px;position:relative;text-shadow:none;width:100%}
 .s3-type-playlist-single{-moz-border-radius:3px!important;-webkit-border-radius:3px!important;border-radius:3px!important;float:left;height:40px!important;min-height:36px;position:relative;width:100%}
 .s3-playlist a,.s3-playlist p,.s3-playlist h3,.s3-playlist ul,.s3-playlist li,.s3-title{color:#999!important}
@@ -8,7 +12,7 @@ div.jp-video-full div.jp-jplayer{left:0;overflow:hidden;position:fixed!important
 div.jp-video-full div.jp-gui{height:100%;left:0;position:fixed!important;top:0;width:100%;z-index:99999}
 div.jp-interface{background-color:#3a2a45;position:relative;width:100%}
 div.jp-video-full div.s3-gui{bottom:0;height:40px;left:0;position:fixed!important;width:100%;z-index:1001}
-.s3-video-play{border-radius:3px;height:80px;left:50%;margin-left:-62px;margin-top:-40px;position:absolute;top:50%;width:124px;z-index:2}
+.s3-video-play{border-radius:3px!important;height:80px!important;left:50%!important;margin-left:-62px!important;margin-top:-40px!important;position:absolute!important;top:50%!important;width:124px!important;z-index:2!important}
 .s3-video-play .s3-video-play-icon{color:#FFF;display:block;font-size:40px;height:100%;position:relative;text-align:center;text-decoration:none;width:100%}
 .s3-video-play .s3-video-play-icon i{font-size:40px;left:50px;line-height:35px;position:absolute;top:27%}
 .s3-interface{float:left;height:40px;position:relative;width:100%}
@@ -61,6 +65,7 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;left:0;position:absolute!important}
 ul.s3-toggles li a i,ul.s3-toggles-video li a i,ul.s3-controls li a i{background:none;font-size:20px!important;margin:0!important;padding:0!important}
 .s3-playlist ul,.s3audibleSingle .s3-playlist ul{margin:0!important;padding:0!important}
+div.s3bubble-video-responsive video,div.s3bubble-video-responsive img{min-height:270px;margin-top:5px}
 @media all and max-width 520px and min-width 0px {
 .s3bubble-rail{display:none}
 }

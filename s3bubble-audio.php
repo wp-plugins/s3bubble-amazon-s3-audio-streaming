@@ -42,7 +42,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $download		= 'false';
 		public $loggedin        = 'false';
 		public $search          = 'false';
-		public $responsive      = 'false';
+		public $responsive      = '360p';
 		public $theme           = 's3bubble_default';
 		
 	    function s3bubble_audio() { //constructor	
@@ -304,14 +304,15 @@ if (!class_exists("s3bubble_audio")) {
 						          <span class="description">Change the player theme.</p></td>
 						      </tr>
 						      <tr>
-						        <th scope="row" valign="top"><label for="responsive">Make Responsive:</label></th>
+						        <th scope="row" valign="top"><label for="responsive">Aspect Ratio:</label></th>
 						        <td><select name="responsive" id="responsive">
 						            <option value="<?php echo $responsive; ?>"><?php echo $responsive; ?></option>
-						            <option value="true">true</option>
-						            <option value="false">false</option>
+						            <option value="270p">270p</option>
+						            <option value="360p">360p</option>
+						            <option value="responsive">responsive</option>
 						          </select>
 						          <br />
-						          <span class="description">This will set a 100% width for the players.</p></td>
+						          <span class="description">This will set the aspect ration for the video players.</p></td>
 						      </tr>
 						      <tr>
 						        <th scope="row" valign="top"><label for="s3bubble_s3bubble">Show Share:</label></th>
@@ -427,7 +428,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $userdata = base64_encode($bind);
 		  
 
-		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:60px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-style="'.$atts['style'].'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:40px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-style="'.$atts['style'].'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
 		
         }
         
