@@ -1,6 +1,6 @@
 .s3-playlist-wrapper{background:#333;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 .s3-video-play{background:#f60;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
-.s3-gui{background:#f60;}
+.s3-gui{background:#f60;!important}
 .s3-playlist{background:#333;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 .s3bubble-audio-playlist-tsearch,.s3bubble-video-playlist-tsearch{background:#222!important}
 .s3-playlist ul li{border-bottom:1px solid #202020!important}
