@@ -89,21 +89,19 @@ if (!class_exists("s3bubble_audio")) {
 			// Styles
 		   	$colour	= get_option("s3-colour");    
 			$theme = get_option("s3-theme");
-			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__) );
+			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css?ver=1.6', __FILE__) );
 			wp_enqueue_style('font-awesome.min');
-			wp_register_style( 's3bubble-standard', plugins_url('assets/css/standard.css', __FILE__) );
-			wp_enqueue_style('s3bubble-standard');
 			if($theme == 's3bubble_default'){
-				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__) );
+				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css?ver=1.6', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-default');
 			}else if($theme == 's3bubble_light'){
-				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css', __FILE__) );
+				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css?ver=1.6', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-light');
 			}else if($theme == 's3bubble_sound'){
-				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css', __FILE__) );
+				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css?ver=1.6', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-sound');
 			}else{
-				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__) );
+				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css?ver=1.6', __FILE__) );
 			    wp_enqueue_style('s3bubble-style-default');
 			}
 			// updated css
@@ -130,8 +128,8 @@ if (!class_exists("s3bubble_audio")) {
             wp_enqueue_script('jquery');
             wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ));
             wp_enqueue_script('jquery-migrate');
-			wp_register_script( 's3audible.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ));
-            wp_enqueue_script('s3audible.min'); 
+			wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js?ver=1.6',__FILE__ ));
+            wp_enqueue_script('s3bubble.min'); 
 		}
 		
 		// include javascript
