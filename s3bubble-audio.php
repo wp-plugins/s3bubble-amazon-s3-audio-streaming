@@ -106,10 +106,7 @@ if (!class_exists("s3bubble_audio")) {
 			}
 			// updated css
 		    echo '<style type="text/css">
-					.s3bubblePlayer a > * {font-family: \'Open Sans\', sans-serif;color: '.stripcslashes($colour).' !important;}
-					.s3bubblePlayer a:visited {color: '.stripcslashes($colour).';}
-					.s3bubblePlayer a:hover {color: '.stripcslashes($colour).' !important;}
-					.s3bubblePlayer a:active {color: '.stripcslashes($colour).' !important;}
+					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;}
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
@@ -141,7 +138,7 @@ if (!class_exists("s3bubble_audio")) {
 		}
 		
 		function s3bubble_audio_admin_menu(){	
-			add_menu_page( 's3bubble_audio', 'S3Bubble Media', 10, 's3bubble_audio', array($this, 's3bubble_audio_admin'), plugins_url('assets/images/wps3icon.png',__FILE__ ) );
+			add_menu_page( 's3bubble_audio', 'S3Bubble Media', 'manage_options', 's3bubble_audio', array($this, 's3bubble_audio_admin'), plugins_url('assets/images/wps3icon.png',__FILE__ ) );
     	}
 		
 		function s3bubble_audio_admin(){	
@@ -380,11 +377,23 @@ if (!class_exists("s3bubble_audio")) {
 	   
 	   
 	   function s3bubble_audio_player($atts){ 
-	   
+	        extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'bucket' => '',
+				'folder' => '',
+				'autoplay' => 'false',
+			), $atts, 's3bubbleAudio' ) );
+			extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'bucket' => '',
+				'folder' => '',
+				'autoplay' => 'false',
+			), $atts, 's3audible' ) );
             // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
 			$s3audible_email = get_option("s3-s3audible_email");		
-            $bucket	         = get_option("s3-bucket");
 			$loggedin        = get_option("s3-loggedin");
 			$search          = get_option("s3-search");
 			$s3bubble_share  = get_option("s3-s3bubble_share");
@@ -399,17 +408,28 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3audible s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div class="s3audible s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 
 
-		function s3bubble_audio_single_player($atts){ 
-	   
+		function s3bubble_audio_single_player($atts){
+			 extract( shortcode_atts( array(
+				'style' => '',
+				'bucket' => '',
+				'track' => '',
+				'autoplay' => 'false',
+			), $atts, 's3bubbleAudioSingle' ) );
+			extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'bucket' => '',
+				'folder' => '',
+				'autoplay' => 'false',
+			), $atts, 's3audibleSingle' ) );
             // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
 			$s3audible_email = get_option("s3-s3audible_email");		
-            $bucket	         = get_option("s3-bucket");
 			$loggedin        = get_option("s3-loggedin");
 			$search          = get_option("s3-search");
 			$s3bubble_share  = get_option("s3-s3bubble_share");
@@ -424,18 +444,28 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		  
-
-		   return '<div style="'.  (($atts['style'] == 'plain') ? 'height:40px;overflow: hidden !important;padding: 0px;' : '' ) . '" class="s3audibleSingle s3bubblePlayer" data-style="'.$atts['style'].'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-track="'.$atts['track'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div class="s3audibleSingle s3bubblePlayer" data-style="'.$style.'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
         
-        function s3bubble_video_player($atts){ 
-	   
+        function s3bubble_video_player($atts){
+        	 extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'bucket' => '',
+				'folder' => '',
+				'autoplay' => 'false',
+			), $atts, 's3bubbleVideo' ) );
+			extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'bucket' => '',
+				'folder' => '',
+				'autoplay' => 'false',
+			), $atts, 's3video' ) );
             // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
 			$s3audible_email = get_option("s3-s3audible_email");		
-            $bucket	         = get_option("s3-bucket");
 			$loggedin        = get_option("s3-loggedin");
 			$search          = get_option("s3-search");
 			$responsive      = get_option("s3-responsive");
@@ -451,16 +481,30 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3video s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'"></div>';
+		   return '<div class="s3video s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 		
 		function s3bubble_video_single_player($atts){ 
-	   
+	        extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'track' => '',
+				'bucket' => '',
+				'folder' => '',
+				'style' => '',
+				'autoplay' => 'false',
+			), $atts, 's3bubbleVideoSingle' ) );
+			extract( shortcode_atts( array(
+				'playlist' => '',
+				'height' => '',
+				'bucket' => '',
+				'folder' => '',
+				'autoplay' => 'false',
+			), $atts, 's3videoSingle' ) );
             // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
 			$s3audible_email = get_option("s3-s3audible_email");		
-            $bucket	         = get_option("s3-bucket");
 			$loggedin        = get_option("s3-loggedin");
 			$search          = get_option("s3-search");
 			$responsive      = get_option("s3-responsive");
@@ -476,7 +520,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3videoSingle s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$atts['playlist'].'" data-height="'.$atts['height'].'" data-download="'.$download.'"  data-track="'.$atts['track'].'" data-userdata="'.$userdata.'" data-bucket="'.$atts['bucket'].'" data-folder="'.$atts['folder'].'" data-autoplay="'.$atts['autoplay'].'" data-style="'.$atts['style'].'"></div>';
+		   return '<div class="s3videoSingle s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
 		
         }
 		

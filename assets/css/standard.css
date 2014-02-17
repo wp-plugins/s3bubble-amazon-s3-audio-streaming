@@ -1,7 +1,6 @@
 div.s3bubble-video-270p{width:480px}
 div.s3bubble-video-360p{width:640px}
 div.s3bubble-video-responsive{width:100%}
-div.s3bubble-video-responsive .s3bubble-force{min-height:500px!important;margin-top:5px}
 .s3-contain{height:100%;overflow:hidden;position:relative;width:100%;background:#000}
 .s3-type-playlist{color:#CCC;float:left;height:100%;min-height:40px;position:relative;text-shadow:none;width:100%}
 .s3-type-playlist-single{-moz-border-radius:3px!important;-webkit-border-radius:3px!important;border-radius:3px!important;float:left;height:40px!important;min-height:36px;position:relative;width:100%}
@@ -66,6 +65,3 @@ div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;l
 ul.s3-toggles li a i,ul.s3-toggles-video li a i,ul.s3-controls li a i{background:none;font-size:20px!important;margin:0!important;padding:0!important}
 .s3-playlist ul,.s3audibleSingle .s3-playlist ul{margin:0!important;padding:0!important}
 div.s3bubble-video-responsive video,div.s3bubble-video-responsive img{min-height:270px;margin-top:5px}
-@media all and max-width 520px and min-width 0px {
-.s3bubble-rail{display:none}
-}
