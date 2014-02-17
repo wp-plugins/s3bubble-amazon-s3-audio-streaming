@@ -189,7 +189,7 @@ ul.s3-controls {
 	left: 5px;
 	position: absolute;
 	width: 90px;
-	top: 11px;
+	top: 10px;
 	margin: 0 !important;
 	padding: 0 !important
 }
@@ -215,7 +215,7 @@ ul.s3-toggles {
 	height: auto;
 	position: absolute;
 	right: 8px;
-	top: 11px;
+	top: 10px;
 	width: 160px;
 	margin: 0 !important;
 	padding: 0 !important
@@ -349,6 +349,9 @@ div.s3-video-full div.s3-gui {
 }
 .s3-jplayer video {
 	background: #000
+}
+.s3-jplayer img {
+	width: auto !important;
 }
 div.s3-video-270p, div.s3-video-360p {
 	overflow: hidden;
@@ -592,13 +595,20 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 	border-radius: 3px
 }
 .s3-gui {
-	background: #000000;!important
+	background: #45484d; /* Old browsers */
+	background: -moz-linear-gradient(top,  #45484d 0%, #000000 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#45484d), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #45484d 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #45484d 0%,#000000 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #45484d 0%,#000000 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
 .s3bubble-audio-playlist-tsearch, .s3bubble-video-playlist-tsearch {
 	background: #333333 !important
 }
 .s3-playlist ul li {
-	border-bottom: 1px solid #222222 !important
+	border-bottom: 1px solid #333 !important
 }
 .s3-seek-bar {
 	background-color: #333 !important
@@ -638,12 +648,3 @@ div.jp-video-full div div {
 	font-weight:bold;
 }
 /* @end */
-
-
-
-
-
-
-
-
-

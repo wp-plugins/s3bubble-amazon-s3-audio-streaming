@@ -3,7 +3,7 @@
 Plugin Name: S3bubble Cloud Media Streaming Amazon S3
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 3 simple steps. 
-Version: 1.6.5
+Version: 1.6.6
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -243,6 +243,7 @@ if (!class_exists("s3bubble_audio")) {
 						autoplay: //true or false<br>
 					    height: //height of the player<br>
 					    playlist: //hiddenr<br>
+					    order: //defualt asc can be desc<br>
 					    style: //plain - this will remove the bar on the single player
 					    <p>
 				</div>
@@ -382,6 +383,7 @@ if (!class_exists("s3bubble_audio")) {
 				'height' => '',
 				'bucket' => '',
 				'folder' => '',
+				'order' => 'asc',
 				'autoplay' => 'false',
 			), $atts, 's3bubbleAudio' ) );
 			extract( shortcode_atts( array(
@@ -389,6 +391,7 @@ if (!class_exists("s3bubble_audio")) {
 				'height' => '',
 				'bucket' => '',
 				'folder' => '',
+				'order' => 'asc',
 				'autoplay' => 'false',
 			), $atts, 's3audible' ) );
             // get option from database
@@ -408,7 +411,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3audible s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'"></div>';
+		   return '<div class="s3audible s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 
@@ -454,6 +457,7 @@ if (!class_exists("s3bubble_audio")) {
 				'height' => '',
 				'bucket' => '',
 				'folder' => '',
+				'order' => 'asc',
 				'autoplay' => 'false',
 			), $atts, 's3bubbleVideo' ) );
 			extract( shortcode_atts( array(
@@ -461,6 +465,7 @@ if (!class_exists("s3bubble_audio")) {
 				'height' => '',
 				'bucket' => '',
 				'folder' => '',
+				'order' => 'asc',
 				'autoplay' => 'false',
 			), $atts, 's3video' ) );
             // get option from database
@@ -481,7 +486,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3video s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'"></div>';
+		   return '<div class="s3video s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 		

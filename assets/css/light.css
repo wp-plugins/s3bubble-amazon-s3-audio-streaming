@@ -336,6 +336,9 @@ div.s3-video-full div.s3-gui {
 .s3-jplayer video {
 	background: #000
 }
+.s3-jplayer img {
+	width: auto !important;
+}
 div.s3-video-270p, div.s3-video-360p {
 	overflow: hidden;
 	width: 100%
