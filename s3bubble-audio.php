@@ -110,7 +110,7 @@ if (!class_exists("s3bubble_audio")) {
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
-					</style>';
+			</style>';
 		}
 		// include css
 		function s3bubble_audio_css_admin(){
@@ -150,10 +150,7 @@ if (!class_exists("s3bubble_audio")) {
 				// Get our new option values
 				$s3audible_username	= $_POST['s3audible_username'];
 				$s3audible_email	= $_POST['s3audible_email'];
-				$bucket				= $_POST['bucket'];
-				$folder				= $_POST['folder'];
 				$colour				= addslashes($_POST['colour']);
-				$jtoggle			= addslashes($_POST['jtoggle']);
 				$download			= addslashes($_POST['download']);
 				$loggedin			= addslashes($_POST['loggedin']);
 				$search			    = addslashes($_POST['search']);
@@ -164,11 +161,7 @@ if (!class_exists("s3bubble_audio")) {
 			    // Update the DB with the new option values
 				update_option("s3-s3audible_username", mysql_real_escape_string($s3audible_username));
 				update_option("s3-s3audible_email", mysql_real_escape_string($s3audible_email));
-				update_option("s3-bucket", mysql_real_escape_string($bucket));
-				update_option("s3-folder", mysql_real_escape_string($folder));
 				update_option("s3-colour", mysql_real_escape_string($colour));
-				update_option("s3-autoplay", mysql_real_escape_string($autoplay));
-				update_option("s3-jtoggle", mysql_real_escape_string($jtoggle));
 				update_option("s3-download", mysql_real_escape_string($download));
 				update_option("s3-loggedin", mysql_real_escape_string($loggedin));
 				update_option("s3-search", mysql_real_escape_string($search));
@@ -179,10 +172,7 @@ if (!class_exists("s3bubble_audio")) {
 			
 			$s3audible_username	= get_option("s3-s3audible_username");
 			$s3audible_email	= get_option("s3-s3audible_email");
-			$bucket	            = get_option("s3-bucket");
-			$folder				= get_option("s3-folder");
 			$colour				= get_option("s3-colour");
-			$jtoggle	        = get_option("s3-jtoggle");	
 			$download	        = get_option("s3-download");	
 			$loggedin			= get_option("s3-loggedin");			
 			$search			    = get_option("s3-search");

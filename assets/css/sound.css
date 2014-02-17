@@ -14,6 +14,17 @@ div.s3bubble-video-responsive {
 	width: 100%;
 	background: #000
 }
+.s3bubble-loading {
+	position: absolute;
+	height: 50px !important;
+	left: 50% !important;
+	margin-left: -25px !important;
+	margin-top: -25px !important;
+	position: absolute !important;
+	top: 50% !important;
+	width: 50px !important;
+	z-index: 1 !important
+}
 .s3-type-playlist {
 	color: #CCC;
 	float: left;
@@ -445,7 +456,7 @@ ul.s3-toggles-video li a {
 	width: 14%;
 	z-index: 1 !important
 }
-.s3bubblePlayer a > *, .s3bubblePlayer a:focus {
+.s3bubblePlayer a > * {
 	background: none;
 	font-family: FontAwesome !important;
 	outline: none !important;
