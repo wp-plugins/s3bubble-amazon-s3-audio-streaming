@@ -543,9 +543,8 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 		display: none !important
 	}
 	.s3videoSingle .s3bubble-rail {
-		width: 80%;
-		margin-right: 0%;
-		right: 10px;
+		width: 53%;
+		left: 40px;
 	}
 	.s3videoSingle, .s3-progress {
 		width: 100%;
