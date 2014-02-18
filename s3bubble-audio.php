@@ -42,6 +42,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $download		= 'false';
 		public $loggedin        = 'false';
 		public $search          = 'false';
+		public $solution        = 'flash,html';
 		public $responsive      = '360p';
 		public $theme           = 's3bubble_default';
 		
@@ -63,6 +64,7 @@ if (!class_exists("s3bubble_audio")) {
 			add_option("s3-download", $this->download);
 			add_option("s3-loggedin", $this->loggedin);
 			add_option("s3-search", $this->search);
+			add_option("s3-solution", $this->solution);
 			add_option("s3-responsive", $this->responsive);
 			add_option("s3-theme", $this->theme);
 			add_option("s3-s3bubble_share", $this->s3bubble_share);
@@ -154,9 +156,10 @@ if (!class_exists("s3bubble_audio")) {
 				$download			= addslashes($_POST['download']);
 				$loggedin			= addslashes($_POST['loggedin']);
 				$search			    = addslashes($_POST['search']);
-				$responsive			    = addslashes($_POST['responsive']);
+				$solution			= addslashes($_POST['solution']);
+				$responsive			= addslashes($_POST['responsive']);
 				$theme			    = addslashes($_POST['theme']);
-				$s3bubble_share			    = addslashes($_POST['s3bubble_share']);
+				$s3bubble_share	    = addslashes($_POST['s3bubble_share']);
 				
 			    // Update the DB with the new option values
 				update_option("s3-s3audible_username", mysql_real_escape_string($s3audible_username));
@@ -165,6 +168,7 @@ if (!class_exists("s3bubble_audio")) {
 				update_option("s3-download", mysql_real_escape_string($download));
 				update_option("s3-loggedin", mysql_real_escape_string($loggedin));
 				update_option("s3-search", mysql_real_escape_string($search));
+				update_option("s3-solution", mysql_real_escape_string($solution));
 				update_option("s3-responsive", mysql_real_escape_string($responsive));
 				update_option("s3-theme", mysql_real_escape_string($theme));
 				update_option("s3-s3bubble_share", mysql_real_escape_string($s3bubble_share));
@@ -176,9 +180,10 @@ if (!class_exists("s3bubble_audio")) {
 			$download	        = get_option("s3-download");	
 			$loggedin			= get_option("s3-loggedin");			
 			$search			    = get_option("s3-search");
+			$solution			= get_option("s3-solution");
 			$responsive			= get_option("s3-responsive");
 			$theme			    = get_option("s3-theme");
-			$s3bubble_share			    = get_option("s3-s3bubble_share");
+			$s3bubble_share	    = get_option("s3-s3bubble_share");
 ?>
 <style>
 			.s3bubble-pre {
@@ -209,7 +214,7 @@ if (!class_exists("s3bubble_audio")) {
 				</div> 
 			</div>
                  <div class="postbox">
-                 	 <h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? this can be grabbed from your s3bubble account it will be auto generated for you.</h3> 
+                 	 <h3 style="color: #31708f;background-color: #d9edf7;border-color: #bce8f1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">Stuck? this can be grabbed from your s3bubble account it will be auto generated for you. Why not checkout our growing <a href="https://s3bubble.com/forums/" target="_blank" title="S3bubble community forum">Community Forum</a>.</h3> 
 				<h3><span>Audio Playlist Shortcode Example - These are auto generated within your s3bubble admin</span></h3>
 				<div class="inside">
 					<pre class="s3bubble-pre">[s3bubbleAudio bucket="enter-your-bucket" folder="enter-your-bucket-folder"]</pre>
@@ -301,6 +306,16 @@ if (!class_exists("s3bubble_audio")) {
 						          <span class="description">This will set the aspect ration for the video players.</p></td>
 						      </tr>
 						      <tr>
+						        <th scope="row" valign="top"><label for="solution">Media Options:</label></th>
+						        <td><select name="solution" id="solution">
+						            <option value="<?php echo $solution; ?>"><?php echo $solution; ?></option>
+						            <option value="html,flash">HTML</option>
+						            <option value="flash,html">FLASH</option>
+						          </select>
+						          <br />
+						          <span class="description">Set whether you would like to use flash as primary or html5 video audio as primary.</p></td>
+						      </tr>
+						      <tr>
 						        <th scope="row" valign="top"><label for="s3bubble_s3bubble">Show Share:</label></th>
 						        <td><select name="s3bubble_share" id="s3bubble_share">
 						            <option value="<?php echo $s3bubble_share; ?>"><?php echo $s3bubble_share; ?></option>
@@ -386,10 +401,11 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3audible' ) );
             // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
-			$s3audible_email = get_option("s3-s3audible_email");		
-			$loggedin        = get_option("s3-loggedin");
-			$search          = get_option("s3-search");
-			$s3bubble_share  = get_option("s3-s3bubble_share");
+			$s3audible_email    = get_option("s3-s3audible_email");		
+			$loggedin           = get_option("s3-loggedin");
+			$search             = get_option("s3-search");
+			$s3bubble_share     = get_option("s3-s3bubble_share");
+			$solution           = get_option("s3-solution");
 			
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
@@ -401,7 +417,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3audible s3bubblePlayer" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
+		   return '<div class="s3audible s3bubblePlayer" data-solution="'.$solution.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 
@@ -426,6 +442,7 @@ if (!class_exists("s3bubble_audio")) {
 			$loggedin        = get_option("s3-loggedin");
 			$search          = get_option("s3-search");
 			$s3bubble_share  = get_option("s3-s3bubble_share");
+			$solution           = get_option("s3-solution");
 			
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
@@ -437,7 +454,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3audibleSingle s3bubblePlayer" data-style="'.$style.'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'"></div>';
+		   return '<div class="s3audibleSingle s3bubblePlayer" data-solution="'.$solution.'" data-style="'.$style.'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
         
@@ -465,6 +482,7 @@ if (!class_exists("s3bubble_audio")) {
 			$search          = get_option("s3-search");
 			$responsive      = get_option("s3-responsive");
 			$s3bubble_share  = get_option("s3-s3bubble_share");
+			$solution           = get_option("s3-solution");
 
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
@@ -476,7 +494,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3video s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
+		   return '<div class="s3video s3bubblePlayer" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 		
@@ -504,6 +522,7 @@ if (!class_exists("s3bubble_audio")) {
 			$search          = get_option("s3-search");
 			$responsive      = get_option("s3-responsive");
 			$s3bubble_share  = get_option("s3-s3bubble_share");
+			$solution           = get_option("s3-solution");
 			
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
@@ -515,7 +534,7 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3videoSingle s3bubblePlayer" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
+		   return '<div class="s3videoSingle s3bubblePlayer" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
 		
         }
 		
