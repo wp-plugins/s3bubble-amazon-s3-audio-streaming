@@ -91,7 +91,8 @@ div.jp-video-full div.s3-gui {
 	position: relative;
 	text-align: center;
 	text-decoration: none;
-	width: 100%
+	width: 100%;
+	outline: none;
 }
 .s3-video-play .s3-video-play-icon i {
 	font-size: 40px;
