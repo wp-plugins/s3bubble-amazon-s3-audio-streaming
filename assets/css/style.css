@@ -349,7 +349,8 @@ ul.s3-toggles li a, ul.s3-toggles-video li a {
 	vertical-align: middle;
 	width: 30px;
 	margin: 0 !important;
-	padding: 0 !important
+	padding: 0 !important;
+	outline: none;
 }
 div.s3-video-full div.s3-gui {
 	height: 100%;
