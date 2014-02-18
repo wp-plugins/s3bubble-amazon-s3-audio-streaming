@@ -295,8 +295,8 @@ ul.s3-toggles li a.s3-repeat, ul.s3-toggles li a.s3-repeat-off {
 	height: 30px;
 	line-height: 20px;
 	vertical-align: middle;
-	width: 100% !important;
-	padding: 0px 10px !important;
+	width: 98% !important;
+	padding: 0px 1% !important;
 	float: left;
 }
 .s3-togcontainer-video {
@@ -425,7 +425,6 @@ ul.s3-toggles-video li a {
 .s3bubblePlayer, .s3audible, .s3video {
 	position: relative;
 	margin-bottom: 15px;
-	overflow: hidden;
 }
 .s3-gui-video, .s3-gui-audio {
 	clear: both;
