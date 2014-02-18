@@ -272,7 +272,8 @@ ul.s3-toggles {
 	white-space: nowrap;
 	width: 77%;
 	margin: 0 8px !important;
-	padding: 0 !important
+	padding: 0 !important;
+	outline: none;
 }
 ul.s3-toggles li a.s3-repeat, ul.s3-toggles li a.s3-repeat-off {
 	background: transparent url(https://s3.amazonaws.com/s3audible/icons/wp_icon.png) no-repeat center center scroll;
