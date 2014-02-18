@@ -604,7 +604,7 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 	border-radius: 3px
 }
 .s3-playlist {
-	background: #202020;
+	background: #000000;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px
@@ -623,7 +623,7 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 	background: #333333 !important
 }
 .s3-playlist ul li {
-	border-bottom: 1px solid #333 !important
+	border-bottom: 1px solid #202020 !important
 }
 .s3-seek-bar {
 	background-color: #333 !important
