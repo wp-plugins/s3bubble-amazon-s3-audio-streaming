@@ -380,7 +380,8 @@ ul.s3-controls li a {
 	vertical-align: middle;
 	width: 30px;
 	margin: 0 !important;
-	padding: 0 !important
+	padding: 0 !important;
+	outline: none;
 }
 .s3-playlist ul li a.download {
 	background-position: center;
