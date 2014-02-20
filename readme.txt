@@ -16,6 +16,8 @@ S3Bubble offers simple, secure media streaming from Amazon S3 to Wordpress. In j
 * Step 2 - Add Audio, Video and Image files through S3Bubble Admin Tools
 * Step 3 - Embed the files in our responsive player on your website
 
+[VIEW VIDEO EXAMPLE](https://s3bubble.com/share/?file=bnPcrwpqO "VIEW VIDEO EXAMPLE")
+
 Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
 = Why Choose S3Bubble: =
