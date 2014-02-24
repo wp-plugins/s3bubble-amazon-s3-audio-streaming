@@ -426,6 +426,8 @@ ul.s3-toggles-video li a {
 .s3bubblePlayer, .s3audible, .s3video {
 	position: relative;
 	margin-bottom: 15px;
+	overflow: hidden;
+	border: 1px solid #e2e2e2
 }
 .s3-gui-video, .s3-gui-audio {
 	clear: both;
@@ -513,10 +515,8 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 	.s3audibleSingle .s3-duration, .s3audibleSingle .s3-current-time {
 		display: none !important
 	}
-	.s3audible .s3-toggles {
-		display: none !important
-	}
-	.s3audible .s3-duration, .s3audible .s3-current-time {
+
+	.s3audible .s3-duration, .s3audible .s3-current-time, .s3audible .s3-toggles {
 		display: none !important
 	}
 	.s3audible .s3bubble-rail {
@@ -524,25 +524,20 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 		margin-right: 0%;
 		right: 10px;
 	}
+	
+	.s3audible, .s3-progress {
+		width: 100%;
+	}
 
 	.s3video .s3bubble-rail {
 		width: 38%;
 		margin-right: -24%;
 	}
 
-	.s3audible, .s3-progress {
-		width: 100%;
+	.s3video .s3-duration, .s3video .s3-current-time, .s3video .search-tracks, .s3video .s3-mute {
+		display: none !important
 	}
 
-	.s3audible .s3-toggles {
-		display: none !important
-	}
-	.s3video .s3-duration, .s3video .s3-current-time {
-		display: none !important
-	}
-	.s3video .search-tracks, .s3video .s3-mute {
-		display: none !important
-	}
 	.s3videoSingle .s3-duration, .s3videoSingle .s3-current-time {
 		display: none !important
 	}
@@ -554,32 +549,16 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 		width: 100%;
 	}
 	.s3-video-play {
-		border-radius: 3px !important;
 		height: 60px !important;
-		left: 50% !important;
 		margin-left: -40px !important;
 		margin-top: -30px !important;
-		position: absolute !important;
-		top: 50% !important;
 		width: 80px !important;
-		z-index: 2 !important;
 	}
 	.s3-video-play .s3-video-play-icon {
-		color: #FFF;
-		display: block;
 		font-size: 20px;
-		height: 100%;
-		position: relative;
-		text-align: center;
-		text-decoration: none;
-		width: 100%;
 	}
 	.s3-video-play .s3-video-play-icon i {
-		font-size: 30px;
-		left: 31px;
 		line-height: 30px;
-		position: absolute;
-		top: 27%;
 	}
 
 }
@@ -588,7 +567,6 @@ ul.s3-toggles li a i, ul.s3-toggles-video li a i, ul.s3-controls li a i {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	border: 1px solid #e2e2e2
 }
 .s3-playlist {
 	background: #fff;
