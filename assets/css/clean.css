@@ -1,0 +1,14 @@
+.s3-playlist-wrapper{background:none;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
+.s3-video-play{background:#2D373F;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px}
+.s3-playlist{background:#F2F4F7;-moz-border-radius-bottomright:10px;-moz-border-radius-bottomleft:10px;-webkit-border-bottom-right-radius:10px;-webkit-border-bottom-left-radius:10px;clear:both;float:none;width:98%;overflow:hidden;margin:auto}
+.s3bubble-audio-playlist-tsearch,.s3bubble-video-playlist-tsearch{background:#222!important;border-radius:0!important}
+.s3-playlist ul li{border-bottom:1px solid #eaedf1!important}
+.s3-playlist ul li a{font-family:Signika, sans-serif!important;font-size:12px!important;font-weight:400!important}
+.s3-current-time,.s3-duration,.s3-time-seperator{font-size:17px!important;font-family:Signika, sans-serif!important}
+.s3-playlist a,.s3-playlist p,.s3-playlist h3,.s3-playlist ul,.s3-playlist li,.s3-playlist li a i,.s3-title{color:#9ea7b3!important}
+.s3-playlist ul li a.s3-playlist-current{color:#2D373F!important}
+.s3-progress{background-color:#444!important}
+.s3-seek-bar{background-color:#777!important}
+.s3-play-bar{background-color:#14b9d6!important}
+.s3-poweredby{color:#A3B0B7!important;width:98%;padding:1%}
+.s3-gui,div.jp-video-full div div{background:#2D373F}
