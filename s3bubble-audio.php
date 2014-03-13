@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: S3bubble Cloud Media Streaming Amazon S3
+Plugin Name: S3bubble Cloud Media Streaming Amazon S3 Cloudfront
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 3 simple steps. 
-Version: 1.6.7
+Version: 1.6.8
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -44,7 +44,8 @@ if (!class_exists("s3bubble_audio")) {
 		public $search          = 'false';
 		public $solution        = 'flash,html';
 		public $responsive      = '360p';
-		public $theme           = 's3bubble_default';
+		public $theme           = 's3bubble_clean';
+		public $stream          = 'm4v';
 		
 	    function s3bubble_audio() { //constructor	
 			$this->__construct();
@@ -67,6 +68,7 @@ if (!class_exists("s3bubble_audio")) {
 			add_option("s3-solution", $this->solution);
 			add_option("s3-responsive", $this->responsive);
 			add_option("s3-theme", $this->theme);
+			add_option("s3-stream", $this->stream);
 			add_option("s3-s3bubble_share", $this->s3bubble_share);
 			
 			add_action('admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
@@ -91,26 +93,32 @@ if (!class_exists("s3bubble_audio")) {
 			// Styles
 		   	$colour	= get_option("s3-colour");    
 			$theme = get_option("s3-theme");
-			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__), array(), 5 );
+			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__), array(), 7 );
 			wp_enqueue_style('font-awesome.min');
+			wp_register_style( 's3bubble-style-default', plugins_url('assets/css/default.css', __FILE__), array(), 7 );
+			wp_enqueue_style('s3bubble-style-default');
 			if($theme == 's3bubble_default'){
-				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__), array(), 5 );
-			    wp_enqueue_style('s3bubble-style-default');
+				wp_register_style( 's3bubble-style-style', plugins_url('assets/css/style.css', __FILE__), array(), 7 );
+			    wp_enqueue_style('s3bubble-style-style');
 			}else if($theme == 's3bubble_light'){
-				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css', __FILE__), array(), 5 );
+				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css', __FILE__), array(), 7 );
 			    wp_enqueue_style('s3bubble-style-light');
 			}else if($theme == 's3bubble_sound'){
-				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css', __FILE__), array(), 5 );
+				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css', __FILE__), array(), 7 );
 			    wp_enqueue_style('s3bubble-style-sound');
+			}else if($theme == 's3bubble_clean'){
+				wp_register_style( 's3bubble-style-clean', plugins_url('assets/css/clean.css', __FILE__), array(), 7 );
+			    wp_enqueue_style('s3bubble-style-clean');
+				echo "<link href='//fonts.googleapis.com/css?family=Signika' rel='stylesheet' type='text/css'>";
 			}else{
-				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__), array(), 5 );
+				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__), array(), 7 );
 			    wp_enqueue_style('s3bubble-style-default');
 			}
 			// updated css
 		    echo '<style type="text/css">
 					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;}
 					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
-					.s3-current-time, .s3-duration, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
+					.s3-current-time, .s3-duration, .s3-time-seperator, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
 			</style>';
 		}
@@ -125,9 +133,9 @@ if (!class_exists("s3bubble_audio")) {
             wp_deregister_script( 'jquery' );
             wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js');
             wp_enqueue_script('jquery');
-            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 5 );
+            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 7 );
             wp_enqueue_script('jquery-migrate');
-			wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ), array(), 5 );
+			wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ), array(), 7 );
             wp_enqueue_script('s3bubble.min'); 
 		}
 		
@@ -155,7 +163,7 @@ if (!class_exists("s3bubble_audio")) {
 				$colour				= addslashes($_POST['colour']);
 				$download			= addslashes($_POST['download']);
 				$loggedin			= addslashes($_POST['loggedin']);
-				$search			    = addslashes($_POST['search']);
+				//$search			    = addslashes($_POST['search']);
 				$solution			= addslashes($_POST['solution']);
 				$responsive			= addslashes($_POST['responsive']);
 				$theme			    = addslashes($_POST['theme']);
@@ -167,7 +175,7 @@ if (!class_exists("s3bubble_audio")) {
 				update_option("s3-colour", mysql_real_escape_string($colour));
 				update_option("s3-download", mysql_real_escape_string($download));
 				update_option("s3-loggedin", mysql_real_escape_string($loggedin));
-				update_option("s3-search", mysql_real_escape_string($search));
+				//update_option("s3-search", mysql_real_escape_string($search));
 				update_option("s3-solution", mysql_real_escape_string($solution));
 				update_option("s3-responsive", mysql_real_escape_string($responsive));
 				update_option("s3-theme", mysql_real_escape_string($theme));
@@ -183,6 +191,7 @@ if (!class_exists("s3bubble_audio")) {
 			$solution			= get_option("s3-solution");
 			$responsive			= get_option("s3-responsive");
 			$theme			    = get_option("s3-theme");
+			$stream			    = get_option("s3-stream");
 			$s3bubble_share	    = get_option("s3-s3bubble_share");
 ?>
 <style>
@@ -210,7 +219,9 @@ if (!class_exists("s3bubble_audio")) {
 			<div class="postbox">
 				<h3><span>TUTORIAL SECTION</span></h3>
 				<div class="inside">
-					<iframe style="width:100%;" height="340" src="//s3bubble.com/watch?v=OBbTKGhOr&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen></iframe>
+					<a class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=lPoMKEQ4lng">WATCH TUTORIAL VIDEO</a>
+				    <a style="float: right;" class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=dZZ8Ytmbc1U">FREE AMAZON S3 SETUP</a>
+				
 				</div> 
 			</div>
                  <div class="postbox">
@@ -231,24 +242,29 @@ if (!class_exists("s3bubble_audio")) {
 				<div class="inside">
 					<pre class="s3bubble-pre">[s3bubbleVideoSingle bucket="enter-your-bucket" track="enter-your-track-name"]</pre>
 				</div>
+				<h3><span>RTMP Shortcode Example</span></h3>
+				<div class="inside">
+					<pre class="s3bubble-pre">[s3bubbleVideo bucket="enter-your-bucket" folder="enter-your-bucket-folder" cloudfront="enter-your-cloudfront.net-url"]</pre>
+				</div>
 				<div class="inside">
 					<h3><span>Params - these can be added to the shortcode</span></h3>
 					<p>bucket: //your amazon bucket<br>
 						folder: //your amazon s3 folder<br>
 						autoplay: //true or false<br>
 					    height: //height of the player<br>
-					    playlist: //hiddenr<br>
-					    order: //defualt asc can be desc<br>
-					    style: //plain - this will remove the bar on the single player
+					    playlist: //hidden<br>
+					    order: //default asc can be desc<br>
+					    style: //plain - this will remove the bar on the single player<br>
+					    cloudfront: //cloudfront streaming url<br>
+					    share: //show share links<br>
+					    download: //show download links<br>
+					    solution: //can be set to flash or html<br>
 					    <p>
 				</div>
-			</div>
-
-			<div class="postbox">
-				<h3><span>If you dont already have a amazon s3 account create a free one <a href="https://portal.aws.amazon.com/gp/aws/developer/registration/index.html" target="_blank">Amazon S3 Storage</a></span></h3>
-				<div class="inside">
-					<iframe style="width:100%" height="340" src="//s3bubble.com/watch?v=GOxTyRzSB&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen=""></iframe>
-				</div>
+	            <div class="inside">
+	            	<h3><span>Legacy - old plugin versions</span></h3>
+					<a href="https://isdcloud.s3.amazonaws.com/s3bubble_backups/s3bubble_amazon_s3_audio_streaming.zip">Download Last Plugin Version</a>
+			    </div>
 			</div>
  
 		</div> <!-- .inner-sidebar -->
@@ -263,15 +279,18 @@ if (!class_exists("s3bubble_audio")) {
 						    <table class="form-table">
 						      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('isd-updatesettings'); } ?>
 						       <tr>
+						        <h3>Global S3Bubble Settings</h3>
+						      </tr> 
+						       <tr>
 						        <th scope="row" valign="top"><label for="S3Bubble_username">S3Bubble Username:</label></th>
-						        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
+						        <td><input type="password" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
 						        	<br />
 						       <span class="description">Username you signed up to S3Bubble.com found <a href="http://s3bubble.com/admin/#/profile" target="_blank">here</a></span>	
 						        </td>
 						      </tr> 
 						       <tr>
 						        <th scope="row" valign="top"><label for="s3audible_email">S3Bubble Email:</label></th>
-						        <td><input type="email" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
+						        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
 						        	<br />
 						        	<span class="description">Email you signed up to S3Bubble.com found <a href="http://s3bubble.com/admin/#/profile" target="_blank">here</a></span>
 						        </td>
@@ -290,6 +309,7 @@ if (!class_exists("s3bubble_audio")) {
 						            <option value="s3bubble_default">default</option>
 						            <option value="s3bubble_light">light</option>
 						            <option value="s3bubble_sound">sound</option>
+						            <option value="s3bubble_clean">clean</option>
 						          </select>
 						          <br />
 						          <span class="description">Change the player theme.</p></td>
@@ -304,6 +324,13 @@ if (!class_exists("s3bubble_audio")) {
 						          </select>
 						          <br />
 						          <span class="description">This will set the aspect ration for the video players.</p></td>
+						      </tr>
+						      <tr>
+						        <th scope="row" valign="top"><label for="stream">RTMP:</label></th>
+						        <td>S3Bubble now supports RTMP (Real Time Messaging Protocol) Cloudfront Streaming please see this <a href="https://www.youtube.com/watch?v=lPoMKEQ4lng">tutorial</a><br>
+						        	The default streaming is Progressive Streaming.
+						          <br />
+						          <span class="description">Real Time Messaging Protocol streaming is good for power users.</p></td>
 						      </tr>
 						      <tr>
 						        <th scope="row" valign="top"><label for="solution">Media Options:</label></th>
@@ -324,16 +351,6 @@ if (!class_exists("s3bubble_audio")) {
 						          </select>
 						          <br />
 						          <span class="description">Allow users to share media.</p></td>
-						      </tr>
-						      <tr>
-						        <th scope="row" valign="top"><label for="search">Show Search:</label></th>
-						        <td><select name="search" id="search">
-						            <option value="<?php echo $search; ?>"><?php echo $search; ?></option>
-						            <option value="true">true</option>
-						            <option value="false">false</option>
-						          </select>
-						          <br />
-						          <span class="description">Allow users to search tracks.</p></td>
 						      </tr>
 						       <tr>
 						        <th scope="row" valign="top"><label for="download">Show Download Links:</label></th>
@@ -364,10 +381,6 @@ if (!class_exists("s3bubble_audio")) {
 						    </span>
 						  </form>
 					</div><!-- .inside -->
-					<div class="postbox">
-				<iframe style="width:100%" height="340" src="//s3bubble.com/watch/?v=zchrXjGHc&amp;share=true&amp;hex=e02222" frameborder="0" allowfullscreen=""></iframe>
-				</div>
-				
 				</div>
 			</div> <!-- #post-body-content -->
 		</div> <!-- #post-body -->
@@ -382,31 +395,15 @@ if (!class_exists("s3bubble_audio")) {
        } 
 	   
 	   
-	   function s3bubble_audio_player($atts){ 
-	        extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'bucket' => '',
-				'folder' => '',
-				'order' => 'asc',
-				'autoplay' => 'false',
-			), $atts, 's3bubbleAudio' ) );
-			extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'bucket' => '',
-				'folder' => '',
-				'order' => 'asc',
-				'autoplay' => 'false',
-			), $atts, 's3audible' ) );
-            // get option from database
+	   function s3bubble_audio_player($atts){
+	   	    // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
 			$s3audible_email    = get_option("s3-s3audible_email");		
 			$loggedin           = get_option("s3-loggedin");
 			$search             = get_option("s3-search");
-			$s3bubble_share     = get_option("s3-s3bubble_share");
+			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
-			
+			$stream             = get_option("s3-stream");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -414,76 +411,91 @@ if (!class_exists("s3bubble_audio")) {
 			}else{
 				$download = get_option("s3-download");
 			}
-		   $array = array($s3audible_username, $s3audible_email);
-           $bind = implode("|", $array);
-		   $userdata = base64_encode($bind);
-		   return '<div class="s3audible s3bubblePlayer" data-solution="'.$solution.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
+		    $array = array($s3audible_username, $s3audible_email);
+            $bind = implode("|", $array);
+		    $userdata = base64_encode($bind); 
+	        extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'order'      => 'asc',
+				'download'   => $download,
+				'share'      => $share,
+				'search'     => $search,
+				'solution'   => $solution,
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleAudio' ) );
+			extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'order'      => 'asc',
+				'download'   => $download,
+				'share'      => $share,
+				'search'     => $search,
+				'solution'   => $solution,
+				'autoplay'   => 'false',
+			), $atts, 's3audible' ) );
+		   return '<div class="s3audible s3bubblePlayer" data-solution="'.$solution.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 
 
 		function s3bubble_audio_single_player($atts){
-			 extract( shortcode_atts( array(
-				'style' => '',
-				'bucket' => '',
-				'track' => '',
-				'autoplay' => 'false',
-			), $atts, 's3bubbleAudioSingle' ) );
-			extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'bucket' => '',
-				'folder' => '',
-				'autoplay' => 'false',
-			), $atts, 's3audibleSingle' ) );
-            // get option from database
-			$s3audible_username = get_option("s3-s3audible_username");
-			$s3audible_email = get_option("s3-s3audible_email");		
-			$loggedin        = get_option("s3-loggedin");
-			$search          = get_option("s3-search");
-			$s3bubble_share  = get_option("s3-s3bubble_share");
-			$solution           = get_option("s3-solution");
-			
-			if($loggedin == 'true'){
+			 // get option from database
+			 $s3audible_username = get_option("s3-s3audible_username");
+			 $s3audible_email    = get_option("s3-s3audible_email");		
+			 $loggedin           = get_option("s3-loggedin");
+			 $search             = get_option("s3-search");
+			 $share              = get_option("s3-s3bubble_share");
+			 $solution           = get_option("s3-solution");
+			 $stream             = get_option("s3-stream");
+			 if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
 				}
-			}else{
+			 }else{
 				$download = get_option("s3-download");
-			}
-		   $array = array($s3audible_username, $s3audible_email);
-           $bind = implode("|", $array);
-		   $userdata = base64_encode($bind);
-		   return '<div class="s3audibleSingle s3bubblePlayer" data-solution="'.$solution.'" data-style="'.$style.'" data-s3hare="'.$s3bubble_share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'"></div>';
+			 }
+		     $array = array($s3audible_username, $s3audible_email);
+             $bind = implode("|", $array);
+		     $userdata = base64_encode($bind);
+			 extract( shortcode_atts( array(
+				'style'      => '',
+				'bucket'     => '',
+				'track'      => '',
+				'stream'     => $stream,
+				'download'   => $download,
+				'share'      => $share,
+				'solution'   => $solution,
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleAudioSingle' ) );
+			extract( shortcode_atts( array(
+				'style'      => '',
+				'bucket'     => '',
+				'track'      => '',
+				'stream'     => $stream,
+				'download'   => $download,
+				'share'      => $share,
+				'solution'   => $solution,
+				'autoplay'   => 'false',
+			), $atts, 's3audibleSingle' ) );
+		   return '<div class="s3audibleSingle s3bubblePlayer" data-stream="'.$stream.'" data-solution="'.$solution.'" data-style="'.$style.'" data-s3hare="'.$share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
         
         function s3bubble_video_player($atts){
-        	 extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'bucket' => '',
-				'folder' => '',
-				'order' => 'asc',
-				'autoplay' => 'false',
-			), $atts, 's3bubbleVideo' ) );
-			extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'bucket' => '',
-				'folder' => '',
-				'order' => 'asc',
-				'autoplay' => 'false',
-			), $atts, 's3video' ) );
-            // get option from database
+        	 // get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
-			$s3audible_email = get_option("s3-s3audible_email");		
-			$loggedin        = get_option("s3-loggedin");
-			$search          = get_option("s3-search");
-			$responsive      = get_option("s3-responsive");
-			$s3bubble_share  = get_option("s3-s3bubble_share");
+			$s3audible_email    = get_option("s3-s3audible_email");		
+			$loggedin           = get_option("s3-loggedin");
+			$search             = get_option("s3-search");
+			$responsive         = get_option("s3-responsive");
+			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
-
+			$stream             = get_option("s3-stream");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -494,36 +506,50 @@ if (!class_exists("s3bubble_audio")) {
 		   $array = array($s3audible_username, $s3audible_email);
            $bind = implode("|", $array);
 		   $userdata = base64_encode($bind);
-		   return '<div class="s3video s3bubblePlayer" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
+        	 extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'order'      => 'asc',
+				'cloudfront' => '',
+				'download'   => $download,
+				'share'      => $share,
+				'search'     => $search,
+				'solution'   => $solution,
+				'responsive' => $responsive,
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleVideo' ) );
+			extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'order'      => 'asc',
+				'cloudfront' => '',
+				'download'   => $download,
+				'share'      => $share,
+				'search'     => $search,
+				'solution'   => $solution,
+				'responsive' => $responsive,
+				'autoplay'   => 'false',
+			), $atts, 's3video' ) );
+
+			
+		   return '<div class="s3video s3bubblePlayer" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
 		
         }
 		
-		function s3bubble_video_single_player($atts){ 
-	        extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'track' => '',
-				'bucket' => '',
-				'folder' => '',
-				'style' => '',
-				'autoplay' => 'false',
-			), $atts, 's3bubbleVideoSingle' ) );
-			extract( shortcode_atts( array(
-				'playlist' => '',
-				'height' => '',
-				'bucket' => '',
-				'folder' => '',
-				'autoplay' => 'false',
-			), $atts, 's3videoSingle' ) );
-            // get option from database
+		function s3bubble_video_single_player($atts){
+			// get option from database
 			$s3audible_username = get_option("s3-s3audible_username");
-			$s3audible_email = get_option("s3-s3audible_email");		
-			$loggedin        = get_option("s3-loggedin");
-			$search          = get_option("s3-search");
-			$responsive      = get_option("s3-responsive");
-			$s3bubble_share  = get_option("s3-s3bubble_share");
+			$s3audible_email    = get_option("s3-s3audible_email");		
+			$loggedin           = get_option("s3-loggedin");
+			$search             = get_option("s3-search");
+			$responsive         = get_option("s3-responsive");
+			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
-			
+			$stream             = get_option("s3-stream");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -531,10 +557,37 @@ if (!class_exists("s3bubble_audio")) {
 			}else{
 				$download = get_option("s3-download");
 			}
-		   $array = array($s3audible_username, $s3audible_email);
-           $bind = implode("|", $array);
-		   $userdata = base64_encode($bind);
-		   return '<div class="s3videoSingle s3bubblePlayer" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$s3bubble_share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
+		    $array = array($s3audible_username, $s3audible_email);
+            $bind = implode("|", $array);
+		    $userdata = base64_encode($bind); 
+	        extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'track'      => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'style'      => '',
+				'cloudfront' => '',
+				'download'   => $download,
+				'share'      => $share,
+				'solution'   => $solution,
+				'responsive' => $responsive,
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleVideoSingle' ) );
+			extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'cloudfront' => '',
+				'download'   => $download,
+				'share'      => $share,
+				'solution'   => $solution,
+				'responsive' => $responsive,
+				'autoplay'   => 'false',
+			), $atts, 's3videoSingle' ) );
+            
+		   return '<div class="s3videoSingle s3bubblePlayer" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
 		
         }
 		

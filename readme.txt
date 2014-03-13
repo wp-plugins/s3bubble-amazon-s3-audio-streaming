@@ -1,7 +1,7 @@
- === S3Bubble - Amazon S3 Video And Audio Streaming Service ===
+ === S3Bubble - Amazon S3 Video And Audio Streaming Service Cloudfront ===
 Contributors: Samuel East
 Donate link: https://s3bubble.com/
-Tags: S3Bubble, S3-Bubble, S3 Bubble, Amazon, AmazonS3, Amazon S3, Amazon-S3, S3, Amazon Radio, AmazonRadio, HTML 5 Player, HTML5 Player, HTML5Player, HTML-5 Player, Audio, Audioplayer, Audio-player, Audio player, Video, VideoPlayer, Video-Player, Video player, Media, MediaPlayer, Media-Player, Media player, Music, MusicPlayer, Music-Player, Music player, MP3, MP3 Player, MP3-player, MP3 player, MP4, MP4 Player, MP4-player, MP4 player, MediaStreaming, Media-Streaming, Media Streaming, AudioStreaming, Audio-streaming, Audio Streaming, VideoStreaming, Video-streaming, Video Streaming, MediaStream, Media-Stream, Media Stream, stream-media, stream media, AudioStream, Audio-stream, Audio Stream, Stream-audio, stream audio, VideoStream, Video-stream, Video Stream, Stream-video, stream video, VideoBlog, Video-blog, video blog, vlog, v-log, Podcast, pod-cast, pod cast, CDN, Content Distribution Network, Cloudfront, cloud front, cloud-front, Uploads, stream, streaming, player, cloud
+Tags: S3Bubble, S3-Bubble, S3 Bubble, Amazon, Cloudfront, AmazonS3, Amazon S3, Amazon-S3, S3, Amazon Radio, AmazonRadio, HTML 5 Player, HTML5 Player, HTML5Player, HTML-5 Player, Audio, Audioplayer, Audio-player, Audio player, Video, VideoPlayer, Video-Player, Video player, Media, MediaPlayer, Media-Player, Media player, Music, MusicPlayer, Music-Player, Music player, MP3, MP3 Player, MP3-player, MP3 player, MP4, MP4 Player, MP4-player, MP4 player, MediaStreaming, Media-Streaming, Media Streaming, AudioStreaming, Audio-streaming, Audio Streaming, VideoStreaming, Video-streaming, Video Streaming, MediaStream, Media-Stream, Media Stream, stream-media, stream media, AudioStream, Audio-stream, Audio Stream, Stream-audio, stream audio, VideoStream, Video-stream, Video Stream, Stream-video, stream video, VideoBlog, Video-blog, video blog, vlog, v-log, Podcast, pod-cast, pod cast, CDN, Content Distribution Network, Cloudfront, cloud front, cloud-front, Uploads, stream, streaming, player, cloud
 Requires at least: 2.0
 Tested up to: 3.8
 Stable tag: 1.6.0
@@ -15,8 +15,6 @@ S3Bubble offers simple, secure media streaming from Amazon S3 to Wordpress. In j
 * Step 1 - Link your Amazon S3 Account to S3Bubble
 * Step 2 - Add Audio, Video and Image files through S3Bubble Admin Tools
 * Step 3 - Embed the files in our responsive player on your website
-
-[VIEW VIDEO STREAMING EXAMPLE](https://s3bubble.com/share/?file=bnPcrwpqO "VIEW VIDEO STREAMING EXAMPLE")
 
 Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
