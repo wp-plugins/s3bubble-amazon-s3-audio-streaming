@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: S3bubble Cloud Media Streaming Amazon S3 Cloudfront
+Plugin Name: S3Bubble Amazon S3 Cloudfront Video And Audio Streaming Service
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 3 simple steps. 
 Version: 1.6.8
