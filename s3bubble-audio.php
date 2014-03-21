@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Cloudfront Video And Audio Streaming Service
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 3 simple steps. 
-Version: 1.6.8
+Version: 1.6.9
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -93,31 +93,31 @@ if (!class_exists("s3bubble_audio")) {
 			// Styles
 		   	$colour	= get_option("s3-colour");    
 			$theme = get_option("s3-theme");
-			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__), array(), 7 );
+			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__), array(), 8 );
 			wp_enqueue_style('font-awesome.min');
-			wp_register_style( 's3bubble-style-default', plugins_url('assets/css/default.css', __FILE__), array(), 7 );
+			wp_register_style( 's3bubble-style-default', plugins_url('assets/css/default.css', __FILE__), array(), 8 );
 			wp_enqueue_style('s3bubble-style-default');
 			if($theme == 's3bubble_default'){
-				wp_register_style( 's3bubble-style-style', plugins_url('assets/css/style.css', __FILE__), array(), 7 );
+				wp_register_style( 's3bubble-style-style', plugins_url('assets/css/style.css', __FILE__), array(), 8 );
 			    wp_enqueue_style('s3bubble-style-style');
 			}else if($theme == 's3bubble_light'){
-				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css', __FILE__), array(), 7 );
+				wp_register_style( 's3bubble-style-light', plugins_url('assets/css/light.css', __FILE__), array(), 8 );
 			    wp_enqueue_style('s3bubble-style-light');
 			}else if($theme == 's3bubble_sound'){
-				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css', __FILE__), array(), 7 );
+				wp_register_style( 's3bubble-style-sound', plugins_url('assets/css/sound.css', __FILE__), array(), 8 );
 			    wp_enqueue_style('s3bubble-style-sound');
 			}else if($theme == 's3bubble_clean'){
-				wp_register_style( 's3bubble-style-clean', plugins_url('assets/css/clean.css', __FILE__), array(), 7 );
+				wp_register_style( 's3bubble-style-clean', plugins_url('assets/css/clean.css', __FILE__), array(), 8 );
 			    wp_enqueue_style('s3bubble-style-clean');
 				echo "<link href='//fonts.googleapis.com/css?family=Signika' rel='stylesheet' type='text/css'>";
 			}else{
-				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__), array(), 7 );
+				wp_register_style( 's3bubble-style-default', plugins_url('assets/css/style.css', __FILE__), array(), 8 );
 			    wp_enqueue_style('s3bubble-style-default');
 			}
 			// updated css
 		    echo '<style type="text/css">
 					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;}
-					.s3-play-bar {background-color: '.stripcslashes($colour).' !important;}
+					.s3-play-bar, .s3-playlist ul li.s3-playlist-current {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-time-seperator, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
 			</style>';
@@ -133,9 +133,9 @@ if (!class_exists("s3bubble_audio")) {
             wp_deregister_script( 'jquery' );
             wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js');
             wp_enqueue_script('jquery');
-            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 7 );
+            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 8 );
             wp_enqueue_script('jquery-migrate');
-			wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ), array(), 7 );
+			wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ), array(), 8 );
             wp_enqueue_script('s3bubble.min'); 
 		}
 		
@@ -219,7 +219,7 @@ if (!class_exists("s3bubble_audio")) {
 			<div class="postbox">
 				<h3><span>TUTORIAL SECTION</span></h3>
 				<div class="inside">
-					<a class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=lPoMKEQ4lng">WATCH TUTORIAL VIDEO</a>
+					<a class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=KNYfHwpAYxM">WATCH TUTORIAL VIDEO</a>
 				    <a style="float: right;" class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=dZZ8Ytmbc1U">FREE AMAZON S3 SETUP</a>
 				
 				</div> 
@@ -283,14 +283,14 @@ if (!class_exists("s3bubble_audio")) {
 						      </tr> 
 						       <tr>
 						        <th scope="row" valign="top"><label for="S3Bubble_username">S3Bubble Username:</label></th>
-						        <td><input type="password" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
+						        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
 						        	<br />
 						       <span class="description">Username you signed up to S3Bubble.com found <a href="http://s3bubble.com/admin/#/profile" target="_blank">here</a></span>	
 						        </td>
 						      </tr> 
 						       <tr>
 						        <th scope="row" valign="top"><label for="s3audible_email">S3Bubble Email:</label></th>
-						        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
+						        <td><input type="text" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
 						        	<br />
 						        	<span class="description">Email you signed up to S3Bubble.com found <a href="http://s3bubble.com/admin/#/profile" target="_blank">here</a></span>
 						        </td>
