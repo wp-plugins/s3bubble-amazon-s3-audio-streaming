@@ -66,6 +66,16 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;left:0;position:absolute!important}
 ul.s3-toggles li a i,ul.s3-toggles-video li a i,ul.s3-controls li a i{background:none;font-size:20px!important;margin:0!important;padding:0!important}
 .s3-playlist ul,.s3audibleSingle .s3-playlist ul{margin:0!important;padding:0!important}
+.s3-playlist-loader {
+position: absolute;
+left: 50%;
+width: 150px;
+margin-left: -75px;
+top: 50%;
+margin-top: -4px;
+font-size: 11px;
+text-align: center;
+}
 @media all and max-width 580px {
 .s3audible .s3-time-container,.s3video .s3-time-container{display:none!important}
 }

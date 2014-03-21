@@ -6,6 +6,6 @@
 ul.s3-controls li a,ul.s3-toggles li a,ul.s3-toggles-video li a{text-shadow:1px 1px 0 rgba(0,0,0,0.3)}
 div.jp-video-full div div{background:#000}
 .jp-no-solution{font-size:.8em;background-color:#3a2a45;border-top:2px solid #554461;border-left:2px solid #554461;border-right:2px solid #180a1f;border-bottom:2px solid #180a1f;color:#FFF;display:none;padding:5px}
-.jp-no-solution a{color:#FFF}
+.jp-no-solution a, .s3-playlist ul li a.s3-playlist-current, .s3-playlist ul li.s3-playlist-current .s3bubble_share i{color:#e2e2e2 !important}
 .jp-no-solution span{font-size:1em;display:block;text-align:center;font-weight:700}
 .s3-playlist-wrapper,.s3-video-play,.s3-playlist{background:#000;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
