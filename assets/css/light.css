@@ -3,6 +3,6 @@
 .s3bubble-audio-playlist-tsearch,.s3bubble-video-playlist-tsearch{background:#ededed!important}
 .s3-playlist ul li{border-bottom:1px solid #e2e2e2!important}
 .s3-seek-bar{background-color:#fff!important}
-.jp-no-solution a, .s3-playlist ul li a.s3-playlist-current, .s3-playlist ul li.s3-playlist-current .s3bubble_share i{color:#999 !important}
+.jp-no-solution a, .s3-playlist ul li a.s3-playlist-current, .s3-playlist ul li.s3-playlist-current .s3bubble_share i{color:#fff !important}
 .s3-poweredby{color:#e2e2e2!important}
 .s3-gui,div.jp-video-full div div{background:#e2e2e2}

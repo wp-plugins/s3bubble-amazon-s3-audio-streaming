@@ -32,9 +32,9 @@ ul.s3-controls li{background:url(https://s3.amazonaws.com/s3audible/trans-fix.pn
 .s3-current-time,.s3-duration,.s3-time-seperator{display:block;float:left!important;font-size:12px!important;height:16px!important;line-height:17px!important;margin-top:-4px!important;text-align:center;width:auto;z-index:1!important}
 .s3-togcontainer{height:30px;position:absolute;right:0;width:60px;margin:0;padding:0}
 ul.s3-toggles{height:auto;position:absolute;right:8px;bottom:10px;width:160px;margin:0!important;padding:0!important}
-.s3-playlist ul li{display:block;background:none!important;border:none!important;height:30px!important;line-height:16px!important;list-style:none outside none!important;position:relative;text-align:left!important;text-shadow:none!important;width:100%!important;margin:0!important;padding:0!important}
+.s3-playlist ul li{display:block;background:none!important;border:none!important;height:29px!important;line-height:16px!important;list-style:none outside none!important;position:relative;text-align:left!important;text-shadow:none!important;width:100%!important;margin:0!important;padding:0!important}
 .s3-playlist ul li:before{background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;content:" "!important;height:15px;width:15px}
-.s3-playlist ul li div{float:left;margin-left:5px;width:100%!important}
+.s3-playlist ul li div{float:left;width:100%!important}
 .s3-playlist ul li a{border:none!important;display:block!important;font-family:'Open Sans', sans-serif!important;font-size:12px!important;font-weight:700!important;list-style:none!important;overflow:hidden;position:absolute;text-decoration:none!important;text-overflow:ellipsis;text-shadow:none!important;top:7px;white-space:nowrap;width:77%;outline:none;margin:0 8px!important;padding:0!important}
 ul.s3-toggles li a.s3-repeat,ul.s3-toggles li a.s3-repeat-off{background:transparent url(https://s3.amazonaws.com/s3audible/icons/wp_icon.png) no-repeat center center scroll;display:block!important;height:15px;position:absolute;right:0;top:7px;width:23px}
 .s3-artist{float:right!important;font-size:10px!important;margin:0!important;padding:0!important}
@@ -66,16 +66,7 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 div.jp-video-full div.jp-interface,div.jp-video-full div.s3-interface{bottom:0;left:0;position:absolute!important}
 ul.s3-toggles li a i,ul.s3-toggles-video li a i,ul.s3-controls li a i{background:none;font-size:20px!important;margin:0!important;padding:0!important}
 .s3-playlist ul,.s3audibleSingle .s3-playlist ul{margin:0!important;padding:0!important}
-.s3-playlist-loader {
-position: absolute;
-left: 50%;
-width: 150px;
-margin-left: -75px;
-top: 50%;
-margin-top: -4px;
-font-size: 11px;
-text-align: center;
-}
+.s3-playlist-loader {position: absolute;left: 50%;width: 150px;margin-left: -75px;top: 50%;margin-top: -4px;font-size: 11px;text-align: center;}
 @media all and max-width 580px {
 .s3audible .s3-time-container,.s3video .s3-time-container{display:none!important}
 }

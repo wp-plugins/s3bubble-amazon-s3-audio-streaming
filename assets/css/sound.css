@@ -4,5 +4,5 @@
 .s3-seek-bar{background-color:#333!important}
 .s3-poweredby{color:#333!important}
 .jp-no-solution a, .s3-playlist ul li a.s3-playlist-current, .s3-playlist ul li.s3-playlist-current .s3bubble_share i{color:#e2e2e2 !important}
-.s3-playlist-wrapper,.s3-playlist{background:#333;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
+.s3-playlist-wrapper,.s3-playlist{background:#333;}
 .s3-gui,div.jp-video-full div div{background:#f60}
