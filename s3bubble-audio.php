@@ -73,7 +73,7 @@ if (!class_exists("s3bubble_audio")) {
 			
 			add_action('admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
 			add_action( 'wp_head', array( $this, 's3bubble_audio_css' ) );
-			add_action( 'wp_footer', array( $this, 's3bubble_audio_javascript' ) );
+			add_action( 'wp_head', array( $this, 's3bubble_audio_javascript' ), 11 );
 			add_action( 'admin_head', array( $this, 's3bubble_audio_css_admin' ) );
 			add_action( 'admin_footer', array( $this, 's3bubble_audio_javascript_admin' ) );
 			add_shortcode( 's3bubbleAudio', array( $this, 's3bubble_audio_player' ) );
@@ -130,13 +130,15 @@ if (!class_exists("s3bubble_audio")) {
 		
 		// include javascript
 		function s3bubble_audio_javascript(){
-            wp_deregister_script( 'jquery' );
-            wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js');
-            wp_enqueue_script('jquery');
-            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 8 );
-            wp_enqueue_script('jquery-migrate');
-			wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ), array(), 8 );
-            wp_enqueue_script('s3bubble.min'); 
+           if (!is_admin()) {
+	            wp_deregister_script( 'jquery' );
+	            wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false, null);
+	            wp_enqueue_script('jquery');
+	            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 8 );
+	            wp_enqueue_script('jquery-migrate');
+				wp_register_script( 's3bubble.min', plugins_url('assets/js/s3audible.min.js',__FILE__ ), array(), 8 );
+	            wp_enqueue_script('s3bubble.min');
+            } 
 		}
 		
 		// include javascript
