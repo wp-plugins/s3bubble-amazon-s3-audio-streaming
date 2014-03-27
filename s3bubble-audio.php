@@ -329,7 +329,7 @@ if (!class_exists("s3bubble_audio")) {
 						      </tr>
 						      <tr>
 						        <th scope="row" valign="top"><label for="stream">RTMP:</label></th>
-						        <td>S3Bubble now supports RTMP (Real Time Messaging Protocol) Cloudfront Streaming please see this <a href="https://www.youtube.com/watch?v=lPoMKEQ4lng">tutorial</a><br>
+						        <td>S3Bubble now supports RTMP (Real Time Messaging Protocol) Cloudfront Streaming please see this <a href="https://www.youtube.com/watch?v=KNYfHwpAYxM">tutorial</a><br>
 						        	The default streaming is Progressive Streaming.
 						          <br />
 						          <span class="description">Real Time Messaging Protocol streaming is good for power users.</p></td>
