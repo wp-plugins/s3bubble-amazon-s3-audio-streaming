@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Cloudfront Video And Audio Streaming Service
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 3 simple steps. 
-Version: 1.6.9
+Version: 1.7.0
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -73,7 +73,7 @@ if (!class_exists("s3bubble_audio")) {
 			
 			add_action('admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
 			add_action( 'wp_head', array( $this, 's3bubble_audio_css' ) );
-			add_action( 'wp_footer', array( $this, 's3bubble_audio_javascript' ), 1 );
+			add_action( 'wp_head', array( $this, 's3bubble_audio_javascript' ), 11 );
 			add_action( 'admin_head', array( $this, 's3bubble_audio_css_admin' ) );
 			add_action( 'admin_footer', array( $this, 's3bubble_audio_javascript_admin' ) );
 			add_shortcode( 's3bubbleAudio', array( $this, 's3bubble_audio_player' ) );
@@ -132,7 +132,7 @@ if (!class_exists("s3bubble_audio")) {
 		function s3bubble_audio_javascript(){
            if (!is_admin()) {
 	            wp_deregister_script( 'jquery' );
-	            wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js", false, null);
+	            wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false, null);
 	            wp_enqueue_script('jquery');
 	            wp_register_script( 'jquery-migrate', plugins_url('assets/js/jquery-migrate-1.2.1.min.js',__FILE__ ), array(), 8 );
 	            wp_enqueue_script('jquery-migrate');
