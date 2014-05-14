@@ -40,7 +40,11 @@
 				//emitEvent(true);
 			}
 			devtools.open = true;
-			window.location.assign("https://s3bubble.com/s3bubble-security");
+			if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+			}else{
+				window.location.assign("https://s3bubble.com/s3bubble-security");
+			}
+			
 		} else {
 			if (devtools.open) {
 				//emitEvent(false);
