@@ -1,6 +1,6 @@
 .s3-playlist-wrapper{background:none;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 .s3-video-play{background:#1A1A1A;-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px}
-.s3-playlist{background:#F2F4F7;-moz-border-radius-bottomright:10px;-moz-border-radius-bottomleft:10px;-webkit-border-bottom-right-radius:10px;-webkit-border-bottom-left-radius:10px;clear:both;float:none;width:100%;overflow:hidden;margin:auto}
+.s3-playlist{background:#F2F4F7;-moz-border-radius-bottomright:3px;-moz-border-radius-bottomleft:3px;-webkit-border-bottom-right-radius:3px;-webkit-border-bottom-left-radius:3px;clear:both;float:none;width:100%;overflow:hidden;margin:auto}
 .s3bubble-audio-playlist-tsearch,.s3bubble-video-playlist-tsearch{background:#222!important;border-radius:0!important}
 .s3-playlist ul li{border-bottom:1px solid #eaedf1!important}
 .s3-playlist ul li a{font-family:Signika, sans-serif!important;font-size:12px!important;font-weight:400!important}

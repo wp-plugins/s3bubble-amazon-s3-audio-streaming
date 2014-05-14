@@ -29,7 +29,7 @@ ul.s3-controls{float:left;height:20px;left:5px;position:absolute;width:90px;bott
 ul.s3-controls li{background:url(https://s3.amazonaws.com/s3audible/trans-fix.png) no-repeat!important;border:none!important;display:inline-block;float:left;list-style:none!important;text-align:center;margin:0!important;padding:0!important}
 .s3-time-container{position:absolute;left:100px;width:auto;bottom:7px}
 .s3-time-container-single-audio{position:absolute;left:40px;width:110px;bottom:8px}
-.s3-current-time,.s3-duration,.s3-time-seperator{display:block;float:left!important;font-size:12px!important;height:16px!important;line-height:17px!important;margin-top:-4px!important;text-align:center;width:auto;z-index:1!important}
+.s3-current-time,.s3-duration,.s3-time-seperator{font-family: Signika, sans-serif!important;display:block;float:left!important;font-size:12px!important;height:16px!important;line-height:17px!important;margin-top:-4px!important;text-align:center;width:auto;z-index:1!important}
 .s3-togcontainer{height:30px;position:absolute;right:0;width:60px;margin:0;padding:0}
 ul.s3-toggles{height:auto;position:absolute;right:8px;bottom:5px;width:160px;margin:0!important;padding:0!important}
 .s3-playlist ul li{box-sizing: content-box!important;display:block;background:none!important;border:none!important;height:29px!important;line-height:16px!important;list-style:none outside none!important;position:relative;text-align:left!important;text-shadow:none!important;width:100%!important;margin:0!important;padding:0!important}
