@@ -12,6 +12,9 @@ S3Bubble offers simple, secure media streaming from Amazon S3 Cloudfront RTMP to
 
 == Description ==
 
+Now with WYSIWYG buttons [S3Bubble](https://s3bubble.com/need-extra-video-security-wysiwyg-shortcode-generate-buttons/ "View more information on this")
+
+
 **Now Compatible With Media Elements JS.**
 
 * Step 1 - Link your Amazon S3 Account to S3Bubble
