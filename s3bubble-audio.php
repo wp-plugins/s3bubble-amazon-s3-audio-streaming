@@ -804,7 +804,7 @@ if (!class_exists("s3bubble_audio")) {
 					<div class="postbox">
 						<h3><span>TUTORIAL SECTION</span></h3>
 						<div class="inside">
-							<a class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=KNYfHwpAYxM">WATCH TUTORIAL VIDEO</a>
+							<a class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=zC7bIL2L1bM">WATCH TUTORIAL VIDEO</a>
 						    <a style="float: right;" class="button button-primary button-hero" target="_blank" href="https://www.youtube.com/watch?v=dZZ8Ytmbc1U">FREE AMAZON S3 SETUP</a>
 						
 						</div> 
