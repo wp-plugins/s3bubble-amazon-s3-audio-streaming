@@ -42,7 +42,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $width           = '100%';
 		public $autoplay        = 'yes';
 		public $jtoggle		    = 'true';
-		public $security		= 'true';
+		public $security		= 'false';
 		public $s3bubble_share  = 'false';
 		public $download		= 'false';
 		public $loggedin        = 'false';

@@ -8,7 +8,7 @@
 (function () {
 	'use strict';
 	var devtools = {open: false};
-	var threshold = 160;
+	var threshold = 260;
 	var CustomEvent;
 	CustomEvent = function(event, params) {
 	  var evt;
@@ -51,7 +51,7 @@
 			}
 			devtools.open = false;
 		}
-	}, 4000);
+	}, 5000);
 
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = devtools;
