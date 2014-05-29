@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Cloudfront Video And Audio Streaming
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress with Cloudfront. In just 3 simple steps. 
-Version: 1.7.2
+Version: 1.7.3
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -51,7 +51,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $responsive      = '360p';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
-		public $version         = 10;
+		public $version         = 12;
 		
 		/*
 		 * Run Constructor method 
@@ -91,6 +91,10 @@ if (!class_exists("s3bubble_audio")) {
 			add_option("s3-theme", $this->theme);
 			add_option("s3-stream", $this->stream);
 			add_option("s3-s3bubble_share", $this->s3bubble_share);
+			$security = get_option("s3-security");
+			if(isset($security)){
+				update_option("s3-security", mysql_real_escape_string(false));
+			}
 
 			/*
 			 * Run the add admin menu class
@@ -727,10 +731,6 @@ if (!class_exists("s3bubble_audio")) {
 	            wp_enqueue_script('s3bubble.min');
 				wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array(), $this->version );
 	            wp_enqueue_script('mediaelement-and-player.min');
-				if($security == 'true'){
-					wp_register_script( 'devtools-detect', plugins_url('assets/js/devtools-detect.js',__FILE__ ), array(), $this->version );
-		            wp_enqueue_script('devtools-detect');
-				}
             } 
 		}
         
@@ -782,6 +782,7 @@ if (!class_exists("s3bubble_audio")) {
 			$theme			    = get_option("s3-theme");
 			$stream			    = get_option("s3-stream");
 			$s3bubble_share	    = get_option("s3-s3bubble_share");
+
 		?>
 		<style>
 			.s3bubble-pre {
@@ -900,16 +901,6 @@ if (!class_exists("s3bubble_audio")) {
 								        	<br />
 								        	<span class="description">Sets the brand colour for the player.</p>
 								        </td>
-								      </tr>
-								      <tr>
-								        <th scope="row" valign="top"><label for="security">Extra Security:</label></th>
-								        <td><select name="security" id="security">
-								            <option value="<?php echo $security; ?>"><?php echo $security; ?></option>
-								            <option value="true">true</option>
-								            <option value="false">false</option>
-								          </select>
-								          <br />
-								          <span class="description">Optimise security stop people from inspecting element on video & audio players.</p></td>
 								      </tr>
 								      <tr>
 								        <th scope="row" valign="top"><label for="search">Player Theme:</label></th>
