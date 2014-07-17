@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Cloudfront Video And Audio Streaming
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress with Cloudfront. In just 3 simple steps. 
-Version: 1.7.3
+Version: 1.7.4
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -42,7 +42,6 @@ if (!class_exists("s3bubble_audio")) {
 		public $width           = '100%';
 		public $autoplay        = 'yes';
 		public $jtoggle		    = 'true';
-		public $security		= 'false';
 		public $s3bubble_share  = 'false';
 		public $download		= 'false';
 		public $loggedin        = 'false';
@@ -51,23 +50,14 @@ if (!class_exists("s3bubble_audio")) {
 		public $responsive      = '360p';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
-		public $version         = 12;
-		
-		/*
-		 * Run Constructor method 
-		 * @author sameast
-		 * @params none
-		 */ 
-	    function s3bubble_audio() { 
-			$this->__construct();
-		}
+		public $version         = 15;
 		
 		/*
 		 * Constructor method to intiat the class
 		 * @author sameast
 		 * @params none
 		 */ 
-		function __construct(){
+		function s3bubble_audio(){
 			
 			/*
 			 * Add default option to database
@@ -82,7 +72,6 @@ if (!class_exists("s3bubble_audio")) {
 			add_option("s3-width", $this->width);
 			add_option("s3-autoplay", $this->autoplay);
 			add_option("s3-jtoggle", $this->jtoggle);
-			add_option("s3-security", $this->security);
 			add_option("s3-download", $this->download);
 			add_option("s3-loggedin", $this->loggedin);
 			add_option("s3-search", $this->search);
@@ -91,10 +80,6 @@ if (!class_exists("s3bubble_audio")) {
 			add_option("s3-theme", $this->theme);
 			add_option("s3-stream", $this->stream);
 			add_option("s3-s3bubble_share", $this->s3bubble_share);
-			$security = get_option("s3-security");
-			if(isset($security)){
-				update_option("s3-security", mysql_real_escape_string(false));
-			}
 
 			/*
 			 * Run the add admin menu class
@@ -647,7 +632,7 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
         function s3bubble_audio_admin_menu(){	
-			add_menu_page( 's3bubble_audio', 'S3Bubble Media', 'manage_options', 's3bubble_audio', array($this, 's3bubble_audio_admin'), plugins_url('assets/images/wps3icon.png',__FILE__ ) );
+			add_menu_page( 's3bubble_audio', 'S3Bubble Media', 'manage_options', 's3bubble_audio', array($this, 's3bubble_audio_admin'), plugins_url('assets/images/s3bubblelogo.png',__FILE__ ) );
     	}
         
 		/*
@@ -656,6 +641,8 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_audio_css_admin(){
+			wp_register_style( 's3bubble-media-admin-css', plugins_url('assets/css/admin.css', __FILE__) );
+			wp_enqueue_style('s3bubble-media-admin-css');
 			wp_register_style( 'colorpicker', plugins_url('assets/css/colorpicker.css', __FILE__) );
 			wp_enqueue_style('colorpicker');
 			wp_register_style( 's3bubble-plugin', plugins_url('assets/css/s3bubble-plugin.css', __FILE__) );
@@ -721,7 +708,6 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_audio_javascript(){
            if (!is_admin()) {
-           	    $security = get_option("s3-security");
 	            wp_deregister_script( 'jquery' );
 	            wp_register_script( 'jquery', '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false, null);
 	            wp_enqueue_script('jquery');
@@ -752,22 +738,20 @@ if (!class_exists("s3bubble_audio")) {
 				$download			= addslashes($_POST['download']);
 				$loggedin			= addslashes($_POST['loggedin']);
 				$solution			= addslashes($_POST['solution']);
-				$security			= addslashes($_POST['security']);
 				$responsive			= addslashes($_POST['responsive']);
 				$theme			    = addslashes($_POST['theme']);
 				$s3bubble_share	    = addslashes($_POST['s3bubble_share']);
 
 			    // Update the DB with the new option values
-				update_option("s3-s3audible_username", mysql_real_escape_string($s3audible_username));
-				update_option("s3-s3audible_email", mysql_real_escape_string($s3audible_email));
-				update_option("s3-colour", mysql_real_escape_string($colour));
-				update_option("s3-download", mysql_real_escape_string($download));
-				update_option("s3-loggedin", mysql_real_escape_string($loggedin));
-				update_option("s3-solution", mysql_real_escape_string($solution));
-				update_option("s3-security", mysql_real_escape_string($security));
-				update_option("s3-responsive", mysql_real_escape_string($responsive));
-				update_option("s3-theme", mysql_real_escape_string($theme));
-				update_option("s3-s3bubble_share", mysql_real_escape_string($s3bubble_share));
+				update_option("s3-s3audible_username", $s3audible_username);
+				update_option("s3-s3audible_email", $s3audible_email);
+				update_option("s3-colour", $colour);
+				update_option("s3-download", $download);
+				update_option("s3-loggedin", $loggedin);
+				update_option("s3-solution", $solution);
+				update_option("s3-responsive", $responsive);
+				update_option("s3-theme", $theme);
+				update_option("s3-s3bubble_share", $s3bubble_share);
 			}
 			
 			$s3audible_username	= get_option("s3-s3audible_username");
@@ -777,7 +761,6 @@ if (!class_exists("s3bubble_audio")) {
 			$loggedin			= get_option("s3-loggedin");			
 			$search			    = get_option("s3-search");
 			$solution			= get_option("s3-solution");
-			$security			= get_option("s3-security");
 			$responsive			= get_option("s3-responsive");
 			$theme			    = get_option("s3-theme");
 			$stream			    = get_option("s3-stream");
@@ -865,8 +848,9 @@ if (!class_exists("s3bubble_audio")) {
 						</div>
 			            <div class="inside">
 			            	<h3><span>Legacy - old plugin versions</span></h3>
-			            	<a href="https://isdcloud.s3.amazonaws.com/ver1.7/s3bubble_amazon_s3_audio_streaming_1_.zip">Download Last Plugin Version 1.7.0</a>
-							<a href="https://isdcloud.s3.amazonaws.com/s3bubble_backups/s3bubble_amazon_s3_audio_streaming.zip">Download Last Plugin Version</a>
+			            	<a href="https://isdcloud.s3.amazonaws.com/ver1.7.3/s3bubble_amazon_s3_audio_streaming_legacy.zip">Download Last Plugin Version 1.7.3</a><br>
+			            	<a href="https://isdcloud.s3.amazonaws.com/ver1.7/s3bubble_amazon_s3_audio_streaming_1_.zip">Download Last Plugin Version 1.7.0</a><br>
+							<a href="https://isdcloud.s3.amazonaws.com/s3bubble_backups/s3bubble_amazon_s3_audio_streaming.zip">Download Last Plugin Version</a><br>
 					    </div>
 					</div>
 				</div>
@@ -1002,7 +986,6 @@ if (!class_exists("s3bubble_audio")) {
 			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
 			$stream             = get_option("s3-stream");
-			$security           = get_option("s3-security");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -1069,7 +1052,6 @@ if (!class_exists("s3bubble_audio")) {
 			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
 			$stream             = get_option("s3-stream");
-			$security           = get_option("s3-security");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -1135,7 +1117,6 @@ if (!class_exists("s3bubble_audio")) {
 			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
 			$stream             = get_option("s3-stream");
-			$security           = get_option("s3-security");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -1174,7 +1155,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 				'preload'   => 'auto',
 			), $atts, 's3audible' ) );
-		   return '<div class="s3audible s3bubblePlayer" data-security="'.$security.'" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'" data-preload="'.$preload.'"></div>';
+		   return '<div class="s3audible s3bubblePlayer" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'" data-preload="'.$preload.'"></div>';
 		
         }
 
@@ -1191,7 +1172,6 @@ if (!class_exists("s3bubble_audio")) {
 			 $share              = get_option("s3-s3bubble_share");
 			 $solution           = get_option("s3-solution");
 			 $stream             = get_option("s3-stream");
-			 $security           = get_option("s3-security");
 			 if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -1226,7 +1206,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 				'preload'   => 'auto',
 			), $atts, 's3audibleSingle' ) );
-		   return '<div class="s3audibleSingle s3bubblePlayer" data-security="'.$security.'" data-cloudfront="'.$cloudfront.'" data-stream="'.$stream.'" data-solution="'.$solution.'" data-style="'.$style.'" data-s3hare="'.$share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'" data-preload="'.$preload.'"></div>';
+		   return '<div class="s3audibleSingle s3bubblePlayer" data-cloudfront="'.$cloudfront.'" data-stream="'.$stream.'" data-solution="'.$solution.'" data-style="'.$style.'" data-s3hare="'.$share.'" data-download="'.$download.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-track="'.$track.'" data-autoplay="'.$autoplay.'" data-preload="'.$preload.'"></div>';
         }
         
 		/*
@@ -1243,7 +1223,6 @@ if (!class_exists("s3bubble_audio")) {
 			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
 			$stream             = get_option("s3-stream");
-			$security           = get_option("s3-security");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -1282,7 +1261,7 @@ if (!class_exists("s3bubble_audio")) {
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
 			), $atts, 's3video' ) );
-		   return '<div class="s3video s3bubblePlayer" data-security="'.$security.'" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
+		   return '<div class="s3video s3bubblePlayer" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'" data-search="'.$search.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-order="'.$order.'" data-autoplay="'.$autoplay.'"></div>';
         }
 		
 		/*
@@ -1300,7 +1279,6 @@ if (!class_exists("s3bubble_audio")) {
 			$share              = get_option("s3-s3bubble_share");
 			$solution           = get_option("s3-solution");
 			$stream             = get_option("s3-stream");
-			$security           = get_option("s3-security");
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = get_option("s3-download");
@@ -1337,7 +1315,7 @@ if (!class_exists("s3bubble_audio")) {
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
 			), $atts, 's3videoSingle' ) );
-		   return '<div class="s3videoSingle s3bubblePlayer" data-security="'.$security.'" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
+		   return '<div class="s3videoSingle s3bubblePlayer" data-cloudfront="'.$cloudfront.'" data-solution="'.$solution.'" data-responsive="'.$responsive.'" data-s3hare="'.$share.'" data-playlist="'.$playlist.'" data-height="'.$height.'" data-download="'.$download.'"  data-track="'.$track.'" data-userdata="'.$userdata.'" data-bucket="'.$bucket.'" data-folder="'.$folder.'" data-autoplay="'.$autoplay.'" data-style="'.$style.'"></div>';
         }
 	}
 	/*
