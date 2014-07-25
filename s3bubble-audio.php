@@ -50,7 +50,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $responsive      = '360p';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
-		public $version         = 15;
+		public $version         = 16;
 		
 		/*
 		 * Constructor method to intiat the class
