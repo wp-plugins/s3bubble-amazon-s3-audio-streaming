@@ -47,7 +47,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $responsive      = '360p';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
-		public $version         = 16;
+		public $version         = 17;
 		private $endpoint       = 'https://api.s3bubble.com/';
 		
 		/*
@@ -89,7 +89,7 @@ if (!class_exists("s3bubble_audio")) {
 			 * @params none
 			 */ 
 			add_action( 'wp_head', array( $this, 's3bubble_audio_css' ) );
-			add_action( 'wp_head', array( $this, 's3bubble_audio_javascript' ), 11 );
+			add_action( 'wp_enqueue_scripts', array( $this, 's3bubble_audio_javascript' ), 11 );
 			
 			/*
 			 * Add css to the wordpress admin document
