@@ -1204,7 +1204,7 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                swfPath: "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
 	                preload: "'.$preload.'",
-	                //solution: "html",
+	                supplied: "mp3,m4a",
 	                cssSelector: {
 	                    play: ".s3-play",
 	                    pause: ".s3-pause",
@@ -1370,6 +1370,7 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                swfPath: "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
 	                preload: "'.$preload.'",
+	                supplied: "mp3,m4a",
 	                cssSelector: {
 	                    play: ".s3-play",
 	                    pause: ".s3-pause",
