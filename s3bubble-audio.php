@@ -1064,6 +1064,7 @@ if (!class_exists("s3bubble_audio")) {
 			// Check download
 			$dc = 'false';
 			if($download == 'true'){
+				$dc = 'true';
 				if($loggedin == 'true'){
 					if ( is_user_logged_in() ) {
 						$dc = 'true';
@@ -1262,6 +1263,7 @@ if (!class_exists("s3bubble_audio")) {
 			// Check download
 			$dc = 'false';
 			if($download == 'true'){
+				$dc = 'true';
 				if($loggedin == 'true'){
 					if ( is_user_logged_in() ) {
 						$dc = 'true';
@@ -1433,6 +1435,7 @@ if (!class_exists("s3bubble_audio")) {
 			// Check download
 			$dc = 'false';
 			if($download == 'true'){
+				$dc = 'true';
 				if($loggedin == 'true'){
 					if ( is_user_logged_in() ) {
 						$dc = 'true';
@@ -1698,6 +1701,7 @@ if (!class_exists("s3bubble_audio")) {
 			// Check download
 			$dc = 'false';
 			if($download == 'true'){
+				$dc = 'true';
 				if($loggedin == 'true'){
 					if ( is_user_logged_in() ) {
 						$dc = 'true';
