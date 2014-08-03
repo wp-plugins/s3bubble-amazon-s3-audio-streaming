@@ -937,6 +937,11 @@ if (!class_exists("s3bubble_audio")) {
 			    'Cloudfront' => $cloudfront
 			);
 			
+			if(!function_exists('curl_version')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
+			
 			//open connection
 			$ch = curl_init();
 			//set the url, number of POST vars, POST data
@@ -992,6 +997,11 @@ if (!class_exists("s3bubble_audio")) {
 			    'Bucket' => $bucket,
 			    'Key' => $track
 			);
+			
+			if(!function_exists('curl_version')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
 			
 			//open connection
 			$ch = curl_init();
@@ -1071,6 +1081,11 @@ if (!class_exists("s3bubble_audio")) {
 			    'Bucket' => $bucket,
 			    'Folder' => $folder
 			);
+			
+			if(!function_exists('curl_version')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
 			
 			//open connection
 			$ch = curl_init();
@@ -1189,6 +1204,7 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                swfPath: "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
 	                preload: "'.$preload.'",
+	                //solution: "html",
 	                cssSelector: {
 	                    play: ".s3-play",
 	                    pause: ".s3-pause",
@@ -1263,6 +1279,11 @@ if (!class_exists("s3bubble_audio")) {
 			    'Bucket' => $bucket,
 			    'Key' => $track
 			);
+			
+			if(!function_exists('curl_version')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
 			
 			//open connection
 			$ch = curl_init();
@@ -1429,6 +1450,11 @@ if (!class_exists("s3bubble_audio")) {
 			    'Bucket' => $bucket,
 			    'Folder' => $folder
 			);
+			
+			if(!function_exists('curl_version')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
 			
 			//open connection
 			$ch = curl_init();
@@ -1690,6 +1716,11 @@ if (!class_exists("s3bubble_audio")) {
 			    'Key' => $track,
 			    'Cloudfront' => $cloudfront
 			);
+			
+			if(!function_exists('curl_version')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
 			
 			//open connection
 			$ch = curl_init();
