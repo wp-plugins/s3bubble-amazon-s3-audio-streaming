@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Cloudfront Video And Audio Streaming
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress with Cloudfront. In just 4 simple steps. 
-Version: 1.7.6
+Version: 1.7.7
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -1170,7 +1170,7 @@ if (!class_exists("s3bubble_audio")) {
 	                ready: function(event) {
 	                	var res = ' . $result . ';
 						if(res.error !== undefined){
-							alert(res.error);
+							console.log(res.error);
 						}else{
 							audioPlaylistS3Bubble.setPlaylist(res);
 							// hide playlist
@@ -1354,7 +1354,7 @@ if (!class_exists("s3bubble_audio")) {
 	                ready: function(event) {
 	                	var res = ' . $result . ';
 						if(res.error !== undefined){
-							alert(res.error);
+							console.log(res.error);
 						}else{
 		                	audioSingleS3Bubble.setPlaylist(res);
 							//Download
@@ -1565,14 +1565,14 @@ if (!class_exists("s3bubble_audio")) {
 					ready : function(event) {
 						var res = ' . $result . ';
 						if(res.error !== undefined){
-							alert(res.error);
+							console.log(res.error);
 						}else{
 							videoPlaylistS3Bubble.setPlaylist(res);
 							if (res[0].status === "InProgress") {
-								alert("You cloudfront distribution has not deployed yet please wait normally takes up to 15 minutes... This message will not display once deployed...")
+								console.log("You cloudfront distribution has not deployed yet please wait normally takes up to 15 minutes... This message will not display once deployed...")
 							}
 							if (res[0].user === "not_paid") {
-								alert("Alert unfortunately your S3Bubble free trial has expired please upgrade to continue using S3Bubble and remove this message.")
+								console.log("Alert unfortunately your S3Bubble free trial has expired please upgrade to continue using S3Bubble and remove this message.")
 							}
 							$("video").bind("contextmenu", function(e) {
 								return false
@@ -1819,7 +1819,7 @@ if (!class_exists("s3bubble_audio")) {
 						ready : function(event) {
 							var res = ' . $result . ';
 							if(res.error !== undefined){
-								alert(res.error);
+								console.log(res.error);
 							}else{
 								videoSingleS3Bubble.setPlaylist(res);
 								$(".s3-gui").fadeIn();
