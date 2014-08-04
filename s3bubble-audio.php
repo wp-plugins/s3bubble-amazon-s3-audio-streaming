@@ -1146,7 +1146,7 @@ if (!class_exists("s3bubble_audio")) {
 			                <input type="text" id="s3bubble-audio-playlist-tsearch-' . $player_id .  '" class="s3bubble-audio-playlist-tsearch" name="s3bubble-audio-playlist-tsearch" placeholder="Search">
 			            </div>
 			            <div class="s3-playlist s3bubble-audio-playlist-tracksearch-' . $player_id .  '" style="display:'. (($playlist == 'hidden') ? 'none' : 'block' ) .';">
-			                <ul>
+			                <ul class="s3bubble-audio-playlist-ul-' . $player_id .  '">
 			                    <li class="list-fix"></li>
 			                </ul>
 			            </div>
@@ -1194,12 +1194,13 @@ if (!class_exists("s3bubble_audio")) {
 								return false;
 							});
 							$(".s3audible #s3bubble-audio-playlist-tsearch-' . $player_id .  '").keyup(function() {
-								if ($(this).val() != "") {
-									$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  ' ul li").hide();
-									$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  ' ul li div:contains(\'" + $(this).val() + "\')").parent("li").show();
-								} else {
-									$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  ' ul li").show();
-								}
+								var searchText = $(this).val(),
+					            $allListElements = $("ul.s3bubble-audio-playlist-ul-' . $player_id .  ' > li"),
+					            $matchingListElements = $allListElements.filter(function(i, el){
+					                return $(el).text().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+					            });
+								$allListElements.hide();
+       							$matchingListElements.show();
 							});
 						}
 	                },
@@ -1415,6 +1416,7 @@ if (!class_exists("s3bubble_audio")) {
 				'order'      => 'asc',
 				'cloudfront' => '',
 				'download'   => '',
+				'aspect'     => '16:9',
 				'search'     => $search,
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
@@ -1427,6 +1429,7 @@ if (!class_exists("s3bubble_audio")) {
 				'order'      => 'asc',
 				'cloudfront' => '',
 				'download'   => '',
+				'aspect'     => '16:9',
 				'search'     => $search,
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
@@ -1459,7 +1462,6 @@ if (!class_exists("s3bubble_audio")) {
     			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
     			exit();
     		}
-			
 			//open connection
 			$ch = curl_init();
 			//set the url, number of POST vars, POST data
@@ -1525,7 +1527,7 @@ if (!class_exists("s3bubble_audio")) {
 		                <input type="text" id="s3bubble-video-playlist-tsearch-' . $player_id .  '" class="s3bubble-video-playlist-tsearch" name="s3bubble-video-playlist-tsearch" placeholder="Search">
 		            </div>
 		            <div class="s3-playlist s3bubble-video-playlist-tracksearch-' . $player_id .  '" style="display:' . $player_id .  ';">
-		                <ul>
+		                <ul class="s3bubble-video-playlist-ul-' . $player_id .  '">
 		                    <li class="list-fix"></li>
 		                </ul>
 		            </div>
@@ -1543,12 +1545,13 @@ if (!class_exists("s3bubble_audio")) {
 					wratio = "640px";
 					hratio = "360px"
 				} else if ("'.$responsive.'" === "responsive") {
-					var i = parseInt(Math.round($("#s3-container-video-' . $player_id .  '").width()));
-					i *= 1;
-					var b = Math.round(i / 16 * 9);
+					var aspect  = "' . $aspect . '";
+					var aspects = aspect.split(":");
+					var conWidth = $("#s3-container-video-' . $player_id .  '").width();
+					var valueHeight = Math.round((conWidth/aspects[0])*aspects[1]);
 					aratio = "s3bubble-video-responsive";
 					wratio = "100%";
-					hratio = b
+					hratio = valueHeight
 				} else {
 					aratio = "s3bubble-video-360p";
 					wratio = "640px";
@@ -1570,9 +1573,6 @@ if (!class_exists("s3bubble_audio")) {
 							videoPlaylistS3Bubble.setPlaylist(res);
 							if (res[0].status === "InProgress") {
 								console.log("You cloudfront distribution has not deployed yet please wait normally takes up to 15 minutes... This message will not display once deployed...")
-							}
-							if (res[0].user === "not_paid") {
-								console.log("Alert unfortunately your S3Bubble free trial has expired please upgrade to continue using S3Bubble and remove this message.")
 							}
 							$("video").bind("contextmenu", function(e) {
 								return false
@@ -1597,14 +1597,15 @@ if (!class_exists("s3bubble_audio")) {
 								}
 								return false;
 							});
+							
 							$("#s3bubble-video-playlist-tsearch-' . $player_id .  '").keyup(function() {
-								var svalue = $(this).val();
-								if (svalue != "") {
-									$(".s3bubble-video-playlist-tracksearch-' . $player_id .  ' ul li").hide();
-									$(".s3bubble-video-playlist-tracksearch-' . $player_id .  ' ul li div:contains(\'svalue\')").parent("li").show();
-								} else {
-									$(".s3bubble-video-playlist-tracksearch-' . $player_id .  ' ul li").show();
-								}
+								var searchText = $(this).val(),
+					            $allListElements = $("ul.s3bubble-video-playlist-ul-' . $player_id .  ' > li"),
+					            $matchingListElements = $allListElements.filter(function(i, el){
+					                return $(el).text().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+					            });
+								$allListElements.hide();
+       							$matchingListElements.show();
 							});
 						}
 					},
@@ -1684,6 +1685,7 @@ if (!class_exists("s3bubble_audio")) {
 				'style'      => '',
 				'cloudfront' => '',
 				'download'   => '',
+				'aspect'     => '16:9',
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
 			), $atts, 's3bubbleVideoSingle' ) );
@@ -1694,6 +1696,7 @@ if (!class_exists("s3bubble_audio")) {
 				'folder'     => '',
 				'cloudfront' => '',
 				'download'   => '',
+				'aspect'     => '16:9',
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
 			), $atts, 's3videoSingle' ) );
@@ -1798,12 +1801,13 @@ if (!class_exists("s3bubble_audio")) {
 						wratio = "640px";
 						hratio = "360px"
 					} else if ("'.$responsive.'" === "responsive") {
-						var i = parseInt(Math.round($("#s3-container-video-single-' . $player_id .  '").width()));
-						i *= 1;
-						var b = Math.round(i / 16 * 9);
+						var aspect  = "' . $aspect . '";
+						var aspects = aspect.split(":");
+						var conWidth = $("#s3-container-video-single-' . $player_id .  '").width();
+						var valueHeight = Math.round((conWidth/aspects[0])*aspects[1]);
 						aratio = "s3bubble-video-responsive";
 						wratio = "100%";
-						hratio = b
+						hratio = valueHeight
 					} else {
 						aratio = "s3bubble-video-360p";
 						wratio = "640px";
@@ -1904,7 +1908,7 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						size : {
 							width : wratio,
-							height : hratio,
+							height : valueHeight,
 							cssClass : aratio
 						}
 					});
