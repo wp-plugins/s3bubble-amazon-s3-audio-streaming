@@ -164,6 +164,10 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
+						if(response.error){
+							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
+							return;
+						}
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
@@ -272,6 +276,10 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {	
+						if(response.error){
+							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
+							return;
+						}
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
@@ -373,6 +381,10 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
+						if(response.error){
+							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
+							return;
+						}
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
@@ -468,6 +480,10 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
+						if(response.error){
+							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
+							return;
+						}
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
@@ -1661,6 +1677,7 @@ if (!class_exists("s3bubble_audio")) {
 				});
 			});
 			</script>';
+			curl_close($ch);
 		}
 		
 		/*
