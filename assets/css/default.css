@@ -57,7 +57,7 @@ ul.s3-toggles-video li a{display:inline-block;float:right;font-size:18px;height:
 .s3-type-playlist a > *{font-style:normal;text-decoration:none}
 .videoPoster{background-position:center;background-repeat:no-repeat;text-align:center;margin:auto}
 .videoLoader{display:block;height:128px;left:50%;margin-left:-64px;position:absolute;top:120px;width:128px}
-.s3bubblePlayer,.s3audible,.s3video,.s3videoSingle{position:relative;margin-bottom:15px;overflow:hidden}
+.s3bubblePlayer,.s3audible,.s3video,.s3videoSingle{box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);-o-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);position:relative;margin-bottom:15px;overflow:hidden}
 .s3-gui-video,.s3-gui-audio{clear:both;float:left;height:40px;width:100%}
 .s3-playlist ul li a.s3-playlist-item-remove,ul.s3-controls li a.s3-volume-max{display:none!important}
 .s3bubblePlayer a > *{background:none;font-family:FontAwesome!important;outline:none!important;outline-width:0!important;text-decoration:none!important;margin:0!important;padding:0!important}
