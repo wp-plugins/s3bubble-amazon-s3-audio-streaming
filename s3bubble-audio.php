@@ -1629,7 +1629,7 @@ if (!class_exists("s3bubble_audio")) {
 		            </div>
 		            <div class="s3-no-solution" style="display:none;"><span>Update Required</span>To play the media you will need to either update your browser to a recent version or update your <a href="https://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.</div>
 		        </div>
-		    </div>
+		    </div></div>
             <script type="text/javascript">
 			jQuery(document).ready(function($) {
 				if ("'.$responsive.'" === "270p") {
