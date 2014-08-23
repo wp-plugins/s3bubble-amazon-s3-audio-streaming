@@ -195,6 +195,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
 			
@@ -235,6 +236,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
 			
@@ -275,6 +277,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
 			
@@ -315,6 +318,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
 			
@@ -1003,6 +1007,7 @@ if (!class_exists("s3bubble_audio")) {
 			            	<a href="https://isdcloud.s3.amazonaws.com/ver1.7.3/s3bubble_amazon_s3_audio_streaming_legacy.zip">Download Last Plugin Version 1.7.3</a><br>
 			            	<a href="https://isdcloud.s3.amazonaws.com/ver1.7/s3bubble_amazon_s3_audio_streaming_1_.zip">Download Last Plugin Version 1.7.0</a><br>
 							<a href="https://isdcloud.s3.amazonaws.com/s3bubble_backups/s3bubble_amazon_s3_audio_streaming.zip">Download Last Plugin Version</a><br>
+					      <?php //print_r(curl_version()); ?>
 					    </div>
 					</div>
 				</div>
@@ -1134,6 +1139,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
@@ -1174,14 +1180,14 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3bubbleMediaElementAudio' ) );
 
 			$url = $this->endpoint . 's3media/single_audio_object';
-			$fields = array(
+			$fields = http_build_query(array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
 			    'Timezone' => 'America/New_York',
 			    'Bucket' => $bucket,
 			    'Key' => $track
-			);
-			
+			));
+
 			if(!function_exists('curl_init')){
     			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
     			exit();
@@ -1195,6 +1201,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
