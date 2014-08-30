@@ -1340,7 +1340,7 @@ if (!class_exists("s3bubble_audio")) {
 								$(".s3bubble-loading-bar").fadeOut();
 								audioPlaylistS3Bubble.setPlaylist(response);
 								if(response.user === "subscriber"){
-									$("#s3audible-' . $player_id .  '").after(\'<a  target="_blank" href="https://s3bubble.com/" class="s3-branding" tabindex="1" style="display: block;">Powered by S3Bubble</a>\');
+									$("#s3audible-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
 								}
 								// hide playlist
 								$(".s3audible .s3-playlist-hide' . $player_id .  '").click(function() {
@@ -1499,7 +1499,7 @@ if (!class_exists("s3bubble_audio")) {
 							}else{
 								audioSingleS3Bubble.setPlaylist(response);
 								if(response.user === "subscriber"){
-									$("#s3audibleSingle-' . $player_id .  '").after(\'<a  target="_blank" href="https://s3bubble.com/" class="s3-branding" tabindex="1" style="display: block;">Powered by S3Bubble</a>\');
+									$("#s3audibleSingle-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
 								}
 								//Download
 								if ('.$dc.' === true) {
@@ -1698,7 +1698,7 @@ if (!class_exists("s3bubble_audio")) {
 									return false
 								});
 								if(response.user === "subscriber"){
-									$("#s3video-' . $player_id .  '").after(\'<a  target="_blank" href="https://s3bubble.com/" class="s3-branding" tabindex="1" style="display: block;">Powered by S3Bubble</a>\');
+									$("#s3video-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
 								}
 								if ("'.$height.'" !== "") {
 									$(".s3video .s3bubble-video-playlist-tracksearch-' . $player_id .  '").css({
@@ -1926,7 +1926,7 @@ if (!class_exists("s3bubble_audio")) {
 										return false;
 									});
 									if(response.user === "subscriber"){
-										$("#s3videoSingle-' . $player_id .  '").after(\'<a  target="_blank" href="https://s3bubble.com/" class="s3-branding" tabindex="1" style="display: block;">Powered by S3Bubble</a>\');
+										$("#s3videoSingle-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
 									}
 									//Download
 									if ('.$dc.' === true) {
