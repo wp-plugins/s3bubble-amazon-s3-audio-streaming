@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Video And Audio Streaming
 Plugin URI: https://www.s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress with Cloudfront. In just 4 simple steps. 
-Version: 1.8.1
+Version: 1.8.2
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -47,7 +47,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $responsive      = '360p';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
-		public $version         =  21;
+		public $version         =  22;
 		private $endpoint       = 'https://api.s3bubble.com/';
 		
 		/*
@@ -803,11 +803,11 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_audio_css_admin(){
-			wp_register_style( 's3bubble-media-admin-css', plugins_url('assets/css/admin.css', __FILE__) );
+			wp_register_style( 's3bubble-media-admin-css', plugins_url('assets/css/admin.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble-media-admin-css');
-			wp_register_style( 'colorpicker', plugins_url('assets/css/colorpicker.css', __FILE__) );
+			wp_register_style( 'colorpicker', plugins_url('assets/css/colorpicker.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('colorpicker');
-			wp_register_style( 's3bubble-plugin', plugins_url('assets/css/s3bubble-plugin.css', __FILE__) );
+			wp_register_style( 's3bubble-plugin', plugins_url('assets/css/s3bubble-plugin.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble-plugin');
 		}
 		
@@ -817,9 +817,9 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_audio_javascript_admin(){
-			wp_register_script( 's3bubble-colorpicker', plugins_url('assets/js/colorpicker.js',__FILE__ ));
+			wp_register_script( 's3bubble-colorpicker', plugins_url('assets/js/colorpicker.js',__FILE__ ), array(), $this->version );
             wp_enqueue_script('s3bubble-colorpicker');
-			wp_register_script( 's3bubble-colorpicker-admin', plugins_url('assets/js/admin.js',__FILE__ ));
+			wp_register_script( 's3bubble-colorpicker-admin', plugins_url('assets/js/admin.js',__FILE__ ), array(), $this->version );
             wp_enqueue_script('s3bubble-colorpicker-admin');
 		} 
 		
@@ -895,9 +895,9 @@ if (!class_exists("s3bubble_audio")) {
 		function s3bubble_audio_admin(){	
 			if ( isset($_POST['submit']) ) {
 				$nonce = $_REQUEST['_wpnonce'];
-				if (! wp_verify_nonce($nonce, 'isd-updatesettings') ) die('Security check failed'); 
-				if (!current_user_can('manage_options')) die(__('You cannot edit the search-by-category options.'));
-				check_admin_referer('isd-updatesettings');	
+				if (! wp_verify_nonce($nonce, 's3bubble-media') ) die('Security check failed'); 
+				if (!current_user_can('manage_options')) die(__('You cannot edit the s3bubble media options.'));
+				check_admin_referer('s3bubble-media');	
 				// Get our new option values
 				$s3audible_username	= $_POST['s3audible_username'];
 				$s3audible_email	= $_POST['s3audible_email'];
@@ -926,18 +926,6 @@ if (!class_exists("s3bubble_audio")) {
 			$stream			    = get_option("s3-stream");
 
 		?>
-		<style>
-			.s3bubble-pre {
-				white-space: pre-wrap;
-				white-space: -moz-pre-wrap; 
-				white-space: -pre-wrap; 
-				white-space: -o-pre-wrap; 
-				word-wrap: break-word; 
-				background: #202020;
-				padding: 15px;
-				color: white;
-			}
-		</style>
 		<div class="wrap">
 			<div id="icon-options-general" class="icon32"></div>
 			<h2>S3Bubble Amazon S3 Media Cloud Media Streaming</h2>
@@ -1091,19 +1079,21 @@ if (!class_exists("s3bubble_audio")) {
 						<div class="postbox">
 							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://www.youtube.com/watch?v=EyBTpJ9GJCw" target="_blank">Watch Video</a></h3>
 							<div class="inside">
-								<form action="" method="post" class="s3bubble-video-popup-form" style="overflow: hidden;">
+								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
 								    <table class="form-table">
-								      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('isd-updatesettings'); } ?>
-								       <tr>
+								      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('s3bubble-media'); } ?>
+								       <tr style="position: relative;">
+								       	<input class="fakeme-s3bubble" id="fix_user_name" name="fix_user_name" type="text" value="">
+								    	<input class="fakeme-s3bubble" id="fix_user_password" name="fix_user_password" type="password" value="">
 								        <th scope="row" valign="top"><label for="S3Bubble_username">App Access Key:</label></th>
-								        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo $s3audible_username; ?>"/>
+								        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo empty($s3audible_username) ? 'Enter App Key' : $s3audible_username; ?>"/>
 								        	<br />
 								       <span class="description">App Access Key can be found <a href="https://s3bubble.com/admin/#/apps" target="_blank">here</a></span>	
 								        </td>
 								      </tr> 
 								       <tr>
 								        <th scope="row" valign="top"><label for="s3audible_email">App Secret Key:</label></th>
-								        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo $s3audible_email; ?>"/>
+								        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo empty($s3audible_email) ? 'Enter App Secret Key' : $s3audible_email; ?>"/>
 								        	<br />
 								        	<span class="description">App Secret Key can be found <a href="https://s3bubble.com/admin/#/apps" target="_blank">here</a></span>
 								        </td>
