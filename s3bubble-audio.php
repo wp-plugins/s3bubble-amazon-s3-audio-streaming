@@ -38,13 +38,13 @@ if (!class_exists("s3bubble_audio")) {
 		public $s3audible_email = '';
 		public $bucket          = '';
 		public $folder          = '';
-		public $colour          = '#fff';
+		public $colour          = '#1abc98';
 		public $width           = '100%';
 		public $autoplay        = 'yes';
 		public $jtoggle		    = 'true';
 		public $loggedin        = 'false';
 		public $search          = 'false';
-		public $responsive      = '360p';
+		public $responsive      = 'responsive';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
 		public $version         =  22;
@@ -833,6 +833,8 @@ if (!class_exists("s3bubble_audio")) {
 			$theme = get_option("s3-theme");
 			wp_register_style( 'font-awesome.min', plugins_url('assets/css/fa/font-awesome.min.css', __FILE__), array(), $this->version );
 			wp_enqueue_style('font-awesome.min');
+			wp_register_style( 'simple-line-icons', plugins_url('assets/css/simple/simple-line-icons.css', __FILE__), array(), $this->version );
+			wp_enqueue_style('simple-line-icons');
 			wp_register_style( 's3bubble-style-default', plugins_url('assets/css/default.css', __FILE__), array(), $this->version );
 			wp_enqueue_style('s3bubble-style-default');
 			wp_register_style( 'mediaelementplayer.min', plugins_url('assets/mediaelementjs/build/mediaelementplayer.min.css', __FILE__), array(), $this->version );
@@ -841,11 +843,13 @@ if (!class_exists("s3bubble_audio")) {
 	        wp_enqueue_style('fonts.lato');
 			// updated css
 		    echo '<style type="text/css">
-					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;}
+					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 33px !important;}
+					.s3bubblePlayer button > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 33px !important;cursor: pointer !important;}
+                    .bar1, .bar2, .bar3, .bar4, .bar5 {background-color: '.stripcslashes($colour).' !important;}
 					.s3-play-bar, .s3-playlist ul li.s3-playlist-current {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-time-seperator, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
-			</style>';
+			</style>'; 
 			if($theme == 's3bubble_default'){
 				wp_register_style( 's3bubble-style-style', plugins_url('assets/css/style.css', __FILE__), array(), $this->version );
 			    wp_enqueue_style('s3bubble-style-style');
@@ -876,11 +880,11 @@ if (!class_exists("s3bubble_audio")) {
 	            wp_enqueue_script('jquery');
 	            wp_register_script( 'jquery-migrate', '//code.jquery.com/jquery-migrate-1.2.1.min.js', false, null);
 	            wp_enqueue_script('jquery-migrate');
-				wp_register_script( 'jquery.s3player.min', plugins_url('assets/js/jquery.s3player.min.js',__FILE__ ), array(), $this->version );
+				wp_register_script( 'jquery.s3player.min', plugins_url('assets/v2.8.1/js/jplayer/jquery.jplayer.min.js',__FILE__ ), array(), uniqid() );
 	            wp_enqueue_script('jquery.s3player.min');
-				//wp_register_script( 'jquery.s3player.inspector', plugins_url('assets/js/jquery.s3player.inspector.js',__FILE__ ), array(), $this->version );
-	            //wp_enqueue_script('jquery.s3player.inspector');
-				wp_register_script( 'jplayer.s3playlist.min', plugins_url('assets/js/jplayer.s3playlist.min.js',__FILE__ ), array(), $this->version );
+				wp_register_script( 'jquery.s3player.inspector', plugins_url('assets/v2.8.1/js/add-on/jquery.jplayer.inspector.min.js',__FILE__ ), array(), uniqid() );
+	            wp_enqueue_script('jquery.s3player.inspector');
+				wp_register_script( 'jplayer.s3playlist.min', plugins_url('assets/v2.8.1/js/add-on/jplayer.playlist.min.js',__FILE__ ), array(), uniqid() );
 	            wp_enqueue_script('jplayer.s3playlist.min');
 				wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array(), $this->version );
 	            wp_enqueue_script('mediaelement-and-player.min');
@@ -1319,142 +1323,212 @@ if (!class_exists("s3bubble_audio")) {
             $player_id = uniqid();
 								
             return '<div class="s3audible s3bubblePlayer" id="s3audible-' . $player_id .  '">
-			    <div id="jp_container_' . $player_id .  '" class="s3-playlist-wrapper">
-			        <div class="s3-type-playlist">
-			            <div id="jquery_jplayer_' . $player_id .  '" class="s3-jplayer"></div>
-			            <div class="s3-gui s3-gui-audio">
-			                <img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
-			                <div class="s3-interface interfaceApp-' . $player_id .  '">
-			                    <ul class="s3-controls">
-			                        <li><a href="javascript:;" class="s3-previous" tabindex="1"><i class="s3icon-backward"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-play" tabindex="1"><i class="s3icon-play"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-pause" tabindex="1"><i class="s3icon-pause"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-next" tabindex="1"><i class="s3icon-forward"></i></a>
-			                        </li>
-			                    </ul>
-			                    <div class="s3-time-container">
-			                        <div class="s3-duration"></div>
-			                    </div>
-			                    <div class="s3bubble-rail s3rail-' . $player_id .  '">
-			                        <div class="s3-progress">
-			                            <div class="s3-seek-bar">
-			                                <div class="s3-play-bar"></div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <ul class="s3-toggles">
-			                        <li><a href="javascript:;" class="s3-playlist-hide' . $player_id .  '" tabindex="1"><i class="s3icon-list"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-mute" tabindex="1"><i class="s3icon-volume-up"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-unmute" tabindex="1"><i class="s3icon-volume-off"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-shuffle" tabindex="1" title="shuffle"><i class="s3icon-random"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-shuffle-off" tabindex="1" title="shuffle off"><i class="s3icon-random"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" data-snum="' . $player_id .  '" class="search-tracks" tabindex="1"><i class="s3icon-search"></i></a>
-			                        </li>
-			                    </ul>
-			                </div>
-			            </div>
-			            <div class="s3search s3audible-search-' . $player_id .  '" style="display:none;">
-			                <input type="text" id="s3bubble-audio-playlist-tsearch-' . $player_id .  '" class="s3bubble-audio-playlist-tsearch" name="s3bubble-audio-playlist-tsearch" placeholder="Search">
-			            </div>
-			            <div class="s3-playlist s3bubble-audio-playlist-tracksearch-' . $player_id .  '" style="display:'. (($playlist == 'hidden') ? 'none' : 'block' ) .';">
-			                <ul class="s3bubble-audio-playlist-ul-' . $player_id .  '">
-			                    <li class="list-fix"></li>
-			                </ul>
-			            </div>
-			            <div class="s3-no-solution" style="display:none;"><span>Update Required</span>To play the media you will need to either update your browser to a recent version or update your <a href="https://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.</div>
-			        </div>
-			    </div>
+			    <div id="jquery_jplayer_' . $player_id .  '" class="s3-jplayer"></div>
+					<div id="jp_container_' . $player_id .  '" class="s3-audio" role="application" aria-label="media player">
+						<div class="s3-type-playlist">
+							<div class="s3-gui s3-gui-audio s3-interface interfaceApp-' . $player_id .  '">
+							    <img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
+								<div class="s3-controls">
+									<button class="s3-previous" role="button" tabindex="0"><i class="icon-control-rewind"></i></button>
+									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
+									<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
+								</div>
+								<div class="s3-progress">
+									<div class="s3-progress-inner">
+										<div class="s3-seek-bar">
+											<div class="s3-play-bar"><div class="s3-duration" role="timer" aria-label="duration">&nbsp;</div></div>
+										</div>
+									</div>
+								</div>
+								<div class="s3-toggles s3-toggles-' . $player_id .  ' s3-hideit">
+									<span class="musicbar musicbar-' . $player_id .  '">
+					                    <span class="bar1 a1"></span>
+					                    <span class="bar2 a2"></span>
+					                    <span class="bar3 a3"></span>
+					                    <span class="bar4 a4"></span>
+					                    <span class="bar5 a5"></span>
+					                </span>
+									<button class="s3-playlist-hide' . $player_id .  '" role="button" tabindex="0"><i class="icon-playlist"></i></button>
+								    <button class="search-tracks" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="icon-magnifier"></i></button>
+									<button class="s3-mute" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
+								</div>
+							</div>
+							<div class="s3search s3audible-search-' . $player_id .  '" style="display:none;">
+				                <input type="text" id="s3bubble-audio-playlist-tsearch-' . $player_id .  '" class="s3bubble-audio-playlist-tsearch" name="s3bubble-audio-playlist-tsearch" placeholder="Search">
+				            </div>
+				            <div class="s3-playlist s3bubble-audio-playlist-tracksearch-' . $player_id .  '" style="display:'. (($playlist == 'hidden') ? 'none' : 'block' ) .';">
+								<ul class="s3bubble-audio-playlist-ul-' . $player_id .  '">
+									<li>&nbsp;</li>
+								</ul>
+							</div>
+							<div class="s3-no-solution">
+								<span>Update Required</span>
+								To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+							</div>
+						</div>
+					</div>
+				<div id="jplayer_inspector_1"></div>
 			</div>
 			<script type="text/javascript">
 				jQuery(document).ready(function($) {
-				var audioPlaylistS3Bubble = new jPlayerPlaylist({
-					jPlayer : "#jquery_jplayer_' . $player_id .  '",
-					cssSelectorAncestor : "#jp_container_' . $player_id .  '"
-	            }, audioPlaylistS3Bubble, {
-	                playlistOptions: {
-	                    autoPlay: '.$autoplay.',
-	                    displayTime: 0,
-	                    download: '.$dc.',
-	                    playerWidth: $(this).width(),
-	                    enableRemoveControls: false
-	                },
-	                ready: function(event) {
-	                	$(".s3bubble-loading-bar").show();
-						var sendData = {
-							"action": "s3bubble_audio_playlist_internal_ajax",
-							"Timezone":"America/New_York",
-						    "Bucket" : "' . $bucket. '",
-						    "Folder" : "' . $folder. '"
-						}
-						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-							if(response.error !== undefined){
-								console.log(response.error);
+					var audioPlaylistS3Bubble = new jPlayerPlaylist({
+		                jPlayer: "#jquery_jplayer_' . $player_id .  '", 
+		                cssSelectorAncestor: "#jp_container_' . $player_id .  '"
+		            }, audioPlaylistS3Bubble, {
+		                playlistOptions: {
+		                    autoPlay: '.$autoplay.',
+		                    displayTime: 0,
+		                    download: '.$dc.',
+		                    playerWidth: $(this).width(),
+		                    enableRemoveControls: false
+		                },
+		                ready: function(event) {
+							$(".s3bubble-loading-bar").show();
+							// Resize for mobile
+							$(".s3-toggles-' . $player_id .  '").hide();
+							if($("#s3audible-' . $player_id .  '").width() < 400){
+								$(".s3bubble-loading-bar").css("right", "45px");
 							}else{
-								$(".s3bubble-loading-bar").fadeOut();
-								audioPlaylistS3Bubble.setPlaylist(response);
-								if(response.user === "subscriber"){
-									$("#s3audible-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
-								}
-								// hide playlist
-								$(".s3audible .s3-playlist-hide' . $player_id .  '").click(function() {
-									$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  '").slideToggle();
-									return false;
-								});
-								if ("'.$height.'" !== "") {
-									$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  '").css({
-										height : "'.$height.'px",
-										"overflow-y" : "scroll"
+								$(".s3-toggles-' . $player_id .  '").fadeIn();
+							}
+							var sendData = {
+								"action": "s3bubble_audio_playlist_internal_ajax",
+								"Timezone":"America/New_York",
+							    "Bucket" : "' . $bucket. '",
+							    "Folder" : "' . $folder. '"
+							}
+							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
+								if(response.error !== undefined){
+									console.log(response.error);
+								}else{
+									$(".s3bubble-loading-bar").fadeOut();			
+									audioPlaylistS3Bubble.setPlaylist(response);
+									// hide playlist 
+									$(".s3audible .s3-playlist-hide' . $player_id .  '").click(function() {
+										$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  '").slideToggle();
+										return false;
+									});
+									if ("'.$height.'" !== "") {
+										$(".s3audible .s3bubble-audio-playlist-tracksearch-' . $player_id .  '").css({
+											height : "'.$height.'px",
+											"overflow-y" : "scroll"
+										});
+									}
+									// Search tracks
+									$(".s3audible .search-tracks").click(function() {
+										if ($(".s3audible .s3audible-search-' . $player_id .  '").hasClass("searchOpen")) {
+											$(".s3audible .s3audible-search-' . $player_id .  '").fadeOut().removeClass("searchOpen");
+										} else {
+											$(".s3audible .s3audible-search-' . $player_id .  '").fadeIn().addClass("searchOpen");
+										}
+										return false;
+									});
+									$(".s3audible #s3bubble-audio-playlist-tsearch-' . $player_id .  '").keyup(function() {
+										var searchText = $(this).val(),
+							            $allListElements = $("ul.s3bubble-audio-playlist-ul-' . $player_id .  ' > li"),
+							            $matchingListElements = $allListElements.filter(function(i, el){
+							                return $(el).text().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+							            });
+										$allListElements.hide();
+		       							$matchingListElements.show();
 									});
 								}
-								// Search tracks
-								$(".s3audible .search-tracks").click(function() {
-									if ($(".s3audible .s3audible-search-' . $player_id .  '").hasClass("searchOpen")) {
-										$(".s3audible .s3audible-search-' . $player_id .  '").fadeOut().removeClass("searchOpen");
-									} else {
-										$(".s3audible .s3audible-search-' . $player_id .  '").fadeIn().addClass("searchOpen");
-									}
-									return false;
-								});
-								$(".s3audible #s3bubble-audio-playlist-tsearch-' . $player_id .  '").keyup(function() {
-									var searchText = $(this).val(),
-						            $allListElements = $("ul.s3bubble-audio-playlist-ul-' . $player_id .  ' > li"),
-						            $matchingListElements = $allListElements.filter(function(i, el){
-						                return $(el).text().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
-						            });
-									$allListElements.hide();
-	       							$matchingListElements.show();
-								});
-							}
-						},"json");
-	                },
-	                swfPath: "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
-	                preload: "'.$preload.'",
-	                supplied: "mp3,m4a",
-	                cssSelector: {
-	                    play: ".s3-play",
-	                    pause: ".s3-pause",
-	                    mute: ".s3-mute",
-	                    unmute: ".s3-unmute",
-	                    seekBar: ".s3-seek-bar",
-	                    playBar: ".s3-play-bar",
-	                    currentTime: ".s3-current-time",
-	                    duration: ".s3-duration"
-	                },
-	                smoothPlayBar: true,
-					keyEnabled: true,
-					remainingDuration: true,
-					toggleDuration: true,
-	                wmode: "window"
-	            });
-			});
+							},"json");
+						},
+						loadedmetadata: function() {
+							$(".musicbar-' . $player_id .  '").removeClass("animate");
+							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
+						    console.log("loadedmetadata");
+						},
+						waiting: function() {
+							$(".musicbar-' . $player_id .  '").removeClass("animate");
+							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
+						    console.log("waiting");
+						},
+						canplay: function() {
+							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
+						    console.log("canplay");
+						},
+						pause: function() {
+							$(".musicbar-' . $player_id .  '").removeClass("animate"); 
+							$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
+						},
+						playing: function() {
+							$(".musicbar-' . $player_id .  '").addClass("animate");
+							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
+							$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+						},
+						play: function() { 
+						    
+						},
+						timeupdate: function() { 
+						    
+						},
+						suspend: function() { 
+						    
+						},
+						stalled: function() { 
+						    
+						},
+						loadstart: function() { 
+						    
+						},
+						keyBindings: {
+						  play: {
+						    key: 80, // p
+						    fn: function(f) {
+						      if(f.status.paused) {
+						        f.play();
+						      } else {
+						        f.pause();
+						      }
+						    }
+						  },
+						  fullScreen: {
+						    key: 70, // f
+						    fn: function(f) {
+						      if(f.status.video || f.options.audioFullScreen) {
+						        f._setOption("fullScreen", !f.options.fullScreen);
+						      }
+						    }
+						  },
+						  muted: {
+						    key: 77, // m
+						    fn: function(f) {
+						      f._muted(!f.options.muted);
+						    }
+						  },
+						  volumeUp: {
+						    key: 190, // .
+						    fn: function(f) {
+						      f.volume(f.options.volume + 0.1);
+						    }
+						  },
+						  volumeDown: {
+						    key: 188, // ,
+						    fn: function(f) {
+						      f.volume(f.options.volume - 0.1);
+						    }
+						  },
+						  loop: {
+						    key: 76, // l
+						    fn: function(f) {
+						      f._loop(!f.options.loop);
+						    }
+						  }
+						},
+		                swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+		                preload: "'.$preload.'",
+	                    supplied: "mp3,m4a",
+		                wmode: "window",
+		                useStateClassSkin: true,
+						autoBlur: false,
+						remainingDuration: true,
+					    toggleDuration: true,
+						smoothPlayBar: true,
+						keyEnabled: true
+					});			
+				});
 			</script>';
 			curl_close($ch);
         }
@@ -1500,28 +1574,27 @@ if (!class_exists("s3bubble_audio")) {
 			            <div id="s3-single-player-' . $player_id .  '" class="s3-jplayer"></div>
 			            <div class="s3-gui s3-gui-audio">
 			                <div class="s3-interface interfaceApp-' . $player_id .  '">
-			                    <ul class="s3-controls">
-			                        <li><a href="javascript:;" class="s3-play" tabindex="1"><i class="s3icon-play"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-pause" tabindex="1"><i class="s3icon-pause"></i></a>
-			                        </li>
-			                    </ul>
-			                    <div class="s3-time-container-single-audio">
-			                        <div class="s3-duration"></div>
-			                    </div>
-			                    <div class="s3bubble-rail s3singlerail-' . $player_id .  '">
-			                        <div class="s3-progress">
-			                            <div class="s3-seek-bar">
-			                                <div class="s3-play-bar"></div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <ul class="s3-toggles">
-			                        <li><a href="javascript:;" class="s3-mute" tabindex="1" title="mute"><i class="s3icon-volume-up"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-unmute" tabindex="1" title="unmute" style="display: none;"><i class="s3icon-volume-off"></i></a>
-			                        </li>
-			                    </ul>
+			                    <img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
+								<div class="s3-controls">
+									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
+								</div>
+								<div class="s3-progress">
+									<div class="s3-progress-inner">
+										<div class="s3-seek-bar">
+											<div class="s3-play-bar"><div class="s3-duration" role="timer" aria-label="duration">&nbsp;</div></div>
+										</div>
+									</div>
+								</div>
+								<div class="s3-toggles s3-toggles-' . $player_id .  '">
+									<span class="musicbar musicbar-' . $player_id .  '">
+					                    <span class="bar1 a1"></span>
+					                    <span class="bar2 a2"></span>
+					                    <span class="bar3 a3"></span>
+					                    <span class="bar4 a4"></span>
+					                    <span class="bar5 a5"></span>
+					                </span>
+									<button class="s3-mute" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
+								</div>
 			                </div>
 			            </div>
 			            <div class="s3-playlist">
@@ -1548,6 +1621,13 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                ready: function(event) {
 						$(".s3bubble-loading").show();
+						// Resize for mobile
+						$(".s3-toggles-' . $player_id .  '").hide();
+						if($("#s3audibleSingle-' . $player_id .  '").width() < 400){
+							$(".s3bubble-loading-bar").css("right", "45px");
+						}else{
+							$(".s3-toggles-' . $player_id .  '").fadeIn();
+						}
 						var sendData = {
 							"action": "s3bubble_audio_single_internal_ajax",
 							"Timezone":"America/New_York",
@@ -1559,41 +1639,111 @@ if (!class_exists("s3bubble_audio")) {
 								console.log(response.error);
 							}else{
 								audioSingleS3Bubble.setPlaylist(response);
-								if(response.user === "subscriber"){
-									$("#s3audibleSingle-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
-								}
 								//Download
 								if ('.$dc.' === true) {
-									$("#s3-single-container-' . $player_id . ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="s3icon-cloud-download"></i></a></li>\');
+									$("#s3-single-container-' . $player_id . ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="icon-cloud-download"></i></a></li>\');
 								}
 								//Make it plain
 								if ("' . $style . '" === "plain") {
 									$("#s3-single-container-' . $player_id . '").css({
 										overflow : "hidden",
-										height : "40px"
+										height : "84px"
 									})
 								}
 							}
 						},"json");
 	                },
-	                swfPath: "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
+	                loadedmetadata: function() {
+						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
+					    console.log("loadedmetadata");
+					},
+					waiting: function() {
+						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
+						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
+					    console.log("waiting");
+					},
+					canplay: function() {
+						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
+					    console.log("canplay");
+					},
+					pause: function() {
+						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
+						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
+					},
+					playing: function() {
+						$(".musicbar-' . $player_id .  '").addClass("animate");
+						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
+						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+					},
+					play: function() { 
+					    
+					},
+					timeupdate: function() { 
+					    
+					},
+					suspend: function() { 
+					    
+					},
+					stalled: function() { 
+					    
+					},
+					loadstart: function() { 
+					    
+					},
+					keyBindings: {
+					  play: {
+					    key: 80, // p
+					    fn: function(f) {
+					      if(f.status.paused) {
+					        f.play();
+					      } else {
+					        f.pause();
+					      }
+					    }
+					  },
+					  fullScreen: {
+					    key: 70, // f
+					    fn: function(f) {
+					      if(f.status.video || f.options.audioFullScreen) {
+					        f._setOption("fullScreen", !f.options.fullScreen);
+					      }
+					    }
+					  },
+					  muted: {
+					    key: 77, // m
+					    fn: function(f) {
+					      f._muted(!f.options.muted);
+					    }
+					  },
+					  volumeUp: {
+					    key: 190, // .
+					    fn: function(f) {
+					      f.volume(f.options.volume + 0.1);
+					    }
+					  },
+					  volumeDown: {
+					    key: 188, // ,
+					    fn: function(f) {
+					      f.volume(f.options.volume - 0.1);
+					    }
+					  },
+					  loop: {
+					    key: 76, // l
+					    fn: function(f) {
+					      f._loop(!f.options.loop);
+					    }
+					  }
+					},
+	                swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
 	                preload: "'.$preload.'",
-	                supplied: "mp3,m4a",
-	                cssSelector: {
-	                    play: ".s3-play",
-	                    pause: ".s3-pause",
-	                    mute: ".s3-mute",
-	                    unmute: ".s3-unmute",
-	                    seekBar: ".s3-seek-bar",
-	                    playBar: ".s3-play-bar",
-	                    currentTime: ".s3-current-time",
-	                    duration: ".s3-duration"
-	                },
-	                smoothPlayBar: true,
-					keyEnabled: true,
+                    supplied: "mp3,m4a",
+	                wmode: "window",
+	                useStateClassSkin: true,
+					autoBlur: false,
 					remainingDuration: true,
-					toggleDuration: true,
-	                wmode: "window"
+				    toggleDuration: true,
+					smoothPlayBar: true,
+					keyEnabled: true
 	            });
 			});
 			</script>';
@@ -1648,53 +1798,36 @@ if (!class_exists("s3bubble_audio")) {
             $player_id = uniqid();
             return '<div class="s3bubblePlayer s3video" id="s3video-' . $player_id .  '">
 			    <div id="s3-container-video-' . $player_id .  '" class="s3-playlist-wrapper">
-			        <div class="s3-type-playlist jp-jplayer">
+			        <div class="s3-type-playlist s3-jplayer">
 			            <div class="s3-contain">
 			                <img class="s3bubble-loading" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/712.GIF" />
 			                <div class="s3-video-play"><a href="javascript:;" class="s3-video-play-icon" tabindex="1"><i class="s3icon-play"></i></a>
 			                </div>
 			                <div id="s3-jplayer-video-' . $player_id .  '" class="s3-jplayer videoPoster"></div>
+			                <div class="s3-gui s3-gui-video">
+				                <div class="s3-interface">
+									<div class="s3-controls">
+										<button class="s3-previous" role="button" tabindex="0"><i class="icon-control-rewind"></i></button>
+										<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
+										<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
+									</div>
+									<div class="s3-progress">
+										<div class="s3-progress-inner">
+											<div class="s3-seek-bar">
+												<div class="s3-play-bar"><div class="s3-duration" role="timer" aria-label="duration">&nbsp;</div></div>
+											</div>
+										</div>
+									</div>
+									<div class="s3-toggles s3-toggles-' . $player_id .  '">
+										<button class="s3-full-screen" role="button" tabindex="0"><i class="icon-size-fullscreen"></i></button>
+										<button class="s3-playlist-hide' . $player_id .  ' removeIt" role="button" tabindex="0"><i class="icon-list"></i></button>
+									    <button class="search-tracks removeIt" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="icon-magnifier"></i></button>
+										<button class="s3-mute removeIt" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
+									</div>
+				                </div>
+				            </div>
 			            </div>
-			            <div class="s3-gui s3-gui-video">
-			                <div class="s3-interface">
-			                    <ul class="s3-controls">
-			                        <li><a href="javascript:;" class="s3-previous" tabindex="1"><i class="s3icon-backward"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-play" tabindex="1"><i class="s3icon-play"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-pause" tabindex="1"><i class="s3icon-pause"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-next" tabindex="1"><i class="s3icon-forward"></i></a>
-			                        </li>
-			                    </ul>
-			                    <div class="s3-time-container">
-			                        <div class="s3-duration"></div>
-			                    </div>
-			                    <div class="s3bubble-rail">
-			                        <div class="s3-progress">
-			                            <div class="s3-seek-bar">
-			                                <div class="s3-play-bar"></div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <ul class="s3-toggles">
-			                        <li><a href="javascript:;" class="s3-playlist-hide' . $player_id .  '" tabindex="1"><i class="s3icon-list"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-mute" tabindex="1" title="mute"><i class="s3icon-volume-up"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-unmute" tabindex="1" title="unmute"><i class="s3icon-volume-off"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-full-screen" tabindex="1"><i class="s3icon-resize-full"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-restore-screen" tabindex="1" style="display: block;"><i class="s3icon-resize-small"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-shuffle-off" tabindex="1" title="shuffle off"><i class="s3icon-random"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" data-snum="' . $player_id .  '" class="search-tracks" tabindex="1"><i class="s3icon-search"></i></a>
-			                        </li>
-			                    </ul>
-			                </div>
-			            </div>
+			        
 			            <div class="s3search s3audible-search-' . $player_id .  '" style="display:none;">
 			                <input type="text" id="s3bubble-video-playlist-tsearch-' . $player_id .  '" class="s3bubble-video-playlist-tsearch" name="s3bubble-video-playlist-tsearch" placeholder="Search">
 			            </div>
@@ -1739,8 +1872,12 @@ if (!class_exists("s3bubble_audio")) {
 						download : '.$dc.'
 					},
 					ready : function(event) {
-						
 						$(".s3bubble-loading").show();
+						// Resize for mobile
+						if($("#s3video-' . $player_id .  '").width() < 400){
+							$(".s3-toggles-' . $player_id .  ' .removeIt").hide();
+							$(".s3bubble-loading-bar").css("right", "45px");
+						}
 						var sendData = {
 							"action": "s3bubble_video_playlist_internal_ajax",
 							"Timezone":"America/New_York",
@@ -1758,9 +1895,6 @@ if (!class_exists("s3bubble_audio")) {
 								$("video").bind("contextmenu", function(e) {
 									return false
 								});
-								if(response.user === "subscriber"){
-									$("#s3video-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
-								}
 								if ("'.$height.'" !== "") {
 									$(".s3video .s3bubble-video-playlist-tracksearch-' . $player_id .  '").css({
 										height : "'.$height.'px",
@@ -1799,49 +1933,103 @@ if (!class_exists("s3bubble_audio")) {
 							$(".s3bubble-loading").fadeOut()
 						}
 					},
-					loadedmetadata : function(t) {
-						$(".s3bubble-loading").fadeOut()
+					loadedmetadata: function() {
+						$(".s3bubble-loading").fadeIn(); 
+					    console.log("loadedmetadata");
 					},
-					loadeddata : function(t) {
-						$(".s3bubble-loading").fadeOut()
+					volumechange: function(event) {
+						console.log(event.jPlayer.status);
+
 					},
-					emptied : function(t) {
-						$(".s3bubble-loading").fadeIn()
+					waiting: function() {
+						$(".s3bubble-loading").fadeIn(); 
+					    console.log("waiting");
 					},
-					ended : function(t) {
-						$(".s3bubble-loading").fadeIn()
+					canplay: function() {
+						$(".s3bubble-loading").fadeOut(); 
+					    console.log("canplay");
 					},
-					stalled : function(t) {
-						$(".s3bubble-loading").fadeIn()
+					pause: function() { 
+						$(".s3-play").html("<i class=\"icon-control-play\"></i>");
 					},
-					swfPath : "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
-					cssSelector : {
-						play : ".s3-play",
-						pause : ".s3-pause",
-						mute : ".s3-mute",
-						unmute : ".s3-unmute",
-						seekBar : ".s3-seek-bar",
-						playBar : ".s3-play-bar",
-						currentTime : ".s3-current-time",
-						duration : ".s3-duration",
-						videoPlay : ".s3-video-play",
-						fullScreen : ".s3-full-screen",
-						restoreScreen : ".s3-restore-screen",
-						repeat : ".s3-repeat",
-						repeatOff : ".s3-repeat-off",
-						gui : ".s3-gui",
-						noSolution : ".s3-no-solution"
+					playing: function() {
+						$(".s3bubble-loading").fadeOut(); 
+						$(".s3-play").html("<i class=\"icon-control-pause\"></i>");
 					},
-					supplied : "m4v",
+					play: function() { 
+					    
+					},
+					suspend: function() { 
+					    
+					},
+					stalled: function() { 
+					    
+					},
+					loadstart: function() { 
+					    
+					},
+					keyBindings: {
+					  play: {
+					    key: 80, // p
+					    fn: function(f) {
+					      if(f.status.paused) {
+					        f.play();
+					      } else {
+					        f.pause();
+					      }
+					    }
+					  },
+					  fullScreen: {
+					    key: 70, // f
+					    fn: function(f) {
+					      if(f.status.video || f.options.audioFullScreen) {
+					        f._setOption("fullScreen", !f.options.fullScreen);
+					      }
+					    }
+					  },
+					  muted: {
+					    key: 77, // m
+					    fn: function(f) {
+					      f._muted(!f.options.muted);
+					    }
+					  },
+					  volumeUp: {
+					    key: 190, // .
+					    fn: function(f) {
+					      f.volume(f.options.volume + 0.1);
+					    }
+					  },
+					  volumeDown: {
+					    key: 188, // ,
+					    fn: function(f) {
+					      f.volume(f.options.volume - 0.1);
+					    }
+					  },
+					  loop: {
+					    key: 76, // l
+					    fn: function(f) {
+					      f._loop(!f.options.loop);
+					    }
+					  }
+					},
+					swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+                    supplied: "m4v",
+	                wmode: "window",
+	                useStateClassSkin: true,
+					autoBlur: false,
+					remainingDuration: true,
+				    toggleDuration: true,
 					smoothPlayBar: true,
 					keyEnabled: true,
-					remainingDuration: true,
-					toggleDuration: true,
-					consoleAlerts : true,
 					size : {
 						width : wratio,
 						height : hratio,
 						cssClass : aratio
+					},
+					autohide : {
+						full : true,
+						restored : true,
+						hold : 3000
 					}
 				});
 			});
@@ -1901,32 +2089,21 @@ if (!class_exists("s3bubble_audio")) {
 			            </div>
 			            <div class="s3-gui s3-gui-video" style="display:none;">
 			                <div class="s3-interface">
-			                    <ul class="s3-controls">
-			                        <li><a href="javascript:;" class="s3-play" tabindex="1"><i class="s3icon-play"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-pause" tabindex="1"><i class="s3icon-pause"></i></a>
-			                        </li>
-			                    </ul>
-			                    <div class="s3-time-container-single-audio">
-			                        <div class="s3-duration"></div>
-			                    </div>
-			                    <div class="s3bubble-rail">
-			                        <div class="s3-progress">
-			                            <div class="s3-seek-bar">
-			                                <div class="s3-play-bar"></div>
-			                            </div>
-			                        </div>
-			                    </div>
-			                    <ul class="s3-toggles">
-			                        <li><a href="javascript:;" class="s3-full-screen" tabindex="1"><i class="s3icon-resize-full"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-restore-screen" tabindex="1"><i class="s3icon-resize-small"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-mute" tabindex="1"><i class="s3icon-volume-up"></i></a>
-			                        </li>
-			                        <li><a href="javascript:;" class="s3-unmute" tabindex="1"><i class="s3icon-volume-off"></i></a>
-			                        </li>
-			                    </ul>
+			                	<img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
+								<div class="s3-controls">
+									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
+								</div>
+								<div class="s3-progress">
+									<div class="s3-progress-inner">
+										<div class="s3-seek-bar">
+											<div class="s3-play-bar"><div class="s3-duration" role="timer" aria-label="duration">&nbsp;</div></div>
+										</div>
+									</div>
+								</div>
+								<div class="s3-toggles s3-toggles-' . $player_id .  ' s3-hideit">
+									<button class="s3-full-screen" role="button" tabindex="0"><i class="icon-size-fullscreen"></i></button>
+									<button class="s3-mute" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
+								</div>
 			                </div>
 			            </div>
 			            <div class="s3-playlist" style="display:none;">
@@ -1970,6 +2147,13 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						ready : function(event) {
 							$(".s3bubble-loading").show();
+							// Resize for mobile
+							$(".s3-toggles-' . $player_id .  '").hide();
+							if($("#s3videoSingle-' . $player_id .  '").width() < 400){
+								$(".s3bubble-loading-bar").css("right", "45px");
+							}else{
+								$(".s3-toggles-' . $player_id .  '").fadeIn();
+							}
 							var sendData = {
 								"action": "s3bubble_video_single_internal_ajax",
 								"Timezone":"America/New_York",
@@ -1986,70 +2170,118 @@ if (!class_exists("s3bubble_audio")) {
 									$("video").bind("contextmenu", function(e) {
 										return false;
 									});
-									if(response.user === "subscriber"){
-										$("#s3videoSingle-' . $player_id .  '").after("<a target=\"_blank\" href=\"https://s3bubble.com/\" class=\"s3-branding\" style=\"display: block;\">Powered by S3Bubble</a>");
-									}
 									//Download
 									if ('.$dc.' === true) {
-										$("#s3-container-video-single-' . $player_id .  ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="s3icon-cloud-download"></i></a></li>\');
+										$("#s3-container-video-single-' . $player_id .  ' .s3-gui .s3-toggles").append(\'<button onclick="location.href=&quot;\' + response[0].download + \'&quot;" style="display: block;"><i class="icon-cloud-download"></i></button>\');
 									}
 								}
 							},"json");
 						},
 						timeupdate : function(t) {
+							console.log("timeupdate");
 							if (t.jPlayer.status.currentTime > 1) {
-								$(".s3bubble-loading").fadeOut()
+								$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut()
 							}
 						},
 						loadedmetadata : function(t) {
-							$(".s3bubble-loading").fadeOut()
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut()
 						},
 						loadeddata : function(t) {
-							$(".s3bubble-loading").fadeOut()
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut()
 						},
 						emptied : function(t) {
-							$(".s3bubble-loading").fadeIn()
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeIn()
 						},
 						ended : function(t) {
-							$(".s3bubble-loading").fadeIn()
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeIn()
 						},
 						stalled : function(t) {
-							$(".s3bubble-loading").fadeIn()
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeIn()
 						},
-						swfPath : "https://soaudible.s3.amazonaws.com/audio/Jplayer.swf",
-						cssSelector : {
-							play : ".s3-play",
-							pause : ".s3-pause",
-							mute : ".s3-mute",
-							unmute : ".s3-unmute",
-							seekBar : ".s3-seek-bar",
-							playBar : ".s3-play-bar",
-							currentTime : ".s3-current-time",
-							duration : ".s3-duration",
-							videoPlay : ".s3-video-play",
-							fullScreen : ".s3-full-screen",
-							restoreScreen : ".s3-restore-screen",
-							repeat : ".s3-repeat",
-							repeatOff : ".s3-repeat-off",
-							gui : ".s3-gui",
-							noSolution : ".s3-no-solution"
+						waiting: function() {
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeIn(); 
+						    console.log("waiting");
 						},
-						preload: "auto",
-						supplied : "m4v",
+						canplay: function() {
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
+						    console.log("canplay");
+						},
+						pause: function() { 
+							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
+						},
+						playing: function() {
+							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
+							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+						},
+						play: function() { 
+						    $("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
+							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+						},
+						suspend: function() { 
+						    
+						},
+						keyBindings: {
+						  play: {
+						    key: 80, // p
+						    fn: function(f) {
+						      if(f.status.paused) {
+						        f.play();
+						      } else {
+						        f.pause();
+						      }
+						    }
+						  },
+						  fullScreen: {
+						    key: 70, // f
+						    fn: function(f) {
+						      if(f.status.video || f.options.audioFullScreen) {
+						        f._setOption("fullScreen", !f.options.fullScreen);
+						      }
+						    }
+						  },
+						  muted: {
+						    key: 77, // m
+						    fn: function(f) {
+						      f._muted(!f.options.muted);
+						    }
+						  },
+						  volumeUp: {
+						    key: 190, // .
+						    fn: function(f) {
+						      f.volume(f.options.volume + 0.1);
+						    }
+						  },
+						  volumeDown: {
+						    key: 188, // ,
+						    fn: function(f) {
+						      f.volume(f.options.volume - 0.1);
+						    }
+						  },
+						  loop: {
+						    key: 76, // l
+						    fn: function(f) {
+						      f._loop(!f.options.loop);
+						    }
+						  }
+						},
+						swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+	                    supplied: "m4v",
+		                wmode: "window",
+		                useStateClassSkin: true,
+						autoBlur: false,
+						remainingDuration: true,
+					    toggleDuration: true,
 						smoothPlayBar: true,
 						keyEnabled: true,
-						remainingDuration: true,
-						toggleDuration: true,
-						noConflict : "jQuery",
-						autohide : {
-							full : true,
-							restored : true,
-							hold : 3000
-						},
 						size : {
 							width : wratio,
 							height : valueHeight,
 							cssClass : aratio
+						},
+						autohide : {
+							full : true,
+							restored : true,
+							hold : 3000
 						}
 					});
 				});
