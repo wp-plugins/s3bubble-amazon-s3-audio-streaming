@@ -9,5 +9,6 @@ div.jp-video-full div div{background:#2C3E50}
 .jp-no-solution a, .s3-playlist ul li a.s3-playlist-current, .s3-playlist ul li.s3-playlist-current .s3bubble_share i, .s3-playlist ul li.s3-playlist-current .download i{color:#e2e2e2 !important}
 .jp-no-solution span{font-size:1em;display:block;text-align:center;font-weight:700}
 .s3-playlist-wrapper,.s3-video-play,.s3-playlist{background:#2C3E50;}
-.s3videoSingle .s3-gui-video {height: 40px;width: 100%;position: absolute;bottom: 0px;background: #273747;}
-.s3-gui-video, .s3-gui-audio {background: #273747;}
+.s3videoSingle .s3-gui-video {height: 84px;width: 100%;position: absolute;bottom: 0px}
+.s3-controls, .s3-toggles {background: #273747;opacity: 0.9;}
+.s3-gui-audio {background: #273747;}

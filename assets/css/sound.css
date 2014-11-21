@@ -5,5 +5,6 @@
 .s3-poweredby{color:#333!important}
 .jp-no-solution a, .s3-playlist ul li a.s3-playlist-current, .s3-playlist ul li.s3-playlist-current .s3bubble_share i, .s3-playlist ul li.s3-playlist-current .download i{color:#e2e2e2 !important}
 .s3-playlist-wrapper,.s3-playlist{background:#1a1a1a;}
-.s3-gui,div.jp-video-full div div{background:#f60}
-.s3videoSingle .s3-gui-video {height: 40px;width: 100%;position: absolute;bottom: 0px;}
+.s3-controls, .s3-toggles {background:#f60}
+.s3videoSingle .s3-gui-video {height: 84px;width: 100%;position: absolute;bottom: 0px;}
+.s3-gui-audio {background: #f60;}
