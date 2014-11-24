@@ -134,16 +134,13 @@ Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along
 
 = 1.8.3 =
 
-**Enhancements**
 = Sign up without a Amazon Account use S3Bubbles. =
 = Single user WYSIWYG editor shortcode insert. = 
-= Keyboard buttons. p key = Play/Pause, < key = Volume Down, > key = Volume Up, right arrow key = Next Track, left arrow key = Previous Track. Please contact us at support@s3bubble.com for any extra button functionality. = 
+= Keyboard buttons. p key = Play/Pause, < key  Volume Down, > key Volume Up, right arrow key Next Track, left arrow key Previous Track. Please contact us at support@s3bubble.com for any extra button functionality. = 
 = Add a video aspect ratio 4:3 16:9 set your own. = 
 = Multiple instances on one page. = 
 = Compatibility fixes with other S3Bubble Plugins. = 
 = Player load time. = 
-
-**Fixes**
 = Android bug fix audio not playing tested on Samsung Galaxy S3 S2 S4. = 
 = Responsive cross platform bugs. = 
 
