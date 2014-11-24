@@ -345,6 +345,8 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
+						console.log(response);
+						var isSingle = response.Single;
 						if(response.error){
 							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
 							return;
@@ -352,22 +354,37 @@ if (!class_exists("s3bubble_audio")) {
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
-					    	html += '<option value="' + bucket + '">' + bucket + '</option>';
+					    	if(isSingle === true){
+					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+					    	}else{
+					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+					    	}
 						});
 						html += '</select>';
 						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading folders');
 						   var bucket = $(this).val();
+						   if(isSingle === true){
+						   		bucket = $("#s3bucket option:selected").text();
+						   }			   
 						   var data = {
 								AccessKey: '<?php echo $s3bubble_access_key; ?>',
 								Bucket: bucket
 							};
 							$.post("<?php echo $this->endpoint; ?>s3media/folders/", data, function(response) {
+								console.log(response);
 								var html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder"><option value="">Choose folder</option><option value="">Root</option>';
+								if(isSingle === true){
+							   		html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder">';
+							    }	
 							    $.each(response, function (i, item) {
 							    	var folder = item;
-							    	html += '<option value="' + folder + '">' + folder + '</option>';
+							    	if(isSingle === true){
+										html += '<option value="' + folder + '">' + ((i === 0) ? 'root' : folder.split('/').reverse()[0]) + '</option>';
+									}else{
+										html += '<option value="' + folder + '">' + folder + '</option>';
+									}
 								});
 								html += '</select>';
 								$('#s3bubble-folders-shortcode').html(html);
@@ -457,6 +474,7 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {	
+						var isSingle = response.Single;
 						if(response.error){
 							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
 							return;
@@ -464,22 +482,36 @@ if (!class_exists("s3bubble_audio")) {
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
-					    	html += '<option value="' + bucket + '">' + bucket + '</option>';
+					    	if(isSingle === true){
+					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+					    	}else{
+					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+					    	}
 						});
 						html += '</select>';
 						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading folders');
 						   var bucket = $(this).val();
+						   if(isSingle === true){
+						   		bucket = $("#s3bucket option:selected").text();
+						   }	
 						   var data = {
 								AccessKey: '<?php echo $s3bubble_access_key; ?>',
 								Bucket: bucket
 							};
 							$.post("<?php echo $this->endpoint; ?>s3media/folders/", data, function(response) {
-								var html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder"><option value="">Choose folder</option><option value="">Root</option>';
+							    var html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder"><option value="">Choose folder</option><option value="">Root</option>';
+								if(isSingle === true){
+							   		html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder">';
+							    }	
 							    $.each(response, function (i, item) {
 							    	var folder = item;
-							    	html += '<option value="' + folder + '">' + folder + '</option>';
+							    	if(isSingle === true){
+										html += '<option value="' + folder + '">' + ((i === 0) ? 'root' : folder.split('/').reverse()[0]) + '</option>';
+									}else{
+										html += '<option value="' + folder + '">' + folder + '</option>';
+									}
 								});
 								html += '</select>';
 								$('#s3bubble-folders-shortcode').html(html);
@@ -489,7 +521,7 @@ if (!class_exists("s3bubble_audio")) {
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket     = $('#s3bucket').val();
 			        	var folder     = $('#s3folder').val();
-			        	var cloudfront = $('#s3cloudfront').val();
+			        	var aspect     = $('#s3aspect').val();
 			        	var height     = $('#s3height').val();
 			        	if($("#s3autoplay").is(':checked')){
 						    var autoplay = true;
@@ -510,7 +542,7 @@ if (!class_exists("s3bubble_audio")) {
 						}else{
 						    var download = false;
 						}
-	        	        var shortcode = '[s3bubbleVideo bucket="' + bucket + '" folder="' + folder + '" cloudfront="' + cloudfront + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '"/]';
+	        	        var shortcode = '[s3bubbleVideo bucket="' + bucket + '" folder="' + folder + '" aspect="' + aspect + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '"/]';
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
 			        });
@@ -524,7 +556,7 @@ if (!class_exists("s3bubble_audio")) {
 				</p>
 				<p>
 					<span class="s3bubble-pull-left">
-				    	<label for="fname">Cloudfront Distribution ID: </label><input type="text" class="s3bubble-form-input" name="cloudfront" id="s3cloudfront">
+				    	<label for="fname">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label><input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
 				    </span>
 					<span class="s3bubble-pull-right">
 						<label for="fname">Set A Playlist Height:</label><input type="text" class="s3bubble-form-input" name="height" id="s3height">
@@ -562,6 +594,7 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
+						var isSingle = response.Single;
 						if(response.error){
 							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
 							return;
@@ -569,13 +602,20 @@ if (!class_exists("s3bubble_audio")) {
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
-					    	html += '<option value="' + bucket + '">' + bucket + '</option>';
+					    	if(isSingle === true){
+					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+					    	}else{
+					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+					    	}
 						});
 						html += '</select>';
 						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading videos files');
 						   var bucket = $(this).val();
+						   if(isSingle === true){
+						   		bucket = $("#s3bucket option:selected").text();
+						   }
 							var data = {
 								AccessKey: '<?php echo $s3bubble_access_key; ?>',
 								Bucket: bucket
@@ -583,11 +623,15 @@ if (!class_exists("s3bubble_audio")) {
 							$.post("<?php echo $this->endpoint; ?>s3media/video_files/", data, function(response) {
 								var html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder"><option value="">Choose video</option>';
 							    $.each(response, function (i, item) {
-							    	var folder = item.Key;
-							    	var ext    = folder.split('.').pop();
-							    	if(ext == 'mp4' || ext === 'm4v'){
-							    		html += '<option value="' + folder + '">' + folder + '</option>';
-							    	}
+							    	if(isSingle === true){
+										html += '<option value="' + item + '">' + item + '</option>';
+									}else{
+								    	var folder = item.Key;
+								    	var ext    = folder.split('.').pop();
+								    	if(ext == 'mp4' || ext === 'm4v'){
+								    		html += '<option value="' + folder + '">' + folder + '</option>';
+								    	}
+								    }
 								});
 								html += '</select>';
 								$('#s3bubble-folders-shortcode').html(html);
@@ -597,7 +641,7 @@ if (!class_exists("s3bubble_audio")) {
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket     = $('#s3bucket').val();
 			        	var folder     = $('#s3folder').val();
-			        	var cloudfront = $('#s3cloudfront').val();
+			        	var aspect     = $('#s3aspect').val();
 			        	if($("#s3autoplay").is(':checked')){
 						    var autoplay = true;
 						}else{
@@ -608,9 +652,9 @@ if (!class_exists("s3bubble_audio")) {
 						}else{
 						    var download = false;
 						}
-						var shortcode = '[s3bubbleVideoSingle bucket="' + bucket + '" track="' + folder + '" cloudfront="' + cloudfront + '" autoplay="' + autoplay + '" download="' + download + '"/]';
+						var shortcode = '[s3bubbleVideoSingle bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
 						if($("#s3mediaelement").is(':checked')){
-						    shortcode = '[s3bubbleMediaElementVideo bucket="' + bucket + '" track="' + folder + '" cloudfront="' + cloudfront + '" autoplay="' + autoplay + '" download="' + download + '"/]';
+						    shortcode = '[s3bubbleMediaElementVideo bucket="' + bucket + '" track="' + folder + '" autoplay="' + autoplay + '" download="' + download + '"/]';
 						}
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
@@ -625,7 +669,7 @@ if (!class_exists("s3bubble_audio")) {
 				</p>
 				<p>
 					<span class="s3bubble-pull-left">
-				    	<label for="fname">Cloudfront Distribution ID: </label><input type="text" class="s3bubble-form-input" name="cloudfront" id="s3cloudfront">
+				    	<label for="fname">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label><input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
 				    </span>
 				</p> 
                 <blockquote class="bs-callout-s3bubble"><strong>Extra options:</strong> please just select any extra options from the list below, and S3Bubble will automatically add it to the shortcode.</blockquote>
@@ -661,6 +705,7 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
+						var isSingle = response.Single;
 						if(response.error){
 							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
 							return;
@@ -668,13 +713,20 @@ if (!class_exists("s3bubble_audio")) {
 						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
 					    $.each(response.Buckets, function (i, item) {
 					    	var bucket = item.Name;
-					    	html += '<option value="' + bucket + '">' + bucket + '</option>';
+					    	if(isSingle === true){
+					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+					    	}else{
+					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+					    	}
 						});
 						html += '</select>';
 						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading audio files');
 						   var bucket = $(this).val();
+						   if(isSingle === true){
+						   		bucket = $("#s3bucket option:selected").text();
+						   }
 						   var data = {
 								AccessKey: '<?php echo $s3bubble_access_key; ?>',
 								Bucket: bucket
@@ -682,11 +734,15 @@ if (!class_exists("s3bubble_audio")) {
 							$.post("<?php echo $this->endpoint; ?>s3media/audio_files/", data, function(response) {
 								var html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder"><option value="">Choose audio</option>';
 							    $.each(response, function (i, item) {
-							    	var folder = item.Key;
-							    	var ext    = folder.split('.').pop();
-							    	if(ext == 'mp3' || ext === 'm4a'){
-							    		html += '<option value="' + folder + '">' + folder + '</option>';
-							    	}
+							    	if(isSingle === true){
+										html += '<option value="' + item + '">' + item + '</option>';
+									}else{
+										var folder = item.Key;
+								    	var ext    = folder.split('.').pop();
+								    	if(ext == 'mp3' || ext === 'm4a'){
+								    		html += '<option value="' + folder + '">' + folder + '</option>';
+								    	}
+									}
 								});
 								html += '</select>';
 								$('#s3bubble-folders-shortcode').html(html);
