@@ -905,7 +905,7 @@ if (!class_exists("s3bubble_audio")) {
 		    echo '<style type="text/css">
 					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 33px !important;}
 					.s3bubblePlayer button > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 33px !important;cursor: pointer !important;}
-                    .bar1, .bar2, .bar3, .bar4, .bar5 {background-color: '.stripcslashes($colour).' !important;}
+                    .bar1, .bar2, .bar3, .bar4, .bar5, .noUi-connect, .noUi-handle {background-color: '.stripcslashes($colour).' !important;}
 					.s3-play-bar, .s3-playlist ul li.s3-playlist-current {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-time-seperator, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
 					}   
@@ -938,10 +938,10 @@ if (!class_exists("s3bubble_audio")) {
 	            wp_deregister_script( 'jquery' );
 	            wp_register_script( 'jquery', '//code.jquery.com/jquery-1.11.0.min.js', false, null);
 	            wp_enqueue_script('jquery');
-				wp_register_script( 'jquery-ui', '//code.jquery.com/ui/1.11.2/jquery-ui.js', false, null);
-	            wp_enqueue_script('jquery-ui');
 	            wp_register_script( 'jquery-migrate', '//code.jquery.com/jquery-migrate-1.2.1.min.js', false, null);
 	            wp_enqueue_script('jquery-migrate');
+				wp_register_script( 'jquery.slider.min', plugins_url('assets/js/jquery.nouislider.all.min.js',__FILE__ ), array(), uniqid() );
+	            wp_enqueue_script('jquery.slider.min');
 				wp_register_script( 'jquery.s3player.min', plugins_url('assets/v2.8.1/js/jplayer/jquery.jplayer.min.js',__FILE__ ), array(), uniqid() );
 	            wp_enqueue_script('jquery.s3player.min');
 				wp_register_script( 'jquery.s3player.inspector', plugins_url('assets/v2.8.1/js/add-on/jquery.jplayer.inspector.min.js',__FILE__ ), array(), uniqid() );
@@ -1448,17 +1448,20 @@ if (!class_exists("s3bubble_audio")) {
 		                },
 		                ready: function(event) {
 							$(".s3bubble-loading-bar").show();
-							$(".jp-volume-bar").slider({
-								animate: "fast",
-								max: 1,
-								range: "min",
+							$(".jp-volume-bar").noUiSlider({
+								start: 0.8,
+								connect: "lower",
+								orientation: "horizontal",
 								step: 0.01,
-								value : $.jPlayer.prototype.options.volume,
-								slide: function(event, ui) {
-									$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "muted", false);
-									$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "volume", ui.value);
+								range: {
+									"min": 0,
+									"max": 1
 								}
 							});
+							$(".jp-volume-bar").on("slide", function(evt){
+								$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "muted", false);
+								$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "volume", $(this).val());
+							});	
 							// Resize for mobile
 							$(".s3-toggles-' . $player_id .  '").hide();
 							if($("#s3audible-' . $player_id .  '").width() < 400){
@@ -1584,14 +1587,14 @@ if (!class_exists("s3bubble_audio")) {
 					            key: 190, // .
 					            fn: function(f) {
 					                f.volume(f.options.volume + 0.1);
-									$(".jp-volume-bar").slider("option", "value", f.options.volume + 0.1);
+									$(".jp-volume-bar").val(f.options.volume + 0.1);
 					            }
 					        },
 					        volumeDown: {
 					            key: 188, // ,
 					            fn: function(f) {
 					                f.volume(f.options.volume - 0.1);
-									$(".jp-volume-bar").slider("option", "value", f.options.volume - 0.1);
+									$(".jp-volume-bar").val(f.options.volume - 0.1);
 					            }
 					        },
 					        loop: {
@@ -1759,17 +1762,20 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                ready: function(event) {
 						$(".s3bubble-loading").show();
-						$(".jp-volume-bar").slider({
-							animate: "fast",
-							max: 1,
-							range: "min",
+						$(".jp-volume-bar").noUiSlider({
+							start: 0.8,
+							connect: "lower",
+							orientation: "horizontal",
 							step: 0.01,
-							value : $.jPlayer.prototype.options.volume,
-							slide: function(event, ui) {
-								$("#s3-single-player-' . $player_id .  '").jPlayer("option", "muted", false);
-								$("#s3-single-player-' . $player_id .  '").jPlayer("option", "volume", ui.value);
+							range: {
+								"min": 0,
+								"max": 1
 							}
 						});
+						$(".jp-volume-bar").on("slide", function(evt){
+							$("#s3-single-player-' . $player_id .  '").jPlayer("option", "muted", false);
+							$("#s3-single-player-' . $player_id .  '").jPlayer("option", "volume", $(this).val());
+						});	
 						// Resize for mobile
 						$(".s3-toggles-' . $player_id .  '").hide();
 						if($("#s3audibleSingle-' . $player_id .  '").width() < 400){
@@ -1875,14 +1881,14 @@ if (!class_exists("s3bubble_audio")) {
 				            key: 190, // .
 				            fn: function(f) {
 				                f.volume(f.options.volume + 0.1);
-								$(".jp-volume-bar").slider("option", "value", f.options.volume + 0.1);
+								$(".jp-volume-bar").val(f.options.volume + 0.1);
 				            }
 				        },
 				        volumeDown: {
 				            key: 188, // ,
 				            fn: function(f) {
 				                f.volume(f.options.volume - 0.1);
-								$(".jp-volume-bar").slider("option", "value", f.options.volume - 0.1);
+								$(".jp-volume-bar").val(f.options.volume - 0.1);
 				            }
 				        },
 				        loop: {
