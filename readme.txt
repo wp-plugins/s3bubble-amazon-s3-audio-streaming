@@ -36,6 +36,24 @@ Hosting video, galleries and audio files is heavyweight work. S3Bubble adds powe
 
 Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com/auth/?action=register&utm_source=wordpress&utm_medium=link&utm_campaign=wordpresspluginpage "S3bubble")
 
+= Keyboard Functions: =
+* Spacebar: Play/Pause
+* h key: Forward 5
+* b key: Backward 5
+* m key: Mute
+* a key: Slow Playback Speed
+* s key: Increase Playback Speed
+* d key: Set Playback To Normal
+* l key: Loop Track
+* 1 key: Loop In
+* 2 key: Loop Out
+* 3 key: Loop Off
+* f key: Fullscreen
+* > key: Volume Up
+* < key: Volume Down
+* Right Arrow: Next Track
+* Left Arrow: Previous Track
+
 [youtube https://www.youtube.com/watch?v=EyBTpJ9GJCw]
 
 = Features: =
