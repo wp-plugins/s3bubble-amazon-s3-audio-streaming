@@ -1396,7 +1396,6 @@ if (!class_exists("s3bubble_audio")) {
 									<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
 								</div>
 								<div class="jp-volume-bar playlist-audio-volume">
-									<div class="jp-volume-bar-value"></div>
 								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
@@ -1718,7 +1717,6 @@ if (!class_exists("s3bubble_audio")) {
 									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
 								</div>
 								<div class="jp-volume-bar single-audio-volume">
-									<div class="jp-volume-bar-value"></div>
 								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
