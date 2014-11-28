@@ -345,7 +345,6 @@ if (!class_exists("s3bubble_audio")) {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
 					$.post("<?php echo $this->endpoint; ?>s3media/buckets/", sendData, function(response) {
-						console.log(response);
 						var isSingle = response.Single;
 						if(response.error){
 							alert(response.error + ". Please check your app settings the WYSIWYG editor shortcode generator only works with full access, if set to read only please enter shortcode manually.");
@@ -373,7 +372,6 @@ if (!class_exists("s3bubble_audio")) {
 								Bucket: bucket
 							};
 							$.post("<?php echo $this->endpoint; ?>s3media/folders/", data, function(response) {
-								console.log(response);
 								var html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder"><option value="">Choose folder</option><option value="">Root</option>';
 								if(isSingle === true){
 							   		html = '<select class="form-control input-lg" tabindex="1" name="s3folder" id="s3folder">';
@@ -521,7 +519,6 @@ if (!class_exists("s3bubble_audio")) {
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket     = $('#s3bucket').val();
 			        	var folder     = $('#s3folder').val();
-			        	var aspect     = $('#s3aspect').val();
 			        	var height     = $('#s3height').val();
 			        	if($("#s3autoplay").is(':checked')){
 						    var autoplay = true;
@@ -541,6 +538,10 @@ if (!class_exists("s3bubble_audio")) {
 						    var download = true;
 						}else{
 						    var download = false;
+						}
+						var aspect = '16:9';
+						if($('#s3aspect').val() != ''){
+						    aspect = $('#s3aspect').val();
 						}
 	        	        var shortcode = '[s3bubbleVideo bucket="' + bucket + '" folder="' + folder + '" aspect="' + aspect + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '"/]';
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
@@ -641,7 +642,6 @@ if (!class_exists("s3bubble_audio")) {
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket     = $('#s3bucket').val();
 			        	var folder     = $('#s3folder').val();
-			        	var aspect     = $('#s3aspect').val();
 			        	if($("#s3autoplay").is(':checked')){
 						    var autoplay = true;
 						}else{
@@ -651,6 +651,10 @@ if (!class_exists("s3bubble_audio")) {
 						    var download = true;
 						}else{
 						    var download = false;
+						}
+						var aspect = '16:9';
+						if($('#s3aspect').val() != ''){
+						    aspect = $('#s3aspect').val();
 						}
 						var shortcode = '[s3bubbleVideoSingle bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
 						if($("#s3mediaelement").is(':checked')){
@@ -934,6 +938,8 @@ if (!class_exists("s3bubble_audio")) {
 	            wp_deregister_script( 'jquery' );
 	            wp_register_script( 'jquery', '//code.jquery.com/jquery-1.11.0.min.js', false, null);
 	            wp_enqueue_script('jquery');
+				wp_register_script( 'jquery-ui', '//code.jquery.com/ui/1.11.2/jquery-ui.js', false, null);
+	            wp_enqueue_script('jquery-ui');
 	            wp_register_script( 'jquery-migrate', '//code.jquery.com/jquery-migrate-1.2.1.min.js', false, null);
 	            wp_enqueue_script('jquery-migrate');
 				wp_register_script( 'jquery.s3player.min', plugins_url('assets/v2.8.1/js/jplayer/jquery.jplayer.min.js',__FILE__ ), array(), uniqid() );
@@ -1389,6 +1395,9 @@ if (!class_exists("s3bubble_audio")) {
 									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
 									<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
 								</div>
+								<div class="jp-volume-bar playlist-audio-volume">
+									<div class="jp-volume-bar-value"></div>
+								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
 										<div class="s3-seek-bar">
@@ -1406,7 +1415,6 @@ if (!class_exists("s3bubble_audio")) {
 					                </span>
 									<button class="s3-playlist-hide' . $player_id .  '" role="button" tabindex="0"><i class="icon-playlist"></i></button>
 								    <button class="search-tracks" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="icon-magnifier"></i></button>
-									<button class="s3-mute" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
 								</div>
 							</div>
 							<div class="s3search s3audible-search-' . $player_id .  '" style="display:none;">
@@ -1440,10 +1448,22 @@ if (!class_exists("s3bubble_audio")) {
 		                },
 		                ready: function(event) {
 							$(".s3bubble-loading-bar").show();
+							$(".jp-volume-bar").slider({
+								animate: "fast",
+								max: 1,
+								range: "min",
+								step: 0.01,
+								value : $.jPlayer.prototype.options.volume,
+								slide: function(event, ui) {
+									$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "muted", false);
+									$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "volume", ui.value);
+								}
+							});
 							// Resize for mobile
 							$(".s3-toggles-' . $player_id .  '").hide();
 							if($("#s3audible-' . $player_id .  '").width() < 400){
 								$(".s3bubble-loading-bar").css("right", "45px");
+								$(".jp-volume-bar").hide();
 							}else{
 								$(".s3-toggles-' . $player_id .  '").fadeIn();
 							}
@@ -1494,16 +1514,13 @@ if (!class_exists("s3bubble_audio")) {
 						loadedmetadata: function() {
 							$(".musicbar-' . $player_id .  '").removeClass("animate");
 							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
-						    console.log("loadedmetadata");
 						},
 						waiting: function() {
 							$(".musicbar-' . $player_id .  '").removeClass("animate");
 							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
-						    console.log("waiting");
 						},
 						canplay: function() {
 							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
-						    console.log("canplay");
 						},
 						pause: function() {
 							$(".musicbar-' . $player_id .  '").removeClass("animate"); 
@@ -1517,9 +1534,18 @@ if (!class_exists("s3bubble_audio")) {
 						play: function() { 
 						    
 						},
-						timeupdate: function() { 
-						    
-						},
+						timeupdate: function(event) {
+							if (!event.jPlayer.options.lfinish) {
+						        if (event.jPlayer.options.lon && event.jPlayer.options.loff) {
+									$(".s3-play-bar").attr("style", "background: red !important");
+									if(event.jPlayer.status.currentPercentAbsolute > event.jPlayer.options.loff){
+										$("#jquery_jplayer_' . $player_id .  '").jPlayer("playHead", event.jPlayer.options.lon);
+									}
+						        }
+							}else{
+								$(".s3-play-bar").removeAttr("style");
+							}
+					    },
 						suspend: function() { 
 						    
 						},
@@ -1530,55 +1556,109 @@ if (!class_exists("s3bubble_audio")) {
 						    
 						},
 						keyBindings: {
-						  play: {
-						    key: 80, // p
-						    fn: function(f) {
-						      if(f.status.paused) {
-						        f.play();
-						      } else {
-						        f.pause();
-						      }
-						    }
-						  },
-						  fullScreen: {
-						    key: 70, // f
-						    fn: function(f) {
-						      if(f.status.video || f.options.audioFullScreen) {
-						        f._setOption("fullScreen", !f.options.fullScreen);
-						      }
-						    }
-						  },
-						  muted: {
-						    key: 77, // m
-						    fn: function(f) {
-						      f._muted(!f.options.muted);
-						    }
-						  },
-						  volumeUp: {
-						    key: 190, // .
-						    fn: function(f) {
-						      f.volume(f.options.volume + 0.1);
-						    }
-						  },
-						  volumeDown: {
-						    key: 188, // ,
-						    fn: function(f) {
-						      f.volume(f.options.volume - 0.1);
-						    }
-						  },
-						  loop: {
-						    key: 76, // l
-						    fn: function(f) {
-						      f._loop(!f.options.loop);
-						    }
-						  }
-						},
+					        play: {
+					            key: 32, // p
+					            fn: function(f) {
+					                if (f.status.paused) {
+					                    f.play();
+					                } else {
+					                    f.pause();
+					                }
+					            }
+					        },
+					        fullScreen: {
+					            key: 70, // f
+					            fn: function(f) {
+					                if (f.status.video || f.options.audioFullScreen) {
+					                    f._setOption("fullScreen", !f.options.fullScreen);
+					                }
+					            }
+					        },
+					        muted: {
+					            key: 77, // m
+					            fn: function(f) {
+					                f._muted(!f.options.muted);
+					            }
+					        },
+					        volumeUp: {
+					            key: 190, // .
+					            fn: function(f) {
+					                f.volume(f.options.volume + 0.1);
+									$(".jp-volume-bar").slider("option", "value", f.options.volume + 0.1);
+					            }
+					        },
+					        volumeDown: {
+					            key: 188, // ,
+					            fn: function(f) {
+					                f.volume(f.options.volume - 0.1);
+									$(".jp-volume-bar").slider("option", "value", f.options.volume - 0.1);
+					            }
+					        },
+					        loop: {
+					            key: 76, // l
+					            fn: function(f) {
+					                f._loop(!f.options.loop);
+					            }
+					        },
+					        goForwardFive: {
+					            key: 72, //  h
+					            fn: function(f) {
+					                f.playHead(f.status.currentPercentAbsolute + 5);
+					            }
+					        },
+					        goBackFive: {
+					            key: 66, //  h
+					            fn: function(f) {
+					                f.playHead(f.status.currentPercentAbsolute - 5);
+					            }
+					        },
+					        loopOn: {
+					            key: 49, //  f1
+					            fn: function(f) {
+					                f.options.lon = f.status.currentPercentAbsolute;
+					            }
+					        },
+					        loopOff: {
+					            key: 50, //  f2
+					            fn: function(f) {
+					                f.options.loff = f.status.currentPercentAbsolute;
+					            }
+					        },
+					        loopfinish: {
+					            key: 51, //  f3
+					            fn: function(f) {
+					            	if (f.options.lfinish) {
+					                    f.options.lfinish = false;
+					                } else {
+					                    f.options.lfinish = true;
+					                }
+					            }
+					        },
+					        speedUp: {
+					            key: 83, //  s
+					            fn: function(f) {
+					                f.playbackRate(f.status.playbackRate + 0.1);
+					            }
+					        },
+					        slowDown: {
+					            key: 65, //  a
+					            fn: function(f) {
+					                f.playbackRate(f.status.playbackRate - 0.1);
+					            }
+					        },
+					        normalSpeed: {
+					            key: 68, //  d
+					            fn: function(f) {
+					                f.playbackRate(1);
+					            }
+					        }
+					    },
 		                swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
 		                preload: "'.$preload.'",
 	                    supplied: "mp3,m4a",
 		                wmode: "window",
 		                useStateClassSkin: true,
-						autoBlur: false,
+						autoBlur: false, 
 						remainingDuration: true,
 					    toggleDuration: true,
 						smoothPlayBar: true,
@@ -1634,6 +1714,9 @@ if (!class_exists("s3bubble_audio")) {
 								<div class="s3-controls">
 									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
 								</div>
+								<div class="jp-volume-bar single-audio-volume">
+									<div class="jp-volume-bar-value"></div>
+								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
 										<div class="s3-seek-bar">
@@ -1649,7 +1732,6 @@ if (!class_exists("s3bubble_audio")) {
 					                    <span class="bar4 a4"></span>
 					                    <span class="bar5 a5"></span>
 					                </span>
-									<button class="s3-mute" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
 								</div>
 			                </div>
 			            </div>
@@ -1677,10 +1759,22 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                ready: function(event) {
 						$(".s3bubble-loading").show();
+						$(".jp-volume-bar").slider({
+							animate: "fast",
+							max: 1,
+							range: "min",
+							step: 0.01,
+							value : $.jPlayer.prototype.options.volume,
+							slide: function(event, ui) {
+								$("#s3-single-player-' . $player_id .  '").jPlayer("option", "muted", false);
+								$("#s3-single-player-' . $player_id .  '").jPlayer("option", "volume", ui.value);
+							}
+						});
 						// Resize for mobile
 						$(".s3-toggles-' . $player_id .  '").hide();
 						if($("#s3audibleSingle-' . $player_id .  '").width() < 400){
 							$(".s3bubble-loading-bar").css("right", "45px");
+							$(".jp-volume-bar").hide();
 						}else{
 							$(".s3-toggles-' . $player_id .  '").fadeIn();
 						}
@@ -1711,16 +1805,13 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                loadedmetadata: function() {
 						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
-					    console.log("loadedmetadata");
 					},
 					waiting: function() {
 						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
 						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
-					    console.log("waiting");
 					},
 					canplay: function() {
 						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
-					    console.log("canplay");
 					},
 					pause: function() {
 						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
@@ -1734,8 +1825,17 @@ if (!class_exists("s3bubble_audio")) {
 					play: function() { 
 					    
 					},
-					timeupdate: function() { 
-					    
+					timeupdate: function(event) { 
+					    if (!event.jPlayer.options.lfinish) {
+					        if (event.jPlayer.options.lon && event.jPlayer.options.loff) {
+								$(".s3-play-bar").attr("style", "background: red !important");
+								if(event.jPlayer.status.currentPercentAbsolute > event.jPlayer.options.loff){
+									$("#s3-single-player-' . $player_id .  '").jPlayer("playHead", event.jPlayer.options.lon);
+								}
+					        }
+						}else{
+							$(".s3-play-bar").removeAttr("style");
+						}
 					},
 					suspend: function() { 
 					    
@@ -1747,49 +1847,103 @@ if (!class_exists("s3bubble_audio")) {
 					    
 					},
 					keyBindings: {
-					  play: {
-					    key: 80, // p
-					    fn: function(f) {
-					      if(f.status.paused) {
-					        f.play();
-					      } else {
-					        f.pause();
-					      }
-					    }
-					  },
-					  fullScreen: {
-					    key: 70, // f
-					    fn: function(f) {
-					      if(f.status.video || f.options.audioFullScreen) {
-					        f._setOption("fullScreen", !f.options.fullScreen);
-					      }
-					    }
-					  },
-					  muted: {
-					    key: 77, // m
-					    fn: function(f) {
-					      f._muted(!f.options.muted);
-					    }
-					  },
-					  volumeUp: {
-					    key: 190, // .
-					    fn: function(f) {
-					      f.volume(f.options.volume + 0.1);
-					    }
-					  },
-					  volumeDown: {
-					    key: 188, // ,
-					    fn: function(f) {
-					      f.volume(f.options.volume - 0.1);
-					    }
-					  },
-					  loop: {
-					    key: 76, // l
-					    fn: function(f) {
-					      f._loop(!f.options.loop);
-					    }
-					  }
-					},
+				        play: {
+				            key: 32, // space
+				            fn: function(f) {
+				                if (f.status.paused) {
+				                    f.play();
+				                } else {
+				                    f.pause();
+				                }
+				            }
+				        },
+				        fullScreen: {
+				            key: 70, // f
+				            fn: function(f) {
+				                if (f.status.video || f.options.audioFullScreen) {
+				                    f._setOption("fullScreen", !f.options.fullScreen);
+				                }
+				            }
+				        },
+				        muted: {
+				            key: 77, // m
+				            fn: function(f) {
+				                f._muted(!f.options.muted);
+				            }
+				        },
+				        volumeUp: {
+				            key: 190, // .
+				            fn: function(f) {
+				                f.volume(f.options.volume + 0.1);
+								$(".jp-volume-bar").slider("option", "value", f.options.volume + 0.1);
+				            }
+				        },
+				        volumeDown: {
+				            key: 188, // ,
+				            fn: function(f) {
+				                f.volume(f.options.volume - 0.1);
+								$(".jp-volume-bar").slider("option", "value", f.options.volume - 0.1);
+				            }
+				        },
+				        loop: {
+				            key: 76, // l
+				            fn: function(f) {
+				                f._loop(!f.options.loop);
+				            }
+				        },
+				        goForwardFive: {
+				            key: 72, //  h
+				            fn: function(f) {
+				                f.playHead(f.status.currentPercentAbsolute + 5);
+				            }
+				        },
+				        goBackFive: {
+				            key: 66, //  h
+				            fn: function(f) {
+				                f.playHead(f.status.currentPercentAbsolute - 5);
+				            }
+				        },
+				        loopOn: {
+				            key: 49, //  f1
+				            fn: function(f) {
+				                f.options.lon = f.status.currentPercentAbsolute;
+				            }
+				        },
+				        loopOff: {
+				            key: 50, //  f2
+				            fn: function(f) {
+				                f.options.loff = f.status.currentPercentAbsolute;
+				            }
+				        },
+				        loopfinish: {
+				            key: 51, //  f3
+				            fn: function(f) {
+				            	if (f.options.lfinish) {
+				                    f.options.lfinish = false;
+				                } else {
+				                    f.options.lfinish = true;
+				                }
+				            }
+				        },
+				        speedUp: {
+				            key: 83, //  s
+				            fn: function(f) {
+				                f.playbackRate(f.status.playbackRate + 0.1);
+				            }
+				        },
+				        slowDown: {
+				            key: 65, //  a
+				            fn: function(f) {
+				                f.playbackRate(f.status.playbackRate - 0.1);
+				            }
+				        },
+				        normalSpeed: {
+				            key: 68, //  d
+				            fn: function(f) {
+				                f.playbackRate(1);
+				            }
+				        }
+				    },
 	                swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
 	                preload: "'.$preload.'",
                     supplied: "mp3,m4a",
@@ -1991,19 +2145,15 @@ if (!class_exists("s3bubble_audio")) {
 					},
 					loadedmetadata: function() {
 						$(".s3bubble-loading").fadeIn(); 
-					    console.log("loadedmetadata");
 					},
 					volumechange: function(event) {
-						console.log(event.jPlayer.status);
 
 					},
 					waiting: function() {
 						$(".s3bubble-loading").fadeIn(); 
-					    console.log("waiting");
 					},
 					canplay: function() {
 						$(".s3bubble-loading").fadeOut(); 
-					    console.log("canplay");
 					},
 					pause: function() { 
 						$(".s3-play").html("<i class=\"icon-control-play\"></i>");
@@ -2026,7 +2176,7 @@ if (!class_exists("s3bubble_audio")) {
 					},
 					keyBindings: {
 					  play: {
-					    key: 80, // p
+					    key: 32, // space
 					    fn: function(f) {
 					      if(f.status.paused) {
 					        f.play();
@@ -2234,7 +2384,6 @@ if (!class_exists("s3bubble_audio")) {
 							},"json");
 						},
 						timeupdate : function(t) {
-							console.log("timeupdate");
 							if (t.jPlayer.status.currentTime > 1) {
 								$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut()
 							}
@@ -2256,11 +2405,9 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						waiting: function() {
 							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeIn(); 
-						    console.log("waiting");
 						},
 						canplay: function() {
 							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
-						    console.log("canplay");
 						},
 						pause: function() { 
 							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
@@ -2278,7 +2425,7 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						keyBindings: {
 						  play: {
-						    key: 80, // p
+						    key: 32, // space
 						    fn: function(f) {
 						      if(f.status.paused) {
 						        f.play();
