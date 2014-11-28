@@ -1447,7 +1447,7 @@ if (!class_exists("s3bubble_audio")) {
 		                },
 		                ready: function(event) {
 							$(".s3bubble-loading-bar").show();
-							$(".jp-volume-bar").noUiSlider({
+							$(".playlist-audio-volume").noUiSlider({
 								start: 0.8,
 								connect: "lower",
 								orientation: "horizontal",
@@ -1457,7 +1457,7 @@ if (!class_exists("s3bubble_audio")) {
 									"max": 1
 								}
 							});
-							$(".jp-volume-bar").on("slide", function(evt){
+							$(".playlist-audio-volume").on("slide", function(evt){
 								$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "muted", false);
 								$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "volume", $(this).val());
 							});	
@@ -1465,7 +1465,7 @@ if (!class_exists("s3bubble_audio")) {
 							$(".s3-toggles-' . $player_id .  '").hide();
 							if($("#s3audible-' . $player_id .  '").width() < 400){
 								$(".s3bubble-loading-bar").css("right", "45px");
-								$(".jp-volume-bar").hide();
+								$(".playlist-audio-volume").hide();
 							}else{
 								$(".s3-toggles-' . $player_id .  '").fadeIn();
 							}
@@ -1586,14 +1586,14 @@ if (!class_exists("s3bubble_audio")) {
 					            key: 190, // .
 					            fn: function(f) {
 					                f.volume(f.options.volume + 0.1);
-									$(".jp-volume-bar").val(f.options.volume + 0.1);
+									$(".playlist-audio-volume").val(f.options.volume + 0.1);
 					            }
 					        },
 					        volumeDown: {
 					            key: 188, // ,
 					            fn: function(f) {
 					                f.volume(f.options.volume - 0.1);
-									$(".jp-volume-bar").val(f.options.volume - 0.1);
+									$(".playlist-audio-volume").val(f.options.volume - 0.1);
 					            }
 					        },
 					        loop: {
@@ -1760,7 +1760,7 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                ready: function(event) {
 						$(".s3bubble-loading").show();
-						$(".jp-volume-bar").noUiSlider({
+						$(".single-audio-volume").noUiSlider({
 							start: 0.8,
 							connect: "lower",
 							orientation: "horizontal",
@@ -1770,7 +1770,7 @@ if (!class_exists("s3bubble_audio")) {
 								"max": 1
 							}
 						});
-						$(".jp-volume-bar").on("slide", function(evt){
+						$(".single-audio-volume").on("slide", function(evt){
 							$("#s3-single-player-' . $player_id .  '").jPlayer("option", "muted", false);
 							$("#s3-single-player-' . $player_id .  '").jPlayer("option", "volume", $(this).val());
 						});	
@@ -1778,7 +1778,7 @@ if (!class_exists("s3bubble_audio")) {
 						$(".s3-toggles-' . $player_id .  '").hide();
 						if($("#s3audibleSingle-' . $player_id .  '").width() < 400){
 							$(".s3bubble-loading-bar").css("right", "45px");
-							$(".jp-volume-bar").hide();
+							$(".single-audio-volume").hide();
 						}else{
 							$(".s3-toggles-' . $player_id .  '").fadeIn();
 						}
@@ -1879,14 +1879,14 @@ if (!class_exists("s3bubble_audio")) {
 				            key: 190, // .
 				            fn: function(f) {
 				                f.volume(f.options.volume + 0.1);
-								$(".jp-volume-bar").val(f.options.volume + 0.1);
+								$(".single-audio-volume").val(f.options.volume + 0.1);
 				            }
 				        },
 				        volumeDown: {
 				            key: 188, // ,
 				            fn: function(f) {
 				                f.volume(f.options.volume - 0.1);
-								$(".jp-volume-bar").val(f.options.volume - 0.1);
+								$(".single-audio-volume").val(f.options.volume - 0.1);
 				            }
 				        },
 				        loop: {
