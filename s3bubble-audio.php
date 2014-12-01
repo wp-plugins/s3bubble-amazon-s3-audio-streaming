@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Video And Audio Streaming
 Plugin URI: https://s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 4 simple steps. 
-Version: 1.8.3
+Version: 1.8.4
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -1395,7 +1395,7 @@ if (!class_exists("s3bubble_audio")) {
 									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
 									<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
 								</div>
-								<div class="jp-volume-bar playlist-audio-volume">
+								<div class="jp-volume-bar playlist-audio-volume playlist-audio-volume-' . $player_id .  '">
 								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
@@ -1447,7 +1447,7 @@ if (!class_exists("s3bubble_audio")) {
 		                },
 		                ready: function(event) {
 							$(".s3bubble-loading-bar").show();
-							$(".playlist-audio-volume").noUiSlider({
+							$(".playlist-audio-volume-' . $player_id .  '").noUiSlider({
 								start: 0.8,
 								connect: "lower",
 								orientation: "horizontal",
@@ -1457,7 +1457,7 @@ if (!class_exists("s3bubble_audio")) {
 									"max": 1
 								}
 							});
-							$(".playlist-audio-volume").on("slide", function(evt){
+							$(".playlist-audio-volume-' . $player_id .  '").on("slide", function(evt){
 								$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "muted", false);
 								$("#jquery_jplayer_' . $player_id .  '").jPlayer("option", "volume", $(this).val());
 							});	
@@ -1465,7 +1465,7 @@ if (!class_exists("s3bubble_audio")) {
 							$(".s3-toggles-' . $player_id .  '").hide();
 							if($("#s3audible-' . $player_id .  '").width() < 400){
 								$(".s3bubble-loading-bar").css("right", "45px");
-								$(".playlist-audio-volume").hide();
+								$(".playlist-audio-volume-' . $player_id .  '").hide();
 							}else{
 								$(".s3-toggles-' . $player_id .  '").fadeIn();
 							}
@@ -1586,14 +1586,14 @@ if (!class_exists("s3bubble_audio")) {
 					            key: 190, // .
 					            fn: function(f) {
 					                f.volume(f.options.volume + 0.1);
-									$(".playlist-audio-volume").val(f.options.volume + 0.1);
+									$(".playlist-audio-volume-' . $player_id .  '").val(f.options.volume + 0.1);
 					            }
 					        },
 					        volumeDown: {
 					            key: 188, // ,
 					            fn: function(f) {
 					                f.volume(f.options.volume - 0.1);
-									$(".playlist-audio-volume").val(f.options.volume - 0.1);
+									$(".playlist-audio-volume-' . $player_id .  '").val(f.options.volume - 0.1);
 					            }
 					        },
 					        loop: {
@@ -1716,7 +1716,7 @@ if (!class_exists("s3bubble_audio")) {
 								<div class="s3-controls">
 									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
 								</div>
-								<div class="jp-volume-bar single-audio-volume">
+								<div class="jp-volume-bar single-audio-volume single-audio-volume-' . $player_id .  '">
 								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
@@ -1760,7 +1760,7 @@ if (!class_exists("s3bubble_audio")) {
 	                },
 	                ready: function(event) {
 						$(".s3bubble-loading").show();
-						$(".single-audio-volume").noUiSlider({
+						$(".single-audio-volume-' . $player_id .  '").noUiSlider({
 							start: 0.8,
 							connect: "lower",
 							orientation: "horizontal",
@@ -1770,7 +1770,7 @@ if (!class_exists("s3bubble_audio")) {
 								"max": 1
 							}
 						});
-						$(".single-audio-volume").on("slide", function(evt){
+						$(".single-audio-volume-' . $player_id .  '").on("slide", function(evt){
 							$("#s3-single-player-' . $player_id .  '").jPlayer("option", "muted", false);
 							$("#s3-single-player-' . $player_id .  '").jPlayer("option", "volume", $(this).val());
 						});	
@@ -1778,7 +1778,7 @@ if (!class_exists("s3bubble_audio")) {
 						$(".s3-toggles-' . $player_id .  '").hide();
 						if($("#s3audibleSingle-' . $player_id .  '").width() < 400){
 							$(".s3bubble-loading-bar").css("right", "45px");
-							$(".single-audio-volume").hide();
+							$(".single-audio-volume-' . $player_id .  '").hide();
 						}else{
 							$(".s3-toggles-' . $player_id .  '").fadeIn();
 						}
@@ -1879,14 +1879,14 @@ if (!class_exists("s3bubble_audio")) {
 				            key: 190, // .
 				            fn: function(f) {
 				                f.volume(f.options.volume + 0.1);
-								$(".single-audio-volume").val(f.options.volume + 0.1);
+								$(".single-audio-volume-' . $player_id .  '").val(f.options.volume + 0.1);
 				            }
 				        },
 				        volumeDown: {
 				            key: 188, // ,
 				            fn: function(f) {
 				                f.volume(f.options.volume - 0.1);
-								$(".single-audio-volume").val(f.options.volume - 0.1);
+								$(".single-audio-volume-' . $player_id .  '").val(f.options.volume - 0.1);
 				            }
 				        },
 				        loop: {
