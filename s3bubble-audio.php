@@ -903,8 +903,8 @@ if (!class_exists("s3bubble_audio")) {
 	        wp_enqueue_style('fonts.lato');
 			// updated css
 		    echo '<style type="text/css">
-					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 33px !important;text-shadow: none !important;}
-					.s3bubblePlayer button > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 38px !important;cursor: pointer !important;text-shadow: none !important;}
+					.s3bubblePlayer a > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 33px !important;text-shadow: none !important;box-shadow: none !important;}
+					.s3bubblePlayer button > * {color: '.stripcslashes($colour).' !important;background:transparent !important;line-height: 38px !important;cursor: pointer !important;text-shadow: none !important;box-shadow: none !important;}
                     .bar1, .bar2, .bar3, .bar4, .bar5, .noUi-connect, .noUi-handle {background-color: '.stripcslashes($colour).' !important;}
 					.s3-play-bar, .s3-playlist ul li.s3-playlist-current {background-color: '.stripcslashes($colour).' !important;}
 					.s3-current-time, .s3-duration, .s3-time-seperator, .s3-playlist ul li a.s3-playlist-current {color: '.stripcslashes($colour).' !important;}
