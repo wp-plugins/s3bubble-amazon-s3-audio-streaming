@@ -1384,7 +1384,7 @@ if (!class_exists("s3bubble_audio")) {
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
 								
-            return '<div class="s3audible s3bubblePlayer" id="s3audible-' . $player_id .  '">
+            return preg_replace('~>\s+<~', '><','<div class="s3audible s3bubblePlayer" id="s3audible-' . $player_id .  '">
 			    <div id="jquery_jplayer_' . $player_id .  '" class="s3-jplayer"></div>
 					<div id="jp_container_' . $player_id .  '" class="s3-audio" role="application" aria-label="media player">
 						<div class="s3-type-playlist">
@@ -1667,7 +1667,7 @@ if (!class_exists("s3bubble_audio")) {
 						keyEnabled: true
 					});			
 				});
-			</script>';
+			</script>');
 			curl_close($ch);
         }
 
@@ -1706,7 +1706,7 @@ if (!class_exists("s3bubble_audio")) {
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
 			
-            return '<div class="s3audibleSingle s3bubblePlayer" id="s3audibleSingle-' . $player_id .  '">
+            return preg_replace('~>\s+<~', '><','<div class="s3audibleSingle s3bubblePlayer" id="s3audibleSingle-' . $player_id .  '">
 			    <div id="s3-single-container-' . $player_id .  '" class="s3-playlist-wrapper">
 			        <div class="s3-type-playlist">
 			            <div id="s3-single-player-' . $player_id .  '" class="s3-jplayer"></div>
@@ -1960,7 +1960,7 @@ if (!class_exists("s3bubble_audio")) {
 					keyEnabled: true
 	            });
 			});
-			</script>';
+			</script>');
 			curl_close($ch);
 
 		}
@@ -2010,7 +2010,7 @@ if (!class_exists("s3bubble_audio")) {
 			$dc = $download;
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
-            return '<div class="s3bubblePlayer s3video" id="s3video-' . $player_id .  '">
+            return preg_replace('~>\s+<~', '><','<div class="s3bubblePlayer s3video" id="s3video-' . $player_id .  '">
 			    <div id="s3-container-video-' . $player_id .  '" class="s3-playlist-wrapper">
 			        <div class="s3-type-playlist s3-jplayer">
 			            <div class="s3-contain">
@@ -2243,7 +2243,7 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				});
 			});
-			</script>';
+			</script>');
 			curl_close($ch);
 		}
 		
@@ -2288,7 +2288,7 @@ if (!class_exists("s3bubble_audio")) {
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
 		
-            return '<div class="s3videoSingle s3bubblePlayer" id="s3videoSingle-' . $player_id .  '">
+            return preg_replace('~>\s+<~', '><','<div class="s3videoSingle s3bubblePlayer" id="s3videoSingle-' . $player_id .  '">
 			    <div id="s3-container-video-single-' . $player_id .  '" class="s3-playlist-wrapper">
 			        <div class="s3-type-playlist">
 			            <div class="s3-contain">
@@ -2492,7 +2492,7 @@ if (!class_exists("s3bubble_audio")) {
 						}
 					});
 				});
-			</script>';
+			</script>');
 			curl_close($ch);
 		}
 	}
