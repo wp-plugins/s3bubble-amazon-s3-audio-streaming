@@ -944,15 +944,15 @@ if (!class_exists("s3bubble_audio")) {
 	            wp_enqueue_script('jquery');
 	            wp_register_script( 'jquery-migrate', '//code.jquery.com/jquery-migrate-1.2.1.min.js', false, null);
 	            wp_enqueue_script('jquery-migrate');
-				wp_register_script( 'jquery.slider.min', plugins_url('assets/js/jquery.nouislider.all.min.js',__FILE__ ), array(), uniqid() );
+				wp_register_script( 'jquery.slider.min', plugins_url('assets/js/jquery.nouislider.all.min.js',__FILE__ ), array(), uniqid(), true );
 	            wp_enqueue_script('jquery.slider.min');
-				wp_register_script( 'jquery.s3player.min', plugins_url('assets/v2.8.1/js/jplayer/jquery.jplayer.min.js',__FILE__ ), array(), uniqid() );
+				wp_register_script( 'jquery.s3player.min', plugins_url('assets/v2.8.1/js/jplayer/jquery.jplayer.min.js',__FILE__ ), array(), uniqid(), true );
 	            wp_enqueue_script('jquery.s3player.min');
-				wp_register_script( 'jquery.s3player.inspector', plugins_url('assets/v2.8.1/js/add-on/jquery.jplayer.inspector.min.js',__FILE__ ), array(), uniqid() );
+				wp_register_script( 'jquery.s3player.inspector', plugins_url('assets/v2.8.1/js/add-on/jquery.jplayer.inspector.min.js',__FILE__ ), array(), uniqid(), true );
 	            wp_enqueue_script('jquery.s3player.inspector');
-				wp_register_script( 'jplayer.s3playlist.min', plugins_url('assets/v2.8.1/js/add-on/jplayer.playlist.min.js',__FILE__ ), array(), uniqid() );
+				wp_register_script( 'jplayer.s3playlist.min', plugins_url('assets/v2.8.1/js/add-on/jplayer.playlist.min.js',__FILE__ ), array(), uniqid(), true );
 	            wp_enqueue_script('jplayer.s3playlist.min');
-				wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array(), $this->version );
+				wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array(), uniqid(), true );
 	            wp_enqueue_script('mediaelement-and-player.min');
             } 
 		}
