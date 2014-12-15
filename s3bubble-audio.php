@@ -198,8 +198,9 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
-			
 			echo $result;
+			curl_close($ch);
+			
 			die();	
 		}
 
@@ -239,8 +240,9 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
-			
 			echo $result;
+			curl_close($ch);
+			
 			die();	
 		}
 
@@ -280,8 +282,9 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
-			
 			echo $result;
+			curl_close($ch);
+			
 			die();	
 		}
 
@@ -321,8 +324,9 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
 		    $result = curl_exec($ch);
-			
 			echo $result;
+			curl_close($ch);
+			
 			die();	
 		}
         
@@ -1384,16 +1388,16 @@ if (!class_exists("s3bubble_audio")) {
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
 								
-            return preg_replace('~>\s+<~', '><','<div class="s3audible s3bubblePlayer" id="s3audible-' . $player_id .  '">
+            return '<div class="s3audible s3bubblePlayer" id="s3audible-' . $player_id .  '">
 			    <div id="jquery_jplayer_' . $player_id .  '" class="s3-jplayer"></div>
 					<div id="jp_container_' . $player_id .  '" class="s3-audio" role="application" aria-label="media player">
 						<div class="s3-type-playlist">
 							<div class="s3-gui s3-gui-audio s3-interface interfaceApp-' . $player_id .  '">
 							    <img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
 								<div class="s3-controls">
-									<button class="s3-previous" role="button" tabindex="0"><i class="icon-control-rewind"></i></button>
-									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
-									<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
+									<button class="s3-previous" role="button" tabindex="0"><i class="s3bubbleico-control-rewind"></i></button>
+									<button class="s3-play" role="button" tabindex="0"><i class="s3bubbleico-control-play"></i></button>
+									<button class="s3-next" role="button" tabindex="0"><i class="s3bubbleico-control-forward"></i></button>
 								</div>
 								<div class="jp-volume-bar playlist-audio-volume playlist-audio-volume-' . $player_id .  '">
 								</div>
@@ -1412,8 +1416,8 @@ if (!class_exists("s3bubble_audio")) {
 					                    <span class="bar4 a4"></span>
 					                    <span class="bar5 a5"></span>
 					                </span>
-									<button class="s3-playlist-hide' . $player_id .  '" role="button" tabindex="0"><i class="icon-playlist"></i></button>
-								    <button class="search-tracks" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="icon-magnifier"></i></button>
+									<button class="s3-playlist-hide' . $player_id .  '" role="button" tabindex="0"><i class="s3bubbleico-playlist"></i></button>
+								    <button class="search-tracks" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="s3bubbleico-magnifier"></i></button>
 								</div>
 							</div>
 							<div class="s3search s3audible-search-' . $player_id .  '" style="display:none;">
@@ -1526,12 +1530,12 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						pause: function() {
 							$(".musicbar-' . $player_id .  '").removeClass("animate"); 
-							$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
+							$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-play\"></i>");
 						},
 						playing: function() {
 							$(".musicbar-' . $player_id .  '").addClass("animate");
 							$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
-							$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+							$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-pause\"></i>");
 						},
 						play: function() { 
 						    
@@ -1667,8 +1671,8 @@ if (!class_exists("s3bubble_audio")) {
 						keyEnabled: true
 					});			
 				});
-			</script>');
-			curl_close($ch);
+			</script>';
+
         }
 
         /*
@@ -1706,7 +1710,7 @@ if (!class_exists("s3bubble_audio")) {
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
 			
-            return preg_replace('~>\s+<~', '><','<div class="s3audibleSingle s3bubblePlayer" id="s3audibleSingle-' . $player_id .  '">
+            return '<div class="s3audibleSingle s3bubblePlayer" id="s3audibleSingle-' . $player_id .  '">
 			    <div id="s3-single-container-' . $player_id .  '" class="s3-playlist-wrapper">
 			        <div class="s3-type-playlist">
 			            <div id="s3-single-player-' . $player_id .  '" class="s3-jplayer"></div>
@@ -1714,7 +1718,7 @@ if (!class_exists("s3bubble_audio")) {
 			                <div class="s3-interface interfaceApp-' . $player_id .  '">
 			                    <img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
 								<div class="s3-controls">
-									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
+									<button class="s3-play" role="button" tabindex="0"><i class="s3bubbleico-control-play"></i></button>
 								</div>
 								<div class="jp-volume-bar single-audio-volume single-audio-volume-' . $player_id .  '">
 								</div>
@@ -1795,7 +1799,7 @@ if (!class_exists("s3bubble_audio")) {
 								audioSingleS3Bubble.setPlaylist(response);
 								//Download
 								if ('.$dc.' === true) {
-									$("#s3-single-container-' . $player_id . ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="icon-cloud-download"></i></a></li>\');
+									$("#s3-single-container-' . $player_id . ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="s3bubbleico-cloud-download"></i></a></li>\');
 								}
 								//Make it plain
 								if ("' . $style . '" === "plain") {
@@ -1819,12 +1823,12 @@ if (!class_exists("s3bubble_audio")) {
 					},
 					pause: function() {
 						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
-						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
+						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-play\"></i>");
 					},
 					playing: function() {
 						$(".musicbar-' . $player_id .  '").addClass("animate");
 						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
-						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-pause\"></i>");
 					},
 					play: function() { 
 					    
@@ -1960,8 +1964,7 @@ if (!class_exists("s3bubble_audio")) {
 					keyEnabled: true
 	            });
 			});
-			</script>');
-			curl_close($ch);
+			</script>';
 
 		}
         
@@ -2010,7 +2013,8 @@ if (!class_exists("s3bubble_audio")) {
 			$dc = $download;
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
-            return preg_replace('~>\s+<~', '><','<div class="s3bubblePlayer s3video" id="s3video-' . $player_id .  '">
+            
+            return '<div class="s3bubblePlayer s3video" id="s3video-' . $player_id .  '">
 			    <div id="s3-container-video-' . $player_id .  '" class="s3-playlist-wrapper">
 			        <div class="s3-type-playlist s3-jplayer">
 			            <div class="s3-contain">
@@ -2021,9 +2025,9 @@ if (!class_exists("s3bubble_audio")) {
 			                <div class="s3-gui s3-gui-video">
 				                <div class="s3-interface">
 									<div class="s3-controls">
-										<button class="s3-previous" role="button" tabindex="0"><i class="icon-control-rewind"></i></button>
-										<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
-										<button class="s3-next" role="button" tabindex="0"><i class="icon-control-forward"></i></button>
+										<button class="s3-previous" role="button" tabindex="0"><i class="s3bubbleico-control-rewind"></i></button>
+										<button class="s3-play" role="button" tabindex="0"><i class="s3bubbleico-control-play"></i></button>
+										<button class="s3-next" role="button" tabindex="0"><i class="s3bubbleico-control-forward"></i></button>
 									</div>
 									<div class="s3-progress">
 										<div class="s3-progress-inner">
@@ -2033,10 +2037,10 @@ if (!class_exists("s3bubble_audio")) {
 										</div>
 									</div>
 									<div class="s3-toggles s3-toggles-' . $player_id .  '">
-										<button class="s3-full-screen" role="button" tabindex="0"><i class="icon-size-fullscreen"></i></button>
-										<button class="s3-playlist-hide' . $player_id .  ' removeIt" role="button" tabindex="0"><i class="icon-list"></i></button>
-									    <button class="search-tracks removeIt" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="icon-magnifier"></i></button>
-										<button class="s3-mute removeIt" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
+										<button class="s3-full-screen" role="button" tabindex="0"><i class="s3bubbleico-size-fullscreen"></i></button>
+										<button class="s3-playlist-hide' . $player_id .  ' removeIt" role="button" tabindex="0"><i class="s3bubbleico-list"></i></button>
+									    <button class="search-tracks removeIt" data-snum="' . $player_id .  '" role="button" tabindex="0"><i class="s3bubbleico-magnifier"></i></button>
+										<button class="s3-mute removeIt" role="button" tabindex="0"><i class="s3bubbleico-volume-off"></i></button>
 									</div>
 				                </div>
 				            </div>
@@ -2160,11 +2164,11 @@ if (!class_exists("s3bubble_audio")) {
 						$(".s3bubble-loading").fadeOut(); 
 					},
 					pause: function() { 
-						$(".s3-play").html("<i class=\"icon-control-play\"></i>");
+						$(".s3-play").html("<i class=\"s3bubbleico-control-play\"></i>");
 					},
 					playing: function() {
 						$(".s3bubble-loading").fadeOut(); 
-						$(".s3-play").html("<i class=\"icon-control-pause\"></i>");
+						$(".s3-play").html("<i class=\"s3bubbleico-control-pause\"></i>");
 					},
 					play: function() { 
 					    
@@ -2243,8 +2247,8 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				});
 			});
-			</script>');
-			curl_close($ch);
+			</script>';
+
 		}
 		
 		/*
@@ -2288,7 +2292,7 @@ if (!class_exists("s3bubble_audio")) {
 			if($loggedin == 'true'){if ( is_user_logged_in() ) {$dc = 'true';}}
             $player_id = uniqid();
 		
-            return preg_replace('~>\s+<~', '><','<div class="s3videoSingle s3bubblePlayer" id="s3videoSingle-' . $player_id .  '">
+            return '<div class="s3videoSingle s3bubblePlayer" id="s3videoSingle-' . $player_id .  '">
 			    <div id="s3-container-video-single-' . $player_id .  '" class="s3-playlist-wrapper">
 			        <div class="s3-type-playlist">
 			            <div class="s3-contain">
@@ -2301,7 +2305,7 @@ if (!class_exists("s3bubble_audio")) {
 			                <div class="s3-interface">
 			                	<img class="s3bubble-loading-bar" style="display:none;" src="https://isdcloud.s3.amazonaws.com/ajax_loaders/ajax_loader_bar_small.gif" />
 								<div class="s3-controls">
-									<button class="s3-play" role="button" tabindex="0"><i class="icon-control-play"></i></button>
+									<button class="s3-play" role="button" tabindex="0"><i class="s3bubbleico-control-play"></i></button>
 								</div>
 								<div class="s3-progress">
 									<div class="s3-progress-inner">
@@ -2311,8 +2315,8 @@ if (!class_exists("s3bubble_audio")) {
 									</div>
 								</div>
 								<div class="s3-toggles s3-toggles-' . $player_id .  ' s3-hideit">
-									<button class="s3-full-screen" role="button" tabindex="0"><i class="icon-size-fullscreen"></i></button>
-									<button class="s3-mute" role="button" tabindex="0"><i class="icon-volume-off"></i></button>
+									<button class="s3-full-screen" role="button" tabindex="0"><i class="s3bubbleico-size-fullscreen"></i></button>
+									<button class="s3-mute" role="button" tabindex="0"><i class="s3bubbleico-volume-off"></i></button>
 								</div>
 			                </div>
 			            </div>
@@ -2382,7 +2386,7 @@ if (!class_exists("s3bubble_audio")) {
 									});
 									//Download
 									if ('.$dc.' === true) {
-										$("#s3-container-video-single-' . $player_id .  ' .s3-gui .s3-toggles").append(\'<button onclick="location.href=&quot;\' + response[0].download + \'&quot;" style="display: block;"><i class="icon-cloud-download"></i></button>\');
+										$("#s3-container-video-single-' . $player_id .  ' .s3-gui .s3-toggles").append(\'<button onclick="location.href=&quot;\' + response[0].download + \'&quot;" style="display: block;"><i class="s3bubbleico-cloud-download"></i></button>\');
 									}
 								}
 							},"json");
@@ -2414,15 +2418,15 @@ if (!class_exists("s3bubble_audio")) {
 							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
 						},
 						pause: function() { 
-							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-play\"></i>");
+							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-play\"></i>");
 						},
 						playing: function() {
 							$("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
-							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-pause\"></i>");
 						},
 						play: function() { 
 						    $("#s3videoSingle-' . $player_id .  ' .s3bubble-loading").fadeOut(); 
-							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"icon-control-pause\"></i>");
+							$("#s3videoSingle-' . $player_id .  ' .s3-play").html("<i class=\"s3bubbleico-control-pause\"></i>");
 						},
 						suspend: function() { 
 						    
@@ -2492,8 +2496,8 @@ if (!class_exists("s3bubble_audio")) {
 						}
 					});
 				});
-			</script>');
-			curl_close($ch);
+			</script>';
+
 		}
 	}
 	/*

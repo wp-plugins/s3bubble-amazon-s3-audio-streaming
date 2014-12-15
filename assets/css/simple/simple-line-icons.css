@@ -10,7 +10,7 @@
 }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
-[data-icon]:before {
+[data-s3bubbleico]:before {
 	font-family: 'Simple-Line-Icons';
 	content: attr(data-icon);
 	speak: none;
@@ -28,7 +28,7 @@ Instead of a list of all class selectors,
 you can use the generic selector below, but it's slower:
 [class*="icon-"] {
 */
-.icon-user-female, .icon-user-follow, .icon-user-following, .icon-user-unfollow, .icon-trophy, .icon-screen-smartphone, .icon-screen-desktop, .icon-plane, .icon-notebook, .icon-moustache, .icon-mouse, .icon-magnet, .icon-energy, .icon-emoticon-smile, .icon-disc, .icon-cursor-move, .icon-crop, .icon-credit-card, .icon-chemistry, .icon-user, .icon-speedometer, .icon-social-youtube, .icon-social-twitter, .icon-social-tumblr, .icon-social-facebook, .icon-social-dropbox, .icon-social-dribbble, .icon-shield, .icon-screen-tablet, .icon-magic-wand, .icon-hourglass, .icon-graduation, .icon-ghost, .icon-game-controller, .icon-fire, .icon-eyeglasses, .icon-envelope-open, .icon-envelope-letter, .icon-bell, .icon-badge, .icon-anchor, .icon-wallet, .icon-vector, .icon-speech, .icon-puzzle, .icon-printer, .icon-present, .icon-playlist, .icon-pin, .icon-picture, .icon-map, .icon-layers, .icon-handbag, .icon-globe-alt, .icon-globe, .icon-frame, .icon-folder-alt, .icon-film, .icon-feed, .icon-earphones-alt, .icon-earphones, .icon-drop, .icon-drawer, .icon-docs, .icon-directions, .icon-direction, .icon-diamond, .icon-cup, .icon-compass, .icon-call-out, .icon-call-in, .icon-call-end, .icon-calculator, .icon-bubbles, .icon-briefcase, .icon-book-open, .icon-basket-loaded, .icon-basket, .icon-bag, .icon-action-undo, .icon-action-redo, .icon-wrench, .icon-umbrella, .icon-trash, .icon-tag, .icon-support, .icon-size-fullscreen, .icon-size-actual, .icon-shuffle, .icon-share-alt, .icon-share, .icon-rocket, .icon-question, .icon-pie-chart, .icon-pencil, .icon-note, .icon-music-tone-alt, .icon-music-tone, .icon-microphone, .icon-loop, .icon-logout, .icon-login, .icon-list, .icon-like, .icon-home, .icon-grid, .icon-graph, .icon-equalizer, .icon-dislike, .icon-cursor, .icon-control-start, .icon-control-rewind, .icon-control-play, .icon-control-pause, .icon-control-forward, .icon-control-end, .icon-calendar, .icon-bulb, .icon-bar-chart, .icon-arrow-up, .icon-arrow-right, .icon-arrow-left, .icon-arrow-down, .icon-ban, .icon-bubble, .icon-camcorder, .icon-camera, .icon-check, .icon-clock, .icon-close, .icon-cloud-download, .icon-cloud-upload, .icon-doc, .icon-envelope, .icon-eye, .icon-flag, .icon-folder, .icon-heart, .icon-info, .icon-key, .icon-link, .icon-lock, .icon-lock-open, .icon-magnifier, .icon-magnifier-add, .icon-magnifier-remove, .icon-paper-clip, .icon-paper-plane, .icon-plus, .icon-pointer, .icon-power, .icon-refresh, .icon-reload, .icon-settings, .icon-star, .icon-symbol-female, .icon-symbol-male, .icon-target, .icon-volume-1, .icon-volume-2, .icon-volume-off, .icon-users {
+.s3bubbleico-user-female, .s3bubbleico-user-follow, .s3bubbleico-user-following, .s3bubbleico-user-unfollow, .s3bubbleico-trophy, .s3bubbleico-screen-smartphone, .s3bubbleico-screen-desktop, .s3bubbleico-plane, .s3bubbleico-notebook, .s3bubbleico-moustache, .s3bubbleico-mouse, .s3bubbleico-magnet, .s3bubbleico-energy, .s3bubbleico-emots3bubbleico-smile, .s3bubbleico-disc, .s3bubbleico-cursor-move, .s3bubbleico-crop, .s3bubbleico-credit-card, .s3bubbleico-chemistry, .s3bubbleico-user, .s3bubbleico-speedometer, .s3bubbleico-social-youtube, .s3bubbleico-social-twitter, .s3bubbleico-social-tumblr, .s3bubbleico-social-facebook, .s3bubbleico-social-dropbox, .s3bubbleico-social-dribbble, .s3bubbleico-shield, .s3bubbleico-screen-tablet, .s3bubbleico-magic-wand, .s3bubbleico-hourglass, .s3bubbleico-graduation, .s3bubbleico-ghost, .s3bubbleico-game-controller, .s3bubbleico-fire, .s3bubbleico-eyeglasses, .s3bubbleico-envelope-open, .s3bubbleico-envelope-letter, .s3bubbleico-bell, .s3bubbleico-badge, .s3bubbleico-anchor, .s3bubbleico-wallet, .s3bubbleico-vector, .s3bubbleico-speech, .s3bubbleico-puzzle, .s3bubbleico-printer, .s3bubbleico-present, .s3bubbleico-playlist, .s3bubbleico-pin, .s3bubbleico-picture, .s3bubbleico-map, .s3bubbleico-layers, .s3bubbleico-handbag, .s3bubbleico-globe-alt, .s3bubbleico-globe, .s3bubbleico-frame, .s3bubbleico-folder-alt, .s3bubbleico-film, .s3bubbleico-feed, .s3bubbleico-earphones-alt, .s3bubbleico-earphones, .s3bubbleico-drop, .s3bubbleico-drawer, .s3bubbleico-docs, .s3bubbleico-directions, .s3bubbleico-direction, .s3bubbleico-diamond, .s3bubbleico-cup, .s3bubbleico-compass, .s3bubbleico-call-out, .s3bubbleico-call-in, .s3bubbleico-call-end, .s3bubbleico-calculator, .s3bubbleico-bubbles, .s3bubbleico-briefcase, .s3bubbleico-book-open, .s3bubbleico-basket-loaded, .s3bubbleico-basket, .s3bubbleico-bag, .s3bubbleico-action-undo, .s3bubbleico-action-redo, .s3bubbleico-wrench, .s3bubbleico-umbrella, .s3bubbleico-trash, .s3bubbleico-tag, .s3bubbleico-support, .s3bubbleico-size-fullscreen, .s3bubbleico-size-actual, .s3bubbleico-shuffle, .s3bubbleico-share-alt, .s3bubbleico-share, .s3bubbleico-rocket, .s3bubbleico-question, .s3bubbleico-pie-chart, .s3bubbleico-pencil, .s3bubbleico-note, .s3bubbleico-music-tone-alt, .s3bubbleico-music-tone, .s3bubbleico-microphone, .s3bubbleico-loop, .s3bubbleico-logout, .s3bubbleico-login, .s3bubbleico-list, .s3bubbleico-like, .s3bubbleico-home, .s3bubbleico-grid, .s3bubbleico-graph, .s3bubbleico-equalizer, .s3bubbleico-dislike, .s3bubbleico-cursor, .s3bubbleico-control-start, .s3bubbleico-control-rewind, .s3bubbleico-control-play, .s3bubbleico-control-pause, .s3bubbleico-control-forward, .s3bubbleico-control-end, .s3bubbleico-calendar, .s3bubbleico-bulb, .s3bubbleico-bar-chart, .s3bubbleico-arrow-up, .s3bubbleico-arrow-right, .s3bubbleico-arrow-left, .s3bubbleico-arrow-down, .s3bubbleico-ban, .s3bubbleico-bubble, .s3bubbleico-camcorder, .s3bubbleico-camera, .s3bubbleico-check, .s3bubbleico-clock, .s3bubbleico-close, .s3bubbleico-cloud-download, .s3bubbleico-cloud-upload, .s3bubbleico-doc, .s3bubbleico-envelope, .s3bubbleico-eye, .s3bubbleico-flag, .s3bubbleico-folder, .s3bubbleico-heart, .s3bubbleico-info, .s3bubbleico-key, .s3bubbleico-link, .s3bubbleico-lock, .s3bubbleico-lock-open, .s3bubbleico-magnifier, .s3bubbleico-magnifier-add, .s3bubbleico-magnifier-remove, .s3bubbleico-paper-clip, .s3bubbleico-paper-plane, .s3bubbleico-plus, .s3bubbleico-pointer, .s3bubbleico-power, .s3bubbleico-refresh, .s3bubbleico-reload, .s3bubbleico-settings, .s3bubbleico-star, .s3bubbleico-symbol-female, .s3bubbleico-symbol-male, .s3bubbleico-target, .s3bubbleico-volume-1, .s3bubbleico-volume-2, .s3bubbleico-volume-off, .s3bubbleico-users {
 	font-family: 'Simple-Line-Icons';
 	speak: none;
 	font-style: normal;
@@ -38,489 +38,489 @@ you can use the generic selector below, but it's slower:
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
-.icon-user-female:before {
+.s3bubbleico-user-female:before {
 	content: "\e000";
 }
-.icon-user-follow:before {
+.s3bubbleico-user-follow:before {
 	content: "\e002";
 }
-.icon-user-following:before {
+.s3bubbleico-user-following:before {
 	content: "\e003";
 }
-.icon-user-unfollow:before {
+.s3bubbleico-user-unfollow:before {
 	content: "\e004";
 }
-.icon-trophy:before {
+.s3bubbleico-trophy:before {
 	content: "\e006";
 }
-.icon-screen-smartphone:before {
+.s3bubbleico-screen-smartphone:before {
 	content: "\e010";
 }
-.icon-screen-desktop:before {
+.s3bubbleico-screen-desktop:before {
 	content: "\e011";
 }
-.icon-plane:before {
+.s3bubbleico-plane:before {
 	content: "\e012";
 }
-.icon-notebook:before {
+.s3bubbleico-notebook:before {
 	content: "\e013";
 }
-.icon-moustache:before {
+.s3bubbleico-moustache:before {
 	content: "\e014";
 }
-.icon-mouse:before {
+.s3bubbleico-mouse:before {
 	content: "\e015";
 }
-.icon-magnet:before {
+.s3bubbleico-magnet:before {
 	content: "\e016";
 }
-.icon-energy:before {
+.s3bubbleico-energy:before {
 	content: "\e020";
 }
-.icon-emoticon-smile:before {
+.s3bubbleico-emots3bubbleico-smile:before {
 	content: "\e021";
 }
-.icon-disc:before {
+.s3bubbleico-disc:before {
 	content: "\e022";
 }
-.icon-cursor-move:before {
+.s3bubbleico-cursor-move:before {
 	content: "\e023";
 }
-.icon-crop:before {
+.s3bubbleico-crop:before {
 	content: "\e024";
 }
-.icon-credit-card:before {
+.s3bubbleico-credit-card:before {
 	content: "\e025";
 }
-.icon-chemistry:before {
+.s3bubbleico-chemistry:before {
 	content: "\e026";
 }
-.icon-user:before {
+.s3bubbleico-user:before {
 	content: "\e005";
 }
-.icon-speedometer:before {
+.s3bubbleico-speedometer:before {
 	content: "\e007";
 }
-.icon-social-youtube:before {
+.s3bubbleico-social-youtube:before {
 	content: "\e008";
 }
-.icon-social-twitter:before {
+.s3bubbleico-social-twitter:before {
 	content: "\e009";
 }
-.icon-social-tumblr:before {
+.s3bubbleico-social-tumblr:before {
 	content: "\e00a";
 }
-.icon-social-facebook:before {
+.s3bubbleico-social-facebook:before {
 	content: "\e00b";
 }
-.icon-social-dropbox:before {
+.s3bubbleico-social-dropbox:before {
 	content: "\e00c";
 }
-.icon-social-dribbble:before {
+.s3bubbleico-social-dribbble:before {
 	content: "\e00d";
 }
-.icon-shield:before {
+.s3bubbleico-shield:before {
 	content: "\e00e";
 }
-.icon-screen-tablet:before {
+.s3bubbleico-screen-tablet:before {
 	content: "\e00f";
 }
-.icon-magic-wand:before {
+.s3bubbleico-magic-wand:before {
 	content: "\e017";
 }
-.icon-hourglass:before {
+.s3bubbleico-hourglass:before {
 	content: "\e018";
 }
-.icon-graduation:before {
+.s3bubbleico-graduation:before {
 	content: "\e019";
 }
-.icon-ghost:before {
+.s3bubbleico-ghost:before {
 	content: "\e01a";
 }
-.icon-game-controller:before {
+.s3bubbleico-game-controller:before {
 	content: "\e01b";
 }
-.icon-fire:before {
+.s3bubbleico-fire:before {
 	content: "\e01c";
 }
-.icon-eyeglasses:before {
+.s3bubbleico-eyeglasses:before {
 	content: "\e01d";
 }
-.icon-envelope-open:before {
+.s3bubbleico-envelope-open:before {
 	content: "\e01e";
 }
-.icon-envelope-letter:before {
+.s3bubbleico-envelope-letter:before {
 	content: "\e01f";
 }
-.icon-bell:before {
+.s3bubbleico-bell:before {
 	content: "\e027";
 }
-.icon-badge:before {
+.s3bubbleico-badge:before {
 	content: "\e028";
 }
-.icon-anchor:before {
+.s3bubbleico-anchor:before {
 	content: "\e029";
 }
-.icon-wallet:before {
+.s3bubbleico-wallet:before {
 	content: "\e02a";
 }
-.icon-vector:before {
+.s3bubbleico-vector:before {
 	content: "\e02b";
 }
-.icon-speech:before {
+.s3bubbleico-speech:before {
 	content: "\e02c";
 }
-.icon-puzzle:before {
+.s3bubbleico-puzzle:before {
 	content: "\e02d";
 }
-.icon-printer:before {
+.s3bubbleico-printer:before {
 	content: "\e02e";
 }
-.icon-present:before {
+.s3bubbleico-present:before {
 	content: "\e02f";
 }
-.icon-playlist:before {
+.s3bubbleico-playlist:before {
 	content: "\e030";
 }
-.icon-pin:before {
+.s3bubbleico-pin:before {
 	content: "\e031";
 }
-.icon-picture:before {
+.s3bubbleico-picture:before {
 	content: "\e032";
 }
-.icon-map:before {
+.s3bubbleico-map:before {
 	content: "\e033";
 }
-.icon-layers:before {
+.s3bubbleico-layers:before {
 	content: "\e034";
 }
-.icon-handbag:before {
+.s3bubbleico-handbag:before {
 	content: "\e035";
 }
-.icon-globe-alt:before {
+.s3bubbleico-globe-alt:before {
 	content: "\e036";
 }
-.icon-globe:before {
+.s3bubbleico-globe:before {
 	content: "\e037";
 }
-.icon-frame:before {
+.s3bubbleico-frame:before {
 	content: "\e038";
 }
-.icon-folder-alt:before {
+.s3bubbleico-folder-alt:before {
 	content: "\e039";
 }
-.icon-film:before {
+.s3bubbleico-film:before {
 	content: "\e03a";
 }
-.icon-feed:before {
+.s3bubbleico-feed:before {
 	content: "\e03b";
 }
-.icon-earphones-alt:before {
+.s3bubbleico-earphones-alt:before {
 	content: "\e03c";
 }
-.icon-earphones:before {
+.s3bubbleico-earphones:before {
 	content: "\e03d";
 }
-.icon-drop:before {
+.s3bubbleico-drop:before {
 	content: "\e03e";
 }
-.icon-drawer:before {
+.s3bubbleico-drawer:before {
 	content: "\e03f";
 }
-.icon-docs:before {
+.s3bubbleico-docs:before {
 	content: "\e040";
 }
-.icon-directions:before {
+.s3bubbleico-directions:before {
 	content: "\e041";
 }
-.icon-direction:before {
+.s3bubbleico-direction:before {
 	content: "\e042";
 }
-.icon-diamond:before {
+.s3bubbleico-diamond:before {
 	content: "\e043";
 }
-.icon-cup:before {
+.s3bubbleico-cup:before {
 	content: "\e044";
 }
-.icon-compass:before {
+.s3bubbleico-compass:before {
 	content: "\e045";
 }
-.icon-call-out:before {
+.s3bubbleico-call-out:before {
 	content: "\e046";
 }
-.icon-call-in:before {
+.s3bubbleico-call-in:before {
 	content: "\e047";
 }
-.icon-call-end:before {
+.s3bubbleico-call-end:before {
 	content: "\e048";
 }
-.icon-calculator:before {
+.s3bubbleico-calculator:before {
 	content: "\e049";
 }
-.icon-bubbles:before {
+.s3bubbleico-bubbles:before {
 	content: "\e04a";
 }
-.icon-briefcase:before {
+.s3bubbleico-briefcase:before {
 	content: "\e04b";
 }
-.icon-book-open:before {
+.s3bubbleico-book-open:before {
 	content: "\e04c";
 }
-.icon-basket-loaded:before {
+.s3bubbleico-basket-loaded:before {
 	content: "\e04d";
 }
-.icon-basket:before {
+.s3bubbleico-basket:before {
 	content: "\e04e";
 }
-.icon-bag:before {
+.s3bubbleico-bag:before {
 	content: "\e04f";
 }
-.icon-action-undo:before {
+.s3bubbleico-action-undo:before {
 	content: "\e050";
 }
-.icon-action-redo:before {
+.s3bubbleico-action-redo:before {
 	content: "\e051";
 }
-.icon-wrench:before {
+.s3bubbleico-wrench:before {
 	content: "\e052";
 }
-.icon-umbrella:before {
+.s3bubbleico-umbrella:before {
 	content: "\e053";
 }
-.icon-trash:before {
+.s3bubbleico-trash:before {
 	content: "\e054";
 }
-.icon-tag:before {
+.s3bubbleico-tag:before {
 	content: "\e055";
 }
-.icon-support:before {
+.s3bubbleico-support:before {
 	content: "\e056";
 }
-.icon-size-fullscreen:before {
+.s3bubbleico-size-fullscreen:before {
 	content: "\e057";
 }
-.icon-size-actual:before {
+.s3bubbleico-size-actual:before {
 	content: "\e058";
 }
-.icon-shuffle:before {
+.s3bubbleico-shuffle:before {
 	content: "\e059";
 }
-.icon-share-alt:before {
+.s3bubbleico-share-alt:before {
 	content: "\e05a";
 }
-.icon-share:before {
+.s3bubbleico-share:before {
 	content: "\e05b";
 }
-.icon-rocket:before {
+.s3bubbleico-rocket:before {
 	content: "\e05c";
 }
-.icon-question:before {
+.s3bubbleico-question:before {
 	content: "\e05d";
 }
-.icon-pie-chart:before {
+.s3bubbleico-pie-chart:before {
 	content: "\e05e";
 }
-.icon-pencil:before {
+.s3bubbleico-pencil:before {
 	content: "\e05f";
 }
-.icon-note:before {
+.s3bubbleico-note:before {
 	content: "\e060";
 }
-.icon-music-tone-alt:before {
+.s3bubbleico-music-tone-alt:before {
 	content: "\e061";
 }
-.icon-music-tone:before {
+.s3bubbleico-music-tone:before {
 	content: "\e062";
 }
-.icon-microphone:before {
+.s3bubbleico-microphone:before {
 	content: "\e063";
 }
-.icon-loop:before {
+.s3bubbleico-loop:before {
 	content: "\e064";
 }
-.icon-logout:before {
+.s3bubbleico-logout:before {
 	content: "\e065";
 }
-.icon-login:before {
+.s3bubbleico-login:before {
 	content: "\e066";
 }
-.icon-list:before {
+.s3bubbleico-list:before {
 	content: "\e067";
 }
-.icon-like:before {
+.s3bubbleico-like:before {
 	content: "\e068";
 }
-.icon-home:before {
+.s3bubbleico-home:before {
 	content: "\e069";
 }
-.icon-grid:before {
+.s3bubbleico-grid:before {
 	content: "\e06a";
 }
-.icon-graph:before {
+.s3bubbleico-graph:before {
 	content: "\e06b";
 }
-.icon-equalizer:before {
+.s3bubbleico-equalizer:before {
 	content: "\e06c";
 }
-.icon-dislike:before {
+.s3bubbleico-dislike:before {
 	content: "\e06d";
 }
-.icon-cursor:before {
+.s3bubbleico-cursor:before {
 	content: "\e06e";
 }
-.icon-control-start:before {
+.s3bubbleico-control-start:before {
 	content: "\e06f";
 }
-.icon-control-rewind:before {
+.s3bubbleico-control-rewind:before {
 	content: "\e070";
 }
-.icon-control-play:before {
+.s3bubbleico-control-play:before {
 	content: "\e071";
 }
-.icon-control-pause:before {
+.s3bubbleico-control-pause:before {
 	content: "\e072";
 }
-.icon-control-forward:before {
+.s3bubbleico-control-forward:before {
 	content: "\e073";
 }
-.icon-control-end:before {
+.s3bubbleico-control-end:before {
 	content: "\e074";
 }
-.icon-calendar:before {
+.s3bubbleico-calendar:before {
 	content: "\e075";
 }
-.icon-bulb:before {
+.s3bubbleico-bulb:before {
 	content: "\e076";
 }
-.icon-bar-chart:before {
+.s3bubbleico-bar-chart:before {
 	content: "\e077";
 }
-.icon-arrow-up:before {
+.s3bubbleico-arrow-up:before {
 	content: "\e078";
 }
-.icon-arrow-right:before {
+.s3bubbleico-arrow-right:before {
 	content: "\e079";
 }
-.icon-arrow-left:before {
+.s3bubbleico-arrow-left:before {
 	content: "\e07a";
 }
-.icon-arrow-down:before {
+.s3bubbleico-arrow-down:before {
 	content: "\e07b";
 }
-.icon-ban:before {
+.s3bubbleico-ban:before {
 	content: "\e07c";
 }
-.icon-bubble:before {
+.s3bubbleico-bubble:before {
 	content: "\e07d";
 }
-.icon-camcorder:before {
+.s3bubbleico-camcorder:before {
 	content: "\e07e";
 }
-.icon-camera:before {
+.s3bubbleico-camera:before {
 	content: "\e07f";
 }
-.icon-check:before {
+.s3bubbleico-check:before {
 	content: "\e080";
 }
-.icon-clock:before {
+.s3bubbleico-clock:before {
 	content: "\e081";
 }
-.icon-close:before {
+.s3bubbleico-close:before {
 	content: "\e082";
 }
-.icon-cloud-download:before {
+.s3bubbleico-cloud-download:before {
 	content: "\e083";
 }
-.icon-cloud-upload:before {
+.s3bubbleico-cloud-upload:before {
 	content: "\e084";
 }
-.icon-doc:before {
+.s3bubbleico-doc:before {
 	content: "\e085";
 }
-.icon-envelope:before {
+.s3bubbleico-envelope:before {
 	content: "\e086";
 }
-.icon-eye:before {
+.s3bubbleico-eye:before {
 	content: "\e087";
 }
-.icon-flag:before {
+.s3bubbleico-flag:before {
 	content: "\e088";
 }
-.icon-folder:before {
+.s3bubbleico-folder:before {
 	content: "\e089";
 }
-.icon-heart:before {
+.s3bubbleico-heart:before {
 	content: "\e08a";
 }
-.icon-info:before {
+.s3bubbleico-info:before {
 	content: "\e08b";
 }
-.icon-key:before {
+.s3bubbleico-key:before {
 	content: "\e08c";
 }
-.icon-link:before {
+.s3bubbleico-link:before {
 	content: "\e08d";
 }
-.icon-lock:before {
+.s3bubbleico-lock:before {
 	content: "\e08e";
 }
-.icon-lock-open:before {
+.s3bubbleico-lock-open:before {
 	content: "\e08f";
 }
-.icon-magnifier:before {
+.s3bubbleico-magnifier:before {
 	content: "\e090";
 }
-.icon-magnifier-add:before {
+.s3bubbleico-magnifier-add:before {
 	content: "\e091";
 }
-.icon-magnifier-remove:before {
+.s3bubbleico-magnifier-remove:before {
 	content: "\e092";
 }
-.icon-paper-clip:before {
+.s3bubbleico-paper-clip:before {
 	content: "\e093";
 }
-.icon-paper-plane:before {
+.s3bubbleico-paper-plane:before {
 	content: "\e094";
 }
-.icon-plus:before {
+.s3bubbleico-plus:before {
 	content: "\e095";
 }
-.icon-pointer:before {
+.s3bubbleico-pointer:before {
 	content: "\e096";
 }
-.icon-power:before {
+.s3bubbleico-power:before {
 	content: "\e097";
 }
-.icon-refresh:before {
+.s3bubbleico-refresh:before {
 	content: "\e098";
 }
-.icon-reload:before {
+.s3bubbleico-reload:before {
 	content: "\e099";
 }
-.icon-settings:before {
+.s3bubbleico-settings:before {
 	content: "\e09a";
 }
-.icon-star:before {
+.s3bubbleico-star:before {
 	content: "\e09b";
 }
-.icon-symbol-female:before {
+.s3bubbleico-symbol-female:before {
 	content: "\e09c";
 }
-.icon-symbol-male:before {
+.s3bubbleico-symbol-male:before {
 	content: "\e09d";
 }
-.icon-target:before {
+.s3bubbleico-target:before {
 	content: "\e09e";
 }
-.icon-volume-1:before {
+.s3bubbleico-volume-1:before {
 	content: "\e09f";
 }
-.icon-volume-2:before {
+.s3bubbleico-volume-2:before {
 	content: "\e0a0";
 }
-.icon-volume-off:before {
+.s3bubbleico-volume-off:before {
 	content: "\e0a1";
 }
-.icon-users:before {
+.s3bubbleico-users:before {
 	content: "\e001";
 }
