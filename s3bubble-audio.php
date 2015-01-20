@@ -47,7 +47,7 @@ if (!class_exists("s3bubble_audio")) {
 		public $responsive      = 'responsive';
 		public $theme           = 's3bubble_clean';
 		public $stream          = 'm4v';
-		public $version         =  25;
+		public $version         =  26;
 		private $endpoint       = 'https://api.s3bubble.com/';
 		
 		/*
