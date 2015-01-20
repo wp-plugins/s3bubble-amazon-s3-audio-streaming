@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Video And Audio Streaming
 Plugin URI: https://s3bubble.com/
 Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 4 simple steps. 
-Version: 1.8.4
+Version: 1.8.5
 Author: S3Bubble
 Author URI: https://s3bubble.com/
 License: GPL2
@@ -1799,7 +1799,7 @@ if (!class_exists("s3bubble_audio")) {
 								audioSingleS3Bubble.setPlaylist(response);
 								//Download
 								if ('.$dc.' === true) {
-									$("#s3-single-container-' . $player_id . ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="s3bubbleico-cloud-download"></i></a></li>\');
+									$("#s3-single-container-' . $player_id . ' .s3-gui .s3-toggles").append(\'<li><a  target="_self" href="\' + response[0].download + \'" class="s3-cloud-download" tabindex="1" style="display: block;"><i class="s3icon-cloud-download"></i></a></li>\');
 								}
 								//Make it plain
 								if ("' . $style . '" === "plain") {
@@ -2386,7 +2386,7 @@ if (!class_exists("s3bubble_audio")) {
 									});
 									//Download
 									if ('.$dc.' === true) {
-										$("#s3-container-video-single-' . $player_id .  ' .s3-gui .s3-toggles").append(\'<button onclick="location.href=&quot;\' + response[0].download + \'&quot;" style="display: block;"><i class="s3bubbleico-cloud-download"></i></button>\');
+										$("#s3-container-video-single-' . $player_id .  ' .s3-gui .s3-toggles").append(\'<button onclick="location.href=&quot;\' + response[0].download + \'&quot;" style="display: block;"><i class="s3icon-cloud-download"></i></button>\');
 									}
 								}
 							},"json");
