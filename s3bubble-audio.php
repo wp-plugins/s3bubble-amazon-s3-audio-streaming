@@ -246,11 +246,10 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_audio_javascript(){
            if (!is_admin()) {
-	            wp_deregister_script( 'jquery' );
-	            wp_register_script( 'jquery', '//code.jquery.com/jquery-1.11.0.min.js', false, null);
+
 	            wp_enqueue_script('jquery');
-	            wp_register_script( 'jquery-migrate', '//code.jquery.com/jquery-migrate-1.2.1.min.js', false, null);
 	            wp_enqueue_script('jquery-migrate');
+				
 				wp_register_script( 'jquery.slider.min', plugins_url('assets/js/jquery.nouislider.all.min.js',__FILE__ ), array('jquery'), uniqid(), true );
 	            wp_enqueue_script('jquery.slider.min');
 				wp_register_script( 'jquery.s3player.min', plugins_url('assets/v2.8.1/js/jplayer/jquery.jplayer.min.js',__FILE__ ), array('jquery'), uniqid(), true );
