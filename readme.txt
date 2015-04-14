@@ -8,7 +8,7 @@ Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-S3Bubble offers simple, secure media streaming from Amazon S3 to Wordpress all in just 4 simple steps!
+S3Bubble offers simple, media streaming from Amazon S3 to Wordpress all in just 4 simple steps!
 
 == Description ==
 
@@ -17,7 +17,7 @@ Now with WYSIWYG buttons [View more information on this](https://s3bubble.com/ne
 **Now Compatible With Media Elements JS.**
 
 * Step 1 - Link your Amazon S3 Account to S3Bubble
-* Step 2 - Create a S3Bubble Application with secure access
+* Step 2 - Create a S3Bubble Application with access
 * Step 3 - Add Audio, Video and Image files through S3Bubble Admin Tools
 * Step 4 - Embed the files in our responsive player on your website
 
@@ -146,7 +146,7 @@ Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along
 2. Enter your S3Bubble email and password to create a sync
 3. Sync your Amazon S3 Keys with S3Bubble Admin
 4. Upload your file ready to stream
-5. All your file video,audio and image all stored securely within buckets
+5. All your file video,audio and image all stored within buckets
 
 == Changelog ==
 
