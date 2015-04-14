@@ -1,0 +1,169 @@
+/* Overwrite some default styles */
+.s3-gui-video {
+  clear: both;
+  float: left;
+  height: 24px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.s3-interface {
+   position: relative;
+    width:100%;
+    height: 24px;
+    background: #1b1b1b;
+}
+
+.s3-progress {
+  background: #706d6d;
+  width: 100%;
+  height: 5px;
+  bottom: 24px;
+  overflow: hidden;
+}
+
+.s3-progress-inner {
+  padding: 0px;
+}
+
+.s3-seek-bar {
+	width:0px;
+    height:100%;
+    cursor: pointer;
+}
+
+.s3-play-bar {
+    width:0px;
+    height:5px;
+      border-radius: 0px;
+}
+
+.s3-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: auto;
+ }
+
+.s3-controls button {
+   width:30px;
+    height:24px;
+    float:left;
+    outline:none;
+}
+
+.s3-controls button i {
+  color: #fff;
+  font-size: 16px;
+}
+
+.s3-duration {
+    font-size:11px;
+    font-family:Arial;
+    color:#444444;
+    margin-top: 12px;
+    float:left;
+}
+
+.s3-duration {
+    float: left;
+    display:inline;
+    text-align: right;
+}
+
+.time-sep {
+    float:left;
+    margin: 13px 3px 0 3px;
+ 
+    font-size:11px;
+    font-family:Arial;
+    color:#444444;
+}
+
+.s3-video a.s3-mute,
+.s3-video a.s3-unmute {
+    text-indent:-9999px;
+    float:left;
+     
+    height: 35px;
+    outline:none;
+}
+ 
+.s3-mute {
+    float:left;
+    background: url(../images/sprite.png) -80px 0 no-repeat;
+    margin-top: 1px;
+    margin-left: -10px;
+    width: 35px;
+}
+ 
+a.s3-unmute {
+    background: url(../images/sprite.png) -115px 0 no-repeat;
+    margin-top: 1px;
+    margin-left: -13px;
+    display: none;
+    width: 38px;
+}
+ 
+.s3-volume-bar {
+    float:left;
+    margin-top: 13px;
+    margin-right: 10px;
+    overflow:hidden;
+    width:70px;
+    height:10px;
+    cursor: pointer;
+ 
+    background: #706d6d;
+ 
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+ 
+    -webkit-box-shadow:
+        inset 0px 1px 4px rgba(0,0,0,.4),
+        0px 1px 0px rgba(255,255,255,.4);
+    -moz-box-shadow:
+        inset 0px 1px 4px rgba(0,0,0,.4),
+        0px 1px 0px rgba(255,255,255,.4);
+    box-shadow:
+        inset 0px 1px 4px rgba(0,0,0,.4),
+        0px 1px 0px rgba(255,255,255,.4);
+}
+ 
+.s3-volume-bar-value {
+    background: transparent;
+    width:0px;
+    height:10px;
+    position: relative;
+}
+ 
+.s3-volume-bar-value span {
+    position:absolute;
+    top: 0px;
+    right: 0px;
+ 
+    background:url(../images/volume.png) no-repeat center;
+    width: 11px;
+    height: 10px;
+}
+.s3-full-screen {
+    background: url(../images/sprite.png) -150px 0 no-repeat;
+    float:left;
+    width: 40px;
+    height: 35px;
+    text-indent:-9999px;
+    margin-left: -15px;
+    outline:none;
+}
+ 
+.s3-restore-screen {
+    background: url(../images/sprite.png) -150px 0 no-repeat;
+    float:left;
+    width: 40px;
+    height: 35px;
+    text-indent:-9999px;
+    margin-left: -15px;
+    outline:none;
+}
