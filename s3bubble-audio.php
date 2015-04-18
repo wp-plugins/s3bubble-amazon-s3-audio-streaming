@@ -212,6 +212,10 @@ if (!class_exists("s3bubble_audio")) {
 			wp_enqueue_style('font-s3bubble.min');
 			wp_enqueue_style('s3bubble.video.all.main');
 			
+			// Depreciated
+			wp_register_style( 'mediaelementplayer.min', plugins_url('assets/mediaelementjs/build/mediaelementplayer.min.css', __FILE__), array(), $this->version  );
+			wp_enqueue_style('mediaelementplayer.min');
+			
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
@@ -231,7 +235,7 @@ if (!class_exists("s3bubble_audio")) {
 			
 			if (!is_admin()) {
 
-				wp_register_script( 's3player.all.s3bubble', plugins_url('assets/js/s3player.all.s3bubble.min.js',__FILE__ ), array('jquery'), $this->version );
+				wp_register_script( 's3player.all.s3bubble', plugins_url('assets/js/s3player.all.s3bubble.min.js',__FILE__ ), array('jquery'), $this->version, true  );
 				wp_localize_script('s3player.all.s3bubble', 's3bubble_all_object', array(
 					's3appid' => get_option("s3-s3audible_username"),
 					'serveraddress' => $_SERVER['REMOTE_ADDR']
@@ -244,6 +248,10 @@ if (!class_exists("s3bubble_audio")) {
 				wp_enqueue_script('s3player.all.s3bubble');
 				wp_enqueue_script('s3bubble.mobile.browser.check');
 				wp_enqueue_script('s3bubble.analytics.min');
+				
+				// Depreciated
+				wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array('jquery'), $this->version, true );
+	            wp_enqueue_script('mediaelement-and-player.min');
 				
             }
 		}
@@ -509,7 +517,7 @@ if (!class_exists("s3bubble_audio")) {
 						}else{
 						    var preload = 'auto';
 						}
-	        	        var shortcode = '[s3bubbleAudio bucket="' + bucket + '" folder="' + folder + '" cloudfront="' + cloudfront + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '"  preload="' + preload + '"/]';
+	        	        var shortcode = '[s3bubbleAudio bucket="' + bucket + '" folder="' + folder + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '"  preload="' + preload + '"/]';
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
 			        });
@@ -872,9 +880,9 @@ if (!class_exists("s3bubble_audio")) {
 						}else{
 						    var preload = 'auto';
 						}
-						var shortcode = '[s3bubbleAudioSingle bucket="' + bucket + '" track="' + folder + '" cloudfront="' + cloudfront + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
+						var shortcode = '[s3bubbleAudioSingle bucket="' + bucket + '" track="' + folder + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
 						if($("#s3mediaelement").is(':checked')){
-						    shortcode = '[s3bubbleMediaElementAudio bucket="' + bucket + '" track="' + folder + '" cloudfront="' + cloudfront + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
+						    shortcode = '[s3bubbleMediaElementAudio bucket="' + bucket + '" track="' + folder + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
 						}  
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
@@ -1462,7 +1470,6 @@ if (!class_exists("s3bubble_audio")) {
 
 						},
 						play: function() { 
-						    $(this).jPlayer("pauseOthers");
 							var CurrentState = audioPlaylistS3Bubble.current;
 							var PlaylistKey  = audioPlaylistS3Bubble.playlist[CurrentState];
 							if(Current !== CurrentState){
@@ -1743,26 +1750,21 @@ if (!class_exists("s3bubble_audio")) {
 						},"json");
 	                },
 	                loadedmetadata: function() {
-						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
+						
 					},
 					waiting: function() {
-						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
-						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeIn(); 
+		
 					},
 					canplay: function() {
-						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
+
 					},
 					pause: function() {
-						$(".musicbar-' . $player_id .  '").removeClass("animate"); 
-						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"s3icon s3icon-play\"></i>");
+
 					},
 					playing: function() {
-						$(".musicbar-' . $player_id .  '").addClass("animate");
-						$(".interfaceApp-' . $player_id .  ' .s3bubble-loading-bar").fadeOut(); 
-						$(".interfaceApp-' . $player_id .  ' .s3-play").html("<i class=\"s3icon s3icon-pause\"></i>");
+
 					},
 					play: function() { 
-					    $(this).jPlayer("pauseOthers");
 						var CurrentState = audioSingleS3Bubble.current;
 						var PlaylistKey  = audioSingleS3Bubble.playlist[CurrentState];
 						if(Current !== CurrentState){
@@ -1778,16 +1780,7 @@ if (!class_exists("s3bubble_audio")) {
 						}
 					},
 					timeupdate: function(event) { 
-					    if (!event.jPlayer.options.lfinish) {
-					        if (event.jPlayer.options.lon && event.jPlayer.options.loff) {
-								$(".s3-play-bar").attr("style", "background: red !important");
-								if(event.jPlayer.status.currentPercentAbsolute > event.jPlayer.options.loff){
-									$("#s3-single-player-' . $player_id .  '").jPlayer("playHead", event.jPlayer.options.lon);
-								}
-					        }
-						}else{
-							$(".s3-play-bar").removeAttr("style");
-						} 
+	
 					},
 					suspend: function() { 
 					    
@@ -2169,7 +2162,6 @@ if (!class_exists("s3bubble_audio")) {
 					play: function() {
 						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-search").fadeOut();
 						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-						$(this).jPlayer("pauseOthers");
 						var CurrentState = videoPlaylistS3Bubble.current;
 						var PlaylistKey  = videoPlaylistS3Bubble.playlist[CurrentState];
 						if(IsMobile === false){
@@ -2500,7 +2492,6 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						play: function() { 
 						    $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-							$(this).jPlayer("pauseOthers");
 							var CurrentState = videoSingleS3Bubble.current;
 							var PlaylistKey  = videoSingleS3Bubble.playlist[CurrentState];
 							if(PlaylistKey.advert && IsMobile === false){
@@ -2603,4 +2594,4 @@ if (!class_exists("s3bubble_audio")) {
 	*/ 
 	$s3bubble_audio = new s3bubble_audio();
 	
-} //End Class s3audible
+} //End Class S3Bubble
