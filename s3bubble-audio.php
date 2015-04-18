@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: S3Bubble Amazon S3 Video And Audio Streaming
+Plugin Name: S3Bubble Amazon S3 Video And Audio Streaming With Analytics
 Plugin URI: https://s3bubble.com/
-Description: S3Bubble offers simple, secure media streaming from Amazon S3 to WordPress. In just 4 simple steps. 
+Description: S3Bubble offers simple, media streaming from Amazon S3 to WordPress. In just 4 simple steps. 
 Version: 1.8.5
 Author: S3Bubble
-Author URI: https://s3bubble.com/
+Author URI: https://s3bubble.com
 License: GPL2
 */ 
  
