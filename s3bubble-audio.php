@@ -1059,7 +1059,7 @@ if (!class_exists("s3bubble_audio")) {
 				<div id="post-body">
 					<div id="post-body-content" style="margin-right: 41%;">
 						<div class="postbox">
-							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></h3>
+							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://www.youtube.com/watch?v=IQDGX8J8qEE" target="_blank">Watch Video</a></h3>
 							<div class="inside">
 								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
 								    <table class="form-table">
