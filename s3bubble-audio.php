@@ -1059,7 +1059,7 @@ if (!class_exists("s3bubble_audio")) {
 				<div id="post-body">
 					<div id="post-body-content" style="margin-right: 41%;">
 						<div class="postbox">
-							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://www.youtube.com/watch?v=EyBTpJ9GJCw" target="_blank">Watch Video</a></h3>
+							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></h3>
 							<div class="inside">
 								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
 								    <table class="form-table">
@@ -1068,14 +1068,14 @@ if (!class_exists("s3bubble_audio")) {
 								        <th scope="row" valign="top"><label for="S3Bubble_username">App Access Key:</label></th>
 								        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo empty($s3audible_username) ? 'Enter App Key' : $s3audible_username; ?>"/>
 								        	<br />
-								       <span class="description">App Access Key can be found <a href="https://s3bubble.com/admin/#/apps" target="_blank">here</a></span>	
+								       <span class="description">App Access Key can be found at S3Bubble.com <a href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></span>	
 								        </td>
 								      </tr> 
 								       <tr>
 								        <th scope="row" valign="top"><label for="s3audible_email">App Secret Key:</label></th>
 								        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo empty($s3audible_email) ? 'Enter App Secret Key' : $s3audible_email; ?>"/>
 								        	<br />
-								        	<span class="description">App Secret Key can be found <a href="https://s3bubble.com/admin/#/apps" target="_blank">here</a></span>
+								        	<span class="description">App Secret Key can be found at S3Bubble.com <a href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></span>
 								        </td>
 								      </tr> 
 								       <tr>
@@ -1339,7 +1339,7 @@ if (!class_exists("s3bubble_audio")) {
 						<li>&nbsp;</li>
 					</ul>
 				</div>
-			    <div class="s3bubble-media-main-no-solution">
+			    <div class="s3bubble-media-main-no-solution" style="display:none;">
 			        <span>Update Required</span>
 			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
 			    </div>
@@ -1675,7 +1675,7 @@ if (!class_exists("s3bubble_audio")) {
 						<li></li>
 					</ul>
 				</div>
-			    <div class="s3bubble-media-main-no-solution">
+			    <div class="s3bubble-media-main-no-solution" style="display:none;">
 			        <span>Update Required</span>
 			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
 			    </div>
@@ -2004,7 +2004,7 @@ if (!class_exists("s3bubble_audio")) {
 						<li></li>
 					</ul>
 				</div>
-			    <div class="s3bubble-media-main-no-solution">
+			    <div class="s3bubble-media-main-no-solution" style="display:none;">
 			        <span>Update Required</span>
 			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
 			    </div>
@@ -2350,7 +2350,7 @@ if (!class_exists("s3bubble_audio")) {
 						<li></li>
 					</ul>
 				</div>
-			    <div class="s3bubble-media-main-no-solution">
+			    <div class="s3bubble-media-main-no-solution" style="display:none;">
 			        <span>Update Required</span>
 			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
 			    </div>
