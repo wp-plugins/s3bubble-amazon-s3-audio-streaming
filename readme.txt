@@ -54,7 +54,7 @@ Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com
 * Right Arrow: Next Track
 * Left Arrow: Previous Track
 
-[youtube https://www.youtube.com/watch?v=IQDGX8J8qEE]
+[youtube https://www.youtube.com/watch?v=VFG3-nvV6F0]
 
 = Features: =
 * HTML 5 Player (Supports iOS, Web, Android, Windows Phone etc.)
@@ -85,7 +85,7 @@ Once you’ve installed the S3Bubble plug-in, you’ll need to create an S3Bubbl
 
 Remember if you need any extra help you can visit our friendly [support forum](https://s3bubble.com/forums "problems").
 
-[youtube https://www.youtube.com/watch?v=IQDGX8J8qEE]
+[youtube https://www.youtube.com/watch?v=VFG3-nvV6F0]
 
 = These are auto generated within your s3bubble admin =
 
