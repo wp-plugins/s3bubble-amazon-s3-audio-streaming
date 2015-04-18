@@ -1027,7 +1027,7 @@ if (!class_exists("s3bubble_audio")) {
 										Are you stuck upgraded and not happy?
 									</h3>
 									<p>If you are stuck at any point or preferred the old version please just click the download below and delete this version and re upload the plugin.</p>
-									<a class="button button-s3bubble" href="https://s3.amazonaws.com/s3bubble.assets/video.adverts/s3bubble-amazon-s3-html-5-video-with-adverts.zip" target="_blank">DOWNLOAD OLD VERISON</a>
+									<a class="button button-s3bubble" href="https://s3.amazonaws.com/s3bubble.assets/main.plugin/s3bubble-amazon-s3-audio-streaming.zip" target="_blank">DOWNLOAD OLD VERISON</a>
 								</li>
 							</ul>        
 						</div> 
