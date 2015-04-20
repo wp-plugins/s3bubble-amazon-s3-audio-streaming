@@ -179,8 +179,8 @@ if (!class_exists("s3bubble_audio")) {
 		function s3bubble_audio_admin_scripts(){
 			
 			// Css
-			wp_register_style( 's3bubble.video.all.admin', plugins_url('assets/css/s3bubble.video.all.admin.css', __FILE__), array(), $this->version );
-			wp_register_style( 's3bubble.video.all.plugin', plugins_url('assets/css/s3bubble.video.all.plugin.css', __FILE__), array(), $this->version );
+			wp_register_style( 's3bubble.video.all.admin', plugins_url('assets/css/s3bubble.video.all.admin.min.css', __FILE__), array(), $this->version );
+			wp_register_style( 's3bubble.video.all.plugin', plugins_url('assets/css/s3bubble.video.all.plugin.min.css', __FILE__), array(), $this->version );
 			
 			
 			wp_enqueue_style('s3bubble.video.all.admin');
@@ -190,7 +190,7 @@ if (!class_exists("s3bubble_audio")) {
 			//wp_enqueue_script( 's3bubble.video.all.tinymce', plugins_url( 'assets/js/s3bubble.video.all.tinymce.js', __FILE__ ), array( ), false, true ); 
 			wp_enqueue_style( 'wp-color-picker' );
 			// Javascript
-			wp_enqueue_script( 's3bubble.video.all.colour', plugins_url( 'assets/js/s3bubble.video.all.colour.js', __FILE__ ), array( 'wp-color-picker' ), false, true ); 
+			wp_enqueue_script( 's3bubble.video.all.colour', plugins_url( 'assets/js/s3bubble.video.all.colour.min.js', __FILE__ ), array( 'wp-color-picker' ), false, true ); 
 			
 		}
 		
@@ -207,7 +207,7 @@ if (!class_exists("s3bubble_audio")) {
 			$icons	    = get_option("s3bubble_video_all_icons");
 			
 			wp_register_style( 'font-s3bubble.min', plugins_url('assets/css/font-awesome.min.css', __FILE__), array(), $this->version );
-			wp_register_style( 's3bubble.video.all.main', plugins_url('assets/css/s3bubble.video.all.main.css', __FILE__), array(), $this->version );
+			wp_register_style( 's3bubble.video.all.main', plugins_url('assets/css/s3bubble.video.all.main.min.css', __FILE__), array(), $this->version );
 			
 			wp_enqueue_style('font-s3bubble.min');
 			wp_enqueue_style('s3bubble.video.all.main');
@@ -235,13 +235,13 @@ if (!class_exists("s3bubble_audio")) {
 			
 			if (!is_admin()) {
 
-				wp_register_script( 's3player.all.s3bubble', plugins_url('assets/js/s3player.all.s3bubble.min.js',__FILE__ ), array('jquery'), $this->version, true  );
+				wp_register_script( 's3player.all.s3bubble', plugins_url('assets/js/s3player.video.all.player.min.js',__FILE__ ), array('jquery'), $this->version, true  );
 				wp_localize_script('s3player.all.s3bubble', 's3bubble_all_object', array(
 					's3appid' => get_option("s3-s3audible_username"),
 					'serveraddress' => $_SERVER['REMOTE_ADDR']
 				));
-				wp_register_script( 's3bubble.mobile.browser.check', plugins_url('assets/js/mobile.browser.check.js',__FILE__ ), array('jquery'),  $this->version, true );
-				wp_register_script( 's3bubble.analytics.min', plugins_url('assets/js/s3analytics.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 's3bubble.mobile.browser.check', plugins_url('assets/js/mobile.browser.check.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 's3bubble.analytics.min', plugins_url('assets/js/s3analytics.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 				
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-migrate');
@@ -539,7 +539,7 @@ if (!class_exists("s3bubble_audio")) {
 				</p>
 				<input type="hidden" class="s3bubble-form-input" name="cloudfront" id="s3cloudfront">
 				<blockquote class="bs-callout-s3bubble"><strong>Extra options</strong> please just select any extra options from the list below and S3Bubble will automatically add it to the shortcode.</blockquote>
-				<p><input type="checkbox" name="autoplay" id="s3autoplay">Autoplay <i>(Start Video On Page Load)</i><br />
+				<p><input type="checkbox" name="autoplay" id="s3autoplay">Autoplay <i>(Start Audio On Page Load)</i><br />
 				<input type="checkbox" name="playlist" id="s3playlist" value="hidden">Hide Playlist <i>(Hide Playlist On Page Load)</i><br />
 				<input type="checkbox" name="order" id="s3order" value="desc">Reverse Order <i>(Reverse The Playlist Order)</i><br />
 				<input class="s3bubble-checkbox" type="checkbox" name="s3preload" id="s3preload" value="true">Preload Off <i>(Prevent Tracks From Preloading)</i><br />
@@ -933,7 +933,7 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_add_buttons( $plugin_array ) {
-		    $plugin_array['s3bubble'] = plugins_url('/assets/js/s3bubble-plugin.js',__FILE__);
+		    $plugin_array['s3bubble'] = plugins_url('/assets/js/s3bubble.video.all.tinymce.min.js',__FILE__);
 		    return $plugin_array;
 		}
 		
@@ -1312,15 +1312,15 @@ if (!class_exists("s3bubble_audio")) {
 				            <div class="s3bubble-media-main-controls-holder">
 								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								<div class="s3bubble-media-main-progress">
-								    <div class="s3bubble-media-main-seek-bar">
-								        <div class="s3bubble-media-main-play-bar"><span></span></div>
+								<div class="s3bubble-media-main-progress" dir="auto">
+								    <div class="s3bubble-media-main-seek-bar" dir="auto">
+								        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
 								    </div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
-								<div class="s3bubble-media-main-volume-bar">
-								    <div class="s3bubble-media-main-volume-bar-value"><span class="handle"></span></div>
+								<div class="s3bubble-media-main-volume-bar" dir="auto">
+								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -1382,14 +1382,11 @@ if (!class_exists("s3bubble_audio")) {
 							$( window ).resize(function() {
 								var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
 								if(main_width_resize < 400){
-									console.log(main_width);
-									console.log("Small");
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-190);	
 								}else{
-									console.log("Large");
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-320);	
@@ -1504,14 +1501,6 @@ if (!class_exists("s3bubble_audio")) {
 					                }
 					            }
 					        },
-					        fullScreen: {
-					            key: 70, // f
-					            fn: function(f) {
-					                if (f.status.video || f.options.audioFullScreen) {
-					                    f._setOption("fullScreen", !f.options.fullScreen);
-					                }
-					            }
-					        },
 					        muted: {
 					            key: 77, // m
 					            fn: function(f) {
@@ -1593,10 +1582,9 @@ if (!class_exists("s3bubble_audio")) {
 		                preload: "'.$preload.'",
 	                    supplied: "mp3,m4a",
 		                wmode: "window",
-		                preload: "metadata",
 						useStateClassSkin: true,
 						autoBlur: false,
-						smoothPlayBar: true,
+						smoothPlayBar: false,
 						keyEnabled: true,
 						audioFullScreen: true,
 						remainingDuration: true
@@ -1654,13 +1642,13 @@ if (!class_exists("s3bubble_audio")) {
 			            <div class="s3bubble-media-main-controls-holder">
 							<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-							<div class="s3bubble-media-main-progress">
-							    <div class="s3bubble-media-main-seek-bar">
-							        <div class="s3bubble-media-main-play-bar"><span></span></div>
+							<div class="s3bubble-media-main-progress" dir="auto">
+							    <div class="s3bubble-media-main-seek-bar" dir="auto">
+							        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
 							    </div>
 							</div>
-							<div class="s3bubble-media-main-volume-bar">
-							    <div class="s3bubble-media-main-volume-bar-value"><span class="handle"></span></div>
+							<div class="s3bubble-media-main-volume-bar" dir="auto">
+							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
 							</div>
 							<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -1802,14 +1790,6 @@ if (!class_exists("s3bubble_audio")) {
 				                }
 				            }
 				        },
-				        fullScreen: {
-				            key: 70, // f
-				            fn: function(f) {
-				                if (f.status.video || f.options.audioFullScreen) {
-				                    f._setOption("fullScreen", !f.options.fullScreen);
-				                }
-				            }
-				        },
 				        muted: { 
 				            key: 77, // m
 				            fn: function(f) {
@@ -1895,7 +1875,7 @@ if (!class_exists("s3bubble_audio")) {
 	                preload: "metadata",
 					useStateClassSkin: true,
 					autoBlur: false,
-					smoothPlayBar: true,
+					smoothPlayBar: false,
 					keyEnabled: true,
 					audioFullScreen: true,
 					remainingDuration: true
@@ -1978,17 +1958,17 @@ if (!class_exists("s3bubble_audio")) {
 				            <div class="s3bubble-media-main-controls-holder">
 								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								<div class="s3bubble-media-main-progress">
-								    <div class="s3bubble-media-main-seek-bar">
-								        <div class="s3bubble-media-main-play-bar"><span></span></div>
+								<div class="s3bubble-media-main-progress" dir="auto">
+								    <div class="s3bubble-media-main-seek-bar" dir="auto">
+								        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
 								    </div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
-								<div class="s3bubble-media-main-volume-bar">
-								    <div class="s3bubble-media-main-volume-bar-value"><span class="handle"></span></div>
+								<div class="s3bubble-media-main-volume-bar" dir="auto">
+								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -2244,9 +2224,8 @@ if (!class_exists("s3bubble_audio")) {
 	                preload: "metadata",
 					useStateClassSkin: true,
 					autoBlur: false,
-					smoothPlayBar: true,
+					smoothPlayBar: false,
 					keyEnabled: true,
-					audioFullScreen: true,
 					remainingDuration: true,
 					size: {
 			            width: "100%",
@@ -2327,15 +2306,15 @@ if (!class_exists("s3bubble_audio")) {
 			            <div class="s3bubble-media-main-controls-holder">
 							<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-							<div class="s3bubble-media-main-progress">
-							    <div class="s3bubble-media-main-seek-bar">
-							        <div class="s3bubble-media-main-play-bar"><span></span></div>
+							<div class="s3bubble-media-main-progress" dir="auto">
+							    <div class="s3bubble-media-main-seek-bar" dir="auto">
+							        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
 							    </div>
 							</div>
 							<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-							<div class="s3bubble-media-main-volume-bar">
-							    <div class="s3bubble-media-main-volume-bar-value"><span class="handle"></span></div>
+							<div class="s3bubble-media-main-volume-bar" dir="auto">
+							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
 							</div>
 							<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -2567,9 +2546,8 @@ if (!class_exists("s3bubble_audio")) {
 		                preload: "metadata",
 						useStateClassSkin: true,
 						autoBlur: false,
-						smoothPlayBar: true,
+						smoothPlayBar: false,
 						keyEnabled: true,
-						audioFullScreen: true,
 						remainingDuration: true,
 						size: {
 				            width: "100%",
