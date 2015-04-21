@@ -218,7 +218,7 @@ if (!class_exists("s3bubble_audio")) {
 			
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
-					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
+					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value, .s3bubble-media-main-play-bar span {background-color: '.stripcslashes($seek).' !important;}
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;}
@@ -443,23 +443,24 @@ if (!class_exists("s3bubble_audio")) {
 			        var sendData = {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
-					$.post("<?php echo $this->endpoint; ?>main_plugin/buckets/", sendData, function(response) {
-						var isSingle = response.Single;
+					$.post("<?php echo $this->endpoint; ?>main_plugin/live_buckets/", sendData, function(response) {
 						if(response.error){
-							console.log(response.error);
-							return;
+							$(".s3bubble-video-main-form-alerts").html("<p>Oh Snap! " + response.message + ". If you do not understand this error please contact support@s3bubble.com</p>");
+						}else{
+							$(".s3bubble-video-main-form-alerts").html("<p>Awesome! " + response.message + ".</p>");
+							var isSingle = response.data.Single;
+							var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
+						    $.each(response.data.Buckets, function (i, item) {
+						    	var bucket = item.Name;
+						    	if(isSingle === true){
+						    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+						    	}else{
+						    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+						    	}
+							});
+							html += '</select>';
+							$('#s3bubble-buckets-shortcode').html(html);
 						}
-						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
-					    $.each(response.Buckets, function (i, item) {
-					    	var bucket = item.Name;
-					    	if(isSingle === true){
-					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
-					    	}else{
-					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
-					    	}
-						});
-						html += '</select>';
-						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading folders');
 						   var bucket = $(this).val();
@@ -524,7 +525,7 @@ if (!class_exists("s3bubble_audio")) {
 		        })
 		    </script>
 		    <form class="s3bubble-form-general">
-		    	<blockquote class="bs-callout-s3bubble"><strong>Please select your bucket and then folder below</strong> when you select your bucket S3Bubble will auto generate a list of folders to choose from.</blockquote>
+		    	<div class="s3bubble-video-main-form-alerts"></div>
 		    	<p>
 			    	<span class="s3bubble-pull-left" id="s3bubble-buckets-shortcode">loading buckets...</span>
 					<span class="s3bubble-pull-right" id="s3bubble-folders-shortcode"></span>
@@ -570,23 +571,24 @@ if (!class_exists("s3bubble_audio")) {
 			        var sendData = {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
-					$.post("<?php echo $this->endpoint; ?>main_plugin/buckets/", sendData, function(response) {	
-						var isSingle = response.Single;
+					$.post("<?php echo $this->endpoint; ?>main_plugin/live_buckets/", sendData, function(response) {	
 						if(response.error){
-							console.log(response.error);
-							return;
+							$(".s3bubble-video-main-form-alerts").html("<p>Oh Snap! " + response.message + ". If you do not understand this error please contact support@s3bubble.com</p>");
+						}else{
+							$(".s3bubble-video-main-form-alerts").html("<p>Awesome! " + response.message + ".</p>");
+							var isSingle = response.data.Single;
+							var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
+						    $.each(response.data.Buckets, function (i, item) {
+						    	var bucket = item.Name;
+						    	if(isSingle === true){
+						    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+						    	}else{
+						    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+						    	}
+							});
+							html += '</select>';
+							$('#s3bubble-buckets-shortcode').html(html);
 						}
-						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
-					    $.each(response.Buckets, function (i, item) {
-					    	var bucket = item.Name;
-					    	if(isSingle === true){
-					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
-					    	}else{
-					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
-					    	}
-						});
-						html += '</select>';
-						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading folders');
 						   var bucket = $(this).val();
@@ -649,7 +651,7 @@ if (!class_exists("s3bubble_audio")) {
 		        })
 		    </script>
 		    <form class="s3bubble-form-general">
-		    	<blockquote class="bs-callout-s3bubble"><strong>Please select your bucket and then folder below</strong> when you select your bucket S3Bubble will auto generate a list of folders to choose from.</blockquote>
+		    	<div class="s3bubble-video-main-form-alerts"></div>
 		    	<p>
 			    	<span class="s3bubble-pull-left" id="s3bubble-buckets-shortcode">loading buckets...</span>
 					<span class="s3bubble-pull-right" id="s3bubble-folders-shortcode"></span>
@@ -693,23 +695,24 @@ if (!class_exists("s3bubble_audio")) {
 			        var sendData = {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
-					$.post("<?php echo $this->endpoint; ?>main_plugin/buckets/", sendData, function(response) {
-						var isSingle = response.Single;
+					$.post("<?php echo $this->endpoint; ?>main_plugin/live_buckets/", sendData, function(response) {
 						if(response.error){
-							console.log(response.error);
-							return;
+							$(".s3bubble-video-main-form-alerts").html("<p>Oh Snap! " + response.message + ". If you do not understand this error please contact support@s3bubble.com</p>");
+						}else{
+							$(".s3bubble-video-main-form-alerts").html("<p>Awesome! " + response.message + ".</p>");
+							var isSingle = response.data.Single;
+							var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
+						    $.each(response.data.Buckets, function (i, item) {
+						    	var bucket = item.Name;
+						    	if(isSingle === true){
+						    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+						    	}else{
+						    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+						    	}
+							});
+							html += '</select>';
+							$('#s3bubble-buckets-shortcode').html(html);
 						}
-						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
-					    $.each(response.Buckets, function (i, item) {
-					    	var bucket = item.Name;
-					    	if(isSingle === true){
-					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
-					    	}else{
-					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
-					    	}
-						});
-						html += '</select>';
-						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading videos files');
 						   var bucket = $(this).val();
@@ -765,7 +768,7 @@ if (!class_exists("s3bubble_audio")) {
 		        })
 		    </script>
 		    <form class="s3bubble-form-general">
-                <blockquote class="bs-callout-s3bubble"><strong>Please select your bucket and then file below.</strong> When you select your bucket S3Bubble will auto generate a list of files to choose from.</blockquote>
+                <div class="s3bubble-video-main-form-alerts"></div>
 		    	<p>
 			    	<span class="s3bubble-pull-left" id="s3bubble-buckets-shortcode">loading buckets...</span>
 					<span class="s3bubble-pull-right" id="s3bubble-folders-shortcode"></span>
@@ -807,23 +810,24 @@ if (!class_exists("s3bubble_audio")) {
 			        var sendData = {
 						AccessKey: '<?php echo $s3bubble_access_key; ?>'
 					};
-					$.post("<?php echo $this->endpoint; ?>main_plugin/buckets/", sendData, function(response) {
-						var isSingle = response.Single;
+					$.post("<?php echo $this->endpoint; ?>main_plugin/live_buckets/", sendData, function(response) {
 						if(response.error){
-							console.log(response.error);
-							return;
+							$(".s3bubble-video-main-form-alerts").html("<p>Oh Snap! " + response.message + ". If you do not understand this error please contact support@s3bubble.com</p>");
+						}else{
+							$(".s3bubble-video-main-form-alerts").html("<p>Awesome! " + response.message + ".</p>");
+							var isSingle = response.data.Single;
+							var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
+						    $.each(response.data.Buckets, function (i, item) {
+						    	var bucket = item.Name;
+						    	if(isSingle === true){
+						    		html += '<option value="s3bubble.users">' + bucket + '</option>';
+						    	}else{
+						    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
+						    	}
+							});
+							html += '</select>';
+							$('#s3bubble-buckets-shortcode').html(html);
 						}
-						var html = '<select class="form-control input-lg" tabindex="1" name="s3bucket" id="s3bucket"><option value="">Choose bucket</option>';
-					    $.each(response.Buckets, function (i, item) {
-					    	var bucket = item.Name;
-					    	if(isSingle === true){
-					    		html += '<option value="s3bubble.users">' + bucket + '</option>';
-					    	}else{
-					    		html += '<option value="' + bucket + '">' + bucket + '</option>';	
-					    	}
-						});
-						html += '</select>';
-						$('#s3bubble-buckets-shortcode').html(html);
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading audio files');
 						   var bucket = $(this).val();
@@ -890,7 +894,7 @@ if (!class_exists("s3bubble_audio")) {
 		        })
 		    </script>
 		    <form class="s3bubble-form-general">
-		    	<blockquote class="bs-callout-s3bubble"><strong>Please select your bucket and then file below.</strong> When you select your bucket S3Bubble will auto generate a list of files to choose from.</blockquote>
+		    	<div class="s3bubble-video-main-form-alerts"></div>
 		    	<p>
 			    	<span class="s3bubble-pull-left" id="s3bubble-buckets-shortcode">loading buckets...</span>
 					<span class="s3bubble-pull-right" id="s3bubble-folders-shortcode"></span>
@@ -1997,14 +2001,11 @@ if (!class_exists("s3bubble_audio")) {
 				var aspects  = "' . $aspect . '";
 				var aspects = aspects.split(":");
 				var aspect = $("#s3bubble-media-main-container-' . $player_id . '").width()/aspects[0]*aspects[1];
-				
 				var IsMobile = false;
 				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 					IsMobile = true;
 				}
-				
 				$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-playlist-wrap").height(aspect);
-					
 				var videoPlaylistS3Bubble = new jPlayerPlaylist({
 					jPlayer: "#jquery_jplayer_' . $player_id . '",
 					cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
@@ -2102,7 +2103,11 @@ if (!class_exists("s3bubble_audio")) {
 				    	},2000);
 				    },
 				    click: function (event) {
-
+				    	if(event.jPlayer.status.paused){
+				    		videoPlaylistS3Bubble.play();
+				    	}else{
+				    		videoPlaylistS3Bubble.pause();
+				    	}
 				    },
 				    error: function (event) {
 				    	console.log(event.jPlayer.error);
@@ -2421,7 +2426,11 @@ if (!class_exists("s3bubble_audio")) {
 					    	},2000);
 					    },
 					    click: function (event) {
-
+					    	if(event.jPlayer.status.paused){
+					    		videoSingleS3Bubble.play();
+					    	}else{
+					    		videoSingleS3Bubble.pause();
+					    	}
 					    },
 					    error: function (event) {
 					    	console.log(event.jPlayer.error);
