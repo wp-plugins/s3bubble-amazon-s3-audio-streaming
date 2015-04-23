@@ -176,11 +176,13 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_admin_notice() {
 			global $current_user ;
-		        $user_id = $current_user->ID;
-		        /* Check that the user hasn't already clicked to ignore the message */
+		    $user_id = $current_user->ID;
+		    $params = array_merge($_GET, array("s3bubble_nag_ignore" => 0));
+			$new_query_string = http_build_query($params); 
+		    /* Check that the user hasn't already clicked to ignore the message */
 			if ( ! get_user_meta($user_id, 's3bubble_nag_ignore') ) {
 		        echo '<div class="updated"><p>'; 
-		        printf(__('Thankyou for upgrading your S3Bubble media streaming plugin. Any issues please contact us at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a> if you are stuck you can always roll back within the S3Bubble WP admin download and re-install the old plugin. Want to see the great new features please watch this video <a href="https://s3bubble.com/video_tutorials/s3bubble-plugin-upgrade/" target="_blank">Watch Video</a>. | <a href="%1$s" class="pull-right">Hide Notice</a>'), '?s3bubble_nag_ignore=0');
+		        echo 'Thankyou for upgrading your S3Bubble media streaming plugin. Any issues please contact us at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a> if you are stuck you can always roll back within the S3Bubble WP admin download and re-install the old plugin. Want to see the great new features please watch this video <a href="https://s3bubble.com/video_tutorials/s3bubble-plugin-upgrade/" target="_blank">Watch Video</a>. | <a href="' . $_SERVER['PHP_SELF'] . "?" . $new_query_string . '" class="pull-right">Hide Notice</a>';
 		        echo "</p></div>";
 			}
 		}
