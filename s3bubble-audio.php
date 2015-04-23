@@ -2444,7 +2444,7 @@ if (!class_exists("s3bubble_audio")) {
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").on( "click", function() {
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn();
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-										    left: "-222"
+										    left: "-230"
 										}, 50, function() {
 										    videoSingleS3Bubble.next();
 										});
@@ -2496,7 +2496,7 @@ if (!class_exists("s3bubble_audio")) {
 								});
 							}else{
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-								    left: "-222"
+								    left: "-230"
 								}, 50, function() {
 								    
 								});

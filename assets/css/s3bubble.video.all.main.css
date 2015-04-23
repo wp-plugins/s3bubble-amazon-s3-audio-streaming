@@ -31,7 +31,7 @@
 .s3bubble-media-main-video-skip {
     position: absolute;
     overflow: hidden;
-    left: -222px;
+    left: -230px;
     bottom: 60px;
     margin: 0;
     padding: 0;
@@ -64,13 +64,14 @@
     font-weight: 400
 }
 .s3bubble-media-main-video-skip img#s3bubble-media-main-skip-tumbnail {
-    float: right !important;
-    width: 90px !important;
-    height: 54px !important;
-    padding: 0 !important;
-    margin: 4px !important;
-    border: 0 !important;
-    max-width: 100% !important;
+    float: right!important;
+  width: 90px!important;
+  height: 100%!important;
+  padding: 0!important;
+  margin: 0px!important;
+  border: 0!important;
+  max-width: 100%!important;
+  border-radius: 0!important;
 }
 .s3bubble-media-main-video-play {
     position: absolute;
