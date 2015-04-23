@@ -3841,6 +3841,9 @@
 				$(this.cssSelector.playlist + " li:nth-child(" + (index + 1) + ")").addClass("s3bubble-media-main-playlist-current").find(".s3bubble-media-main-playlist-item").addClass("s3bubble-media-main-playlist-current");
 				// $(this.cssSelector.details + " li").html("<span class='s3bubble-media-main-title'>" + this.playlist[index].title + "</span>" + (this.playlist[index].artist ? " <span class='s3bubble-media-main-artist'>by " + this.playlist[index].artist + "</span>" : ""));
 			}
+			$(".s3bubble-media-main-playlist").animate({
+				scrollTop : index * 32
+			}, 500);
 		},
 		setPlaylist: function(playlist) {
 			this._initPlaylist(playlist);

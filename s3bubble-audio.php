@@ -160,6 +160,43 @@ if (!class_exists("s3bubble_audio")) {
 			add_action( 'wp_ajax_s3bubble_audio_playlist_internal_ajax', array( $this, 's3bubble_audio_playlist_internal_ajax' ) );
 			add_action('wp_ajax_nopriv_s3bubble_audio_playlist_internal_ajax', array( $this, 's3bubble_audio_playlist_internal_ajax' ) ); 
 			
+			/*
+			 * Admin dismiss message
+			 */
+			add_action('admin_notices', array( $this, 's3bubble_admin_notice' ) );
+			add_action('admin_init', array( $this, 's3bubble_nag_ignore' ) );
+
+		}
+
+
+		/*
+		* Sets up a admin alert notice
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_admin_notice() {
+			global $current_user ;
+		        $user_id = $current_user->ID;
+		        /* Check that the user hasn't already clicked to ignore the message */
+			if ( ! get_user_meta($user_id, 's3bubble_nag_ignore') ) {
+		        echo '<div class="updated"><p>'; 
+		        printf(__('Thankyou for upgrading your S3Bubble media streaming plugin. Any issues please contact us at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a> if you are stuck you can always roll back within the S3Bubble WP admin download and re-install the old plugin. Want to see the great new features please watch this video <a href="https://s3bubble.com/video_tutorials/s3bubble-plugin-upgrade/" target="_blank">Watch Video</a>. | <a href="%1$s" class="pull-right">Hide Notice</a>'), '?s3bubble_nag_ignore=0');
+		        echo "</p></div>";
+			}
+		}
+
+		/*
+		* Allows users to ignore the message
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_nag_ignore() {
+			global $current_user;
+		        $user_id = $current_user->ID;
+		        /* If user clicks to ignore the notice, add that to their user meta */
+		        if ( isset($_GET['s3bubble_nag_ignore']) && '0' == $_GET['s3bubble_nag_ignore'] ) {
+		             add_user_meta($user_id, 's3bubble_nag_ignore', 'true', true);
+			}
 		}
 
 		/*
@@ -218,7 +255,7 @@ if (!class_exists("s3bubble_audio")) {
 			
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
-					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value, .s3bubble-media-main-play-bar span {background-color: '.stripcslashes($seek).' !important;}
+					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;}
@@ -1010,7 +1047,7 @@ if (!class_exists("s3bubble_audio")) {
 						</div> 
 					</div>
 					<div class="postbox">
-						<h3 class="hndle">Track Video Analytics</h3>
+						<h3 class="hndle">Track Analytics</h3>
 						<div class="inside">
 							<ul class="s3bubble-adverts">
 								<li>
@@ -1308,7 +1345,7 @@ if (!class_exists("s3bubble_audio")) {
 			}
             $player_id = uniqid();
 								
-            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-video">
+            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-audio">
             	<div class="s3bubble-media-main-video-playlist-wrap">
 				    <div id="jquery_jplayer_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
 				    <div class="s3bubble-media-main-gui">
@@ -1639,7 +1676,7 @@ if (!class_exists("s3bubble_audio")) {
 			}
             $player_id = uniqid();
 			
-            return '<div id="s3bubble-media-main-container-' . $player_id .  '" class="s3bubble-media-main-video">
+            return '<div id="s3bubble-media-main-container-' . $player_id .  '" class="s3bubble-media-main-audio">
 			    <div id="jquery_jplayer_' . $player_id .  '" class="s3bubble-media-main-jplayer"></div>
 			    <div class="s3bubble-media-main-gui">
 			        <div class="s3bubble-media-main-interface s3bubble-media-main-interface-audio-playlist">
@@ -2239,7 +2276,7 @@ if (!class_exists("s3bubble_audio")) {
 			        autohide : {
 						full : true,
 						restored : true,
-						hold : 30000
+						hold : 3000
 					}
 				});
 			});
