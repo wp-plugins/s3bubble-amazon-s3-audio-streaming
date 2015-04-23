@@ -150,8 +150,10 @@ Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along
 
 == Changelog ==
 
-= 1.8.3 =
-
+= 1.8.6 =
+= Brand new Analytic tracking find out more [S3Bubble Analytics](https://s3bubble.com/video_tutorials/quick-analytics-intro-tutorial/"). =
+= Brand new Admin Manager [S3Bubble](https://s3bubble.com"). =
+= Brand new player design see in action [view design](https://s3bubble.com/video_tutorials "design"). =
 = Sign up without a Amazon Account use S3Bubbles. =
 = Single user WYSIWYG editor shortcode insert. = 
 = Keyboard buttons. p key Play/Pause, < key  Volume Down, > key Volume Up, right arrow key Next Track, left arrow key Previous Track. Please contact us at support@s3bubble.com for any extra button functionality. = 
