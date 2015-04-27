@@ -2461,7 +2461,7 @@ if (!class_exists("s3bubble_audio")) {
 						resize: function (event) {
 					    	$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").fadeOut();
 					    	setTimeout(function(){
-					    		$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width($("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width()-260).fadeIn();	
+					    		$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width($("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width()-280).fadeIn();	
 					    	},2000);
 					    },
 					    click: function (event) {
