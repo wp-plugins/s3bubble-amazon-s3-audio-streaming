@@ -3,7 +3,7 @@ Contributors: Samuel East
 Donate link: https://s3bubble.com
 Tags: S3Bubble, S3 Bubble, Amazon, Cloudfront, AmazonS3, Amazon S3, Amazon-S3, S3, Analytics, Analytics Tracking, HTML 5 Player, HTML5 Player, HTML5Player, HTML-5 Player, Audio, Audioplayer, Audio-player, Audio player, Video, VideoPlayer, Video-Player, Video player, Media, MediaPlayer, Media-Player, Media player, Music, MusicPlayer, Music-Player, Music player, MP3, MP3 Player, MP3-player, MP3 player, MP4, MP4 Player, MP4-player, MP4 player, MediaStreaming, Media-Streaming, Media Streaming, AudioStreaming, Audio-streaming, Audio Streaming, VideoStreaming, Video-streaming, Video Streaming, MediaStream, Media-Stream, Media Stream, stream-media, stream media, AudioStream, Mobile, Audio Stream, Stream-audio, stream audio, VideoStream, Video-stream, Video Stream, Stream-video, stream video, cross-platform, Video-blog, video blog, vlog, v-log, Cross Platform, pod-cast, pod cast, CDN, Content Distribution Network, accessibility, accessibile, android, Uploads, stream, streaming, player, cloud
 Requires at least: 2.0
-Tested up to: 4.1.2
+Tested up to: 4.2
 Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

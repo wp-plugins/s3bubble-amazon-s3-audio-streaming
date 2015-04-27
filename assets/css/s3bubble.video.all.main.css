@@ -10,6 +10,9 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, .3);
     overflow: hidden
 }
+.s3bubble-media-main-video > * {
+  outline: 0;
+}
 .s3bubble-media-main-video-360p {
     width: 570px;
     margin: 100px auto
@@ -366,7 +369,11 @@ a.s3bubble-media-main-pause {
     text-decoration: none;
     color: #d2d6db;
     border: none;
-    line-height: 30px;
+    margin: 0px !important;
+    padding: 0px !important;
+    line-height: 33px;
+    font-size: 13px;
+    outline: 0;
 }
 .s3bubble-media-main-no-solution {
     display: block;
@@ -407,7 +414,7 @@ a.s3bubble-media-main-pause {
     font-size: 16px !important;
     width: 98% !important;
     border: none !important;
-    height: 20px !important;
+    height: 35px !important;
     padding: 1% !important;
     outline: 0;
     background: #fff !important;

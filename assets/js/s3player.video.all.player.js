@@ -3842,7 +3842,7 @@
 				// $(this.cssSelector.details + " li").html("<span class='s3bubble-media-main-title'>" + this.playlist[index].title + "</span>" + (this.playlist[index].artist ? " <span class='s3bubble-media-main-artist'>by " + this.playlist[index].artist + "</span>" : ""));
 			}
 			$(".s3bubble-media-main-playlist").animate({
-				scrollTop : index * 32
+				scrollTop : index * 35
 			}, 500);
 		},
 		setPlaylist: function(playlist) {
