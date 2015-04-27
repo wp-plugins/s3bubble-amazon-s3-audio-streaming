@@ -2197,7 +2197,7 @@ if (!class_exists("s3bubble_audio")) {
 								});
 							}
 						}
-						if(Current !== CurrentState){
+						if(Current !== CurrentState && PlaylistKey.advert !== true){
 							addListener({
 								app_id: s3bubble_all_object.s3appid,
 								server: s3bubble_all_object.serveraddress,
@@ -2528,7 +2528,7 @@ if (!class_exists("s3bubble_audio")) {
 								    // Animation complete.
 								});
 							}
-							if(Current !== CurrentState){
+							if(Current !== CurrentState && PlaylistKey.advert !== true){
 								addListener({
 									app_id: s3bubble_all_object.s3appid,
 									server: s3bubble_all_object.serveraddress,
