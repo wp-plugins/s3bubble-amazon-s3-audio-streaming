@@ -3,7 +3,7 @@
 Plugin Name: S3Bubble Amazon S3 Video And Audio Streaming With Analytics
 Plugin URI: https://s3bubble.com/
 Description: S3Bubble offers simple, media streaming from Amazon S3 to WordPress. In just 4 simple steps. 
-Version: 1.8.6
+Version: 1.8.7
 Author: S3Bubble
 Author URI: https://s3bubble.com
 License: GPL2
@@ -260,7 +260,7 @@ if (!class_exists("s3bubble_audio")) {
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
-					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;}
+					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;}
 			</style>'; 
 
 		}

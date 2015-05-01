@@ -57,6 +57,7 @@
     color: #fff;
     font-weight: normal !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 18px !important;
 }
 .s3bubble-media-main-video-skip i {
     margin: 0;
