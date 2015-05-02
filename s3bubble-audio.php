@@ -1786,7 +1786,8 @@ if (!class_exists("s3bubble_audio")) {
 					if($ismobile) {
 						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
 					}
-					return '<div style="width:100%;position:relative;"><video id="video-' . $player_id . '" controls="controls" preload="metadata">
+					return '<div style="width:100%;position:relative;">
+						<video id="video-' . $player_id . '" style="width:100%;" controls="controls">
 						' . $source . '
 						<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
 							<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
@@ -1864,7 +1865,7 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3bubbleMediaElementVideo' ) );
             
 			//set POST variables
-			$url = $this->endpoint . 's3media/single_video_object_test';
+			$url = $this->endpoint . 'main_plugin/single_video_media_element';
 			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
@@ -1897,7 +1898,8 @@ if (!class_exists("s3bubble_audio")) {
 			}else{
 				$player_id = uniqid();
 				if(is_array($track)){
-					return '<div style="width:100%;position:relative;"><video id="video-' . $player_id . '" controls="controls" preload="metadata">
+					return '<div style="width:100%;position:relative;">
+					<video id="video-' . $player_id . '" controls="controls" style="width:100%;">
 						<source type="video/mp4" src="' . $track[0]['m4v'] . '" />
 						<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
 							<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
@@ -1939,7 +1941,7 @@ if (!class_exists("s3bubble_audio")) {
 		  							videoHeight: "100%",
 		  							defaultVideoWidth: 480,  
 								    defaultVideoHeight: 270,
-							     	enableAutosize: false,
+							     	enableAutosize: true,
 							     	videoVolume: "horizontal"
 				    			});
 							});
@@ -1973,7 +1975,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 			), $atts, 's3bubbleMediaElementAudio' ) );
 
-			$url = $this->endpoint . 's3media/single_audio_object';
+			$url = $this->endpoint . 'main_plugin/single_audio_media_element';
 			$fields = http_build_query(array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
