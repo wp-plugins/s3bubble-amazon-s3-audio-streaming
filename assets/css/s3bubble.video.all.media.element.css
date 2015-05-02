@@ -1,0 +1,30 @@
+.mejs-controls {
+    background: #222;
+}
+.mejs-overlay-button {
+	background: #222 url(../images/play48.png)center no-repeat;
+    height: 70px;
+    width: 116px;
+    border-radius: 5px;
+    margin-left: -58px;
+    margin-top: -35px !important;
+}
+.mejs-controls a.mejs-horizontal-volume-slider {
+    text-decoration: none !important;
+    border: none !important;
+}
+.mejs-controls .mejs-time-rail .mejs-time-total, .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
+	border-radius: 2px !important;
+}
+.mejs-controls .mejs-time-rail span, .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total, .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current {
+	border-radius: 2px !important;
+}
+.mejs-overlay-loading span {
+	background: none !important;
+}
+.mejs-overlay-loading span i {
+	font: normal normal normal 60px FontAwesome !important;
+	font-size: 60px !important;
+	text-align: center;
+	color: white;
+}
