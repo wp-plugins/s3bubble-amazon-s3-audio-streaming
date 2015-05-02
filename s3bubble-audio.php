@@ -250,17 +250,21 @@ if (!class_exists("s3bubble_audio")) {
 			
 			wp_enqueue_style('font-s3bubble.min');
 			wp_enqueue_style('s3bubble.video.all.main');
-			
+
 			// Depreciated
-			wp_register_style( 'mediaelementplayer.min', plugins_url('assets/mediaelementjs/build/mediaelementplayer.min.css', __FILE__), array(), $this->version  );
-			wp_enqueue_style('mediaelementplayer.min');
+			wp_enqueue_style('wp-mediaelement');
+			wp_register_style('s3bubble.video.all.media.element.min', plugins_url('assets/css/s3bubble.video.all.media.element.min.css', __FILE__), array(), $this->version  );
+			wp_enqueue_style('s3bubble.video.all.media.element.min');
 			
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
-					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;}
+					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;text-decoration: none !important;}
+					.mejs-controls {background-color: '.stripcslashes($background).' !important;}
+					.mejs-overlay-button {background: '.stripcslashes($background).' url(' . plugins_url('assets/images/play48.png', __FILE__) . ')center no-repeat !important;}
+					.mejs-time-current {background-color: '.stripcslashes($seek).' !important;}
 			</style>'; 
 
 		}
@@ -284,13 +288,14 @@ if (!class_exists("s3bubble_audio")) {
 				
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-migrate');
+				wp_enqueue_script('wp-mediaelement');
 				wp_enqueue_script('s3player.all.s3bubble');
 				wp_enqueue_script('s3bubble.mobile.browser.check');
 				wp_enqueue_script('s3bubble.analytics.min');
 				
 				// Depreciated
-				wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array('jquery'), $this->version, true );
-	            wp_enqueue_script('mediaelement-and-player.min');
+				//wp_register_script( 'mediaelement-and-player.min', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.min.js',__FILE__ ), array('jquery'), $this->version, true );
+	            //wp_enqueue_script('mediaelement-and-player.min');
 				
             }
 		}
@@ -1192,6 +1197,7 @@ if (!class_exists("s3bubble_audio")) {
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
+				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
@@ -1227,13 +1233,51 @@ if (!class_exists("s3bubble_audio")) {
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
-			$video = 'video_' . substr(md5(rand()), 0, 7);
-			if(is_array($track)){
-				if($cloudfront != ''){
-					$end = explode('mp4:', $track[0]['rtmpv']);
-			    	return '<video width="100%" height="415px" style="width: 100%; height: 100%; z-index: 4001;" id="' . $video . '" src="mp4:' . $end[1] .'" poster="' . $track[0]['poster'] .'" type="video/rtmp" controls="controls"></video><script>jQuery(document).ready(function($) {$(\'#' . $video . '\').mediaelementplayer({flashStreamer:"' . $track[0]['rtmpv'] . '"});});</script>';
-			    }else{
-					return '<video width="100%" height="415px"style="width: 100%; height: 100%; z-index: 4001;" id="' . $video . '" poster="' . $track[0]['poster'] . '" controls="controls" preload="none"><source type="video/mp4" src="' . $track[0]['m4v'] . '" /><object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '"><param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" /><param name="flashvars" value="controls=true&amp;file=' . $track[0]['m4v'] . '" /><img src="' . $track[0]['poster'] . '" width="640" height="360" alt="S3Bubble RTMP Streaming" title="S3Bubble RTMP Streaming" /></object></video><script>jQuery(document).ready(function($) {var player = new MediaElementPlayer(\'#' . $video . '\');'. (($autoplay == 'true') ? 'player.play();' : '') . '});</script>';
+			if(!empty($track['error'])){
+				echo $track['error'];
+			}else{
+				$player_id = uniqid();
+				if(is_array($track)){
+					if($cloudfront != ''){
+						$end = explode('mp4:', $track[0]['rtmpv']);
+				    	return '<video width="100%" height="415px" style="width: 100%; height: 100%; z-index: 4001;" id="video-' . $player_id . '" src="mp4:' . $end[1] .'" poster="' . $track[0]['poster'] .'" type="video/rtmp" controls="controls"></video>
+					    	<script>
+					    		jQuery(document).ready(function($) {
+					    			var aspects  = "' . $aspect . '";
+									var aspects = aspects.split(":");
+									var aspect = $("#video-' . $player_id . '").width()/aspects[0]*aspects[1];
+					    			$("#video-' . $player_id . '").mediaelementplayer({
+					    				flashStreamer:"' . $track[0]['rtmpv'] . '"
+					    			});
+								});
+							</script>';
+				    }else{
+						return '<div class="myvids" id="viddivap1" style="width:100%;position:relative;"><video id="video-' . $player_id . '" controls="controls" preload="none">
+							<source type="video/mp4" src="' . $track[0]['m4v'] . '" />
+							<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
+								<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
+								<param name="flashvars" value="controls=true&amp;file=' . $track[0]['m4v'] . '" />
+							</object></video></div>
+							<script>
+								jQuery(document).ready(function($) {
+									var aspects  = "' . $aspect . '";
+									var aspects = aspects.split(":");
+									var aspect = $("#video-' . $player_id . '").width()/aspects[0]*aspects[1];
+									$(".mejs-container").height(aspect);
+									$("#video-' . $player_id . '").mediaelementplayer({
+						    			poster: "' . $track[0]['poster'] . '",
+						    			success: function(media, node, player) {
+						    				$(".mejs-overlay-loading span").html("<i class=\"s3icon s3icon-refresh s3icon-spin\"></i>");
+						    				'. (($autoplay == 'true') ? 'media.play();' : '') . '
+								     	},
+								     	videoWidth: "100%",
+			  							videoHeight: "100%",
+								     	enableAutosize: false,
+								     	videoVolume: "horizontal"
+					    			});
+								});
+							</script>';
+					}
 				}
 			}
 			//close connection
@@ -1289,12 +1333,16 @@ if (!class_exists("s3bubble_audio")) {
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
-			$audio = 'audio_' . substr(md5(rand()), 0, 7);
-			if(is_array($track)){
-				if($cloudfront != ''){
-			    	return '<p>rtmp only currently support for video</p>';
-			    }else{
-					return '<audio width="100%" src="' . $track[0]['mp3'] . '" id="' . $audio . '"></audio><script>jQuery(document).ready(function($) {var player = new MediaElementPlayer(\'#' . $audio . '\');'. (($autoplay == 'true') ? 'player.play();' : '') . '});</script>';
+			if(!empty($track['error'])){
+				echo $track['error'];
+			}else{
+				$audio = 'audio_' . substr(md5(rand()), 0, 7);
+				if(is_array($track)){
+					if($cloudfront != ''){
+				    	return '<p>rtmp only currently support for video</p>';
+				    }else{
+						return '<audio width="100%" src="' . $track[0]['mp3'] . '" id="' . $audio . '"></audio><script>jQuery(document).ready(function($) {var player = new MediaElementPlayer(\'#' . $audio . '\');'. (($autoplay == 'true') ? 'player.play();' : '') . '});</script>';
+					}
 				}
 			}
 			curl_close($ch);
