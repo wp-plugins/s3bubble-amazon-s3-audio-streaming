@@ -1889,7 +1889,6 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			//execute post
-			//<source type="video/mp4" src="' . $track[0]['m4v'] . '" />
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
 			//print_r($track);
@@ -1899,8 +1898,7 @@ if (!class_exists("s3bubble_audio")) {
 				$player_id = uniqid();
 				if(is_array($track)){
 					return '<div style="width:100%;position:relative;"><video id="video-' . $player_id . '" controls="controls" preload="metadata">
-						<source type="application/x-mpegURL" src="' . $track[0]['m4v'] . '" />
-						
+						<source type="video/mp4" src="' . $track[0]['m4v'] . '" />
 						<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
 							<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
 							<param name="flashvars" value="controls=true&amp;file=' . $track[0]['m4v'] . '" />
