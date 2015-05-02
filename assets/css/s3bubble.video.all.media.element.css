@@ -32,3 +32,9 @@
 	text-align: center;
 	color: white;
 }
+.mejs-overlay-play {
+    height: 100% !important;
+}
+.mejs-controls .mejs-button button:focus {
+  outline: none !important;
+}
