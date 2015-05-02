@@ -1,3 +1,6 @@
+.mejs-container * {
+    height: 100%;
+}
 .mejs-controls {
     background: #222;
 }
@@ -20,7 +23,8 @@
 	border-radius: 2px !important;
 }
 .mejs-overlay-loading span {
-	background: none !important;
+	background: #222 url(../mediaelementjs/build/loading.gif) 50% 50% no-repeat;
+    border-radius: 40px;
 }
 .mejs-overlay-loading span i {
 	font: normal normal normal 60px FontAwesome !important;

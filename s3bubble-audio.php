@@ -1267,7 +1267,6 @@ if (!class_exists("s3bubble_audio")) {
 									$("#video-' . $player_id . '").mediaelementplayer({
 						    			poster: "' . $track[0]['poster'] . '",
 						    			success: function(media, node, player) {
-						    				$(".mejs-overlay-loading span").html("<i class=\"s3icon s3icon-refresh s3icon-spin\"></i>");
 						    				'. (($autoplay == 'true') ? 'media.play();' : '') . '
 								     	},
 								     	videoWidth: "100%",
