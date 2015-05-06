@@ -3032,19 +3032,6 @@ if (!class_exists("s3bubble_audio")) {
 							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
 							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-240);	
 						}
-						$( window ).resize(function() {
-							var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
-							if(main_width_resize < 400){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-110);	
-							}else{
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-240);	
-							}
-						});
 						var sendData = {
 							"action": "s3bubble_audio_single_internal_ajax",
 							"Timezone":"America/New_York",
@@ -3068,6 +3055,19 @@ if (!class_exists("s3bubble_audio")) {
 							}
 						},"json");
 	                },
+					resize: function (event) {
+				    	var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
+						if(main_width_resize < 400){
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-110);	
+						}else{
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-240);	
+						}
+				    },
 	                loadedmetadata: function() {
 						
 					},
@@ -3208,7 +3208,7 @@ if (!class_exists("s3bubble_audio")) {
 					autoBlur: false,
 					smoothPlayBar: false,
 					keyEnabled: true,
-					audioFullScreen: true,
+					audioFullScreen: false,
 					remainingDuration: true
 	            });
 			});
