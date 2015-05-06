@@ -1,6 +1,10 @@
 *:focus {
     outline: 0;
 }
+.s3bubble-media-main-audio {
+    float: left;
+    width: 100%;
+}
 .s3bubble-media-main-video {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     position: relative;
@@ -47,7 +51,7 @@
     width: 222px;
     height: 62px;
     background-color: #010101;
-    z-index: 9999
+    z-index: 9
 }
 .s3bubble-media-main-video-skip h2 {
     margin: 0 !important;
@@ -84,7 +88,7 @@
     height: 70px;
     top: 50%;
     left: 50%;
-    z-index: 9999;
+    z-index: 9;
     margin-left: -58px;
     margin-top: -35px;
     text-align: center;
@@ -102,7 +106,7 @@
     height: 70px;
     top: 50%;
     left: 50%;
-    z-index: 9999;
+    z-index: 2;
     margin-left: -58px;
     margin-top: -35px;
     text-align: center;
@@ -206,7 +210,7 @@ a.s3bubble-media-main-pause {
     width: 0;
     height: 10px;
     position: relative;
-    z-index: 9999;
+    z-index: 1001;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px
@@ -372,6 +376,7 @@ a.s3bubble-media-main-pause {
     padding: 0px 10px!important;
     outline: 0 !important;
     line-height: 35px !important;
+    text-align: left !important;
 }
 .s3bubble-media-main-playlist li div a {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

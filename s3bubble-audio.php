@@ -115,6 +115,13 @@ if (!class_exists("s3bubble_audio")) {
 			add_shortcode( 's3bubbleAudioSingle', array( $this, 's3bubble_audio_single_player' ) );
 			add_shortcode( 's3bubbleVideo', array( $this, 's3bubble_video_player' ) );
 			add_shortcode( 's3bubbleVideoSingle', array( $this, 's3bubble_video_single_player' ) );
+
+			/*
+			 * Video JS for the plugin
+			 * @author sameast
+			 * @params none
+			 */ 
+			add_shortcode( 's3bubbleVideoSingleJs', array( $this, 's3bubble_video_single_player_videojs' ) );
 			
 			/*
 			 * Media Element shortcodes for the plugin
@@ -131,6 +138,18 @@ if (!class_exists("s3bubble_audio")) {
 			 */ 
 			add_shortcode( 's3bubbleHlsVideo', array( $this, 's3bubble_hls_video' ) );
 			add_shortcode( 's3bubbleHlsAudio', array( $this, 's3bubble_hls_audio' ) );
+			add_shortcode( 's3bubbleHlsVideoJs', array( $this, 's3bubble_hls_video_js' ) );
+
+
+			/*
+			 * Live Stream Video JS shortcodes for the plugin
+			 * @author sameast
+			 * @params none
+			 */ 
+			add_shortcode( 's3bubbleLiveStream', array( $this, 's3bubble_live_stream_video' ) );
+			add_shortcode( 's3bubbleLiveAudio', array( $this, 's3bubble_live_stream_audio' ) );
+			add_shortcode( 's3bubbleLiveStreamMedia', array( $this, 's3bubble_live_stream_media_element_video' ) );
+
 
 			/*
 			 * Rtmp shortcodes for the plugin
@@ -139,6 +158,8 @@ if (!class_exists("s3bubble_audio")) {
 			 */ 
 			add_shortcode( 's3bubbleRtmpVideo', array( $this, 's3bubble_rtmp_video' ) );
 			add_shortcode( 's3bubbleRtmpAudio', array( $this, 's3bubble_rtmp_audio' ) );
+			add_shortcode( 's3bubbleRtmpVideoJs', array( $this, 's3bubble_rtmp_video_js' ) );
+			add_shortcode( 's3bubbleRtmpAudioJs', array( $this, 's3bubble_rtmp_audio_js' ) );
 			add_shortcode( 's3bubbleRtmpVideoDefault', array( $this, 's3bubble_rtmp_video_default' ) );
 			add_shortcode( 's3bubbleRtmpAudioDefault', array( $this, 's3bubble_rtmp_audio_default' ) );
 
@@ -163,6 +184,7 @@ if (!class_exists("s3bubble_audio")) {
 			add_action( 'wp_ajax_s3bubble_video_playlist_ajax', array( $this, 's3bubble_video_playlist_ajax' ) );
 			add_action( 'wp_ajax_s3bubble_audio_single_ajax', array( $this, 's3bubble_audio_single_ajax' ) );
 			add_action( 'wp_ajax_s3bubble_video_single_ajax', array( $this, 's3bubble_video_single_ajax' ) ); 
+			add_action( 'wp_ajax_s3bubble_live_stream_ajax', array( $this, 's3bubble_live_stream_ajax' ) );
 		
             /*
 			 * Internal Ajax
@@ -277,7 +299,10 @@ if (!class_exists("s3bubble_audio")) {
 			wp_enqueue_style('wp-mediaelement');
 			wp_register_style('s3bubble.video.all.media.element.min', plugins_url('assets/css/s3bubble.video.all.media.element.min.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble.video.all.media.element.min');
-			
+			// Video js
+			wp_register_style('s3bubble.video.js.css.include', ('//vjs.zencdn.net/4.12/video-js.css'), array(), $this->version  );
+			wp_enqueue_style('s3bubble.video.js.css.include');
+
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
@@ -287,6 +312,7 @@ if (!class_exists("s3bubble_audio")) {
 					.mejs-controls {background-color: '.stripcslashes($background).' !important;}
 					.mejs-overlay-button {background: '.stripcslashes($background).' url(' . plugins_url('assets/images/play48.png', __FILE__) . ')center no-repeat !important;}
 					.mejs-time-current, .mejs-horizontal-volume-current {background-color: '.stripcslashes($seek).' !important;}
+					.vjs-control-bar {background-color: '.stripcslashes($background).' !important;}
 			</style>'; 
 
 		}
@@ -311,9 +337,14 @@ if (!class_exists("s3bubble_audio")) {
 				//wp_register_script( 'media.element.test', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.js',__FILE__ ), array('jquery'),  $this->version, true );
 				//wp_enqueue_script('media.element.test');
 
+				//Video js
+				wp_register_script( 's3bubble.video.js.include', plugins_url('assets/videojs/video.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				//wp_register_script('s3bubble.video.js.include', ("//vjs.zencdn.net/4.12/video.js"), array('jquery'),  $this->version, true );
+
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-migrate');
 				wp_enqueue_script('wp-mediaelement');
+				wp_enqueue_script('s3bubble.video.js.include');
 				wp_enqueue_script('s3player.all.s3bubble');
 				wp_enqueue_script('s3bubble.mobile.browser.check');
 				wp_enqueue_script('s3bubble.analytics.min');
@@ -377,14 +408,15 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
 			//set POST variables
-			$url = $this->endpoint . 'main_plugin/single_video_object';
+			$url = $this->endpoint . 'main_plugin/single_video_object_test';
 			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
 			    'Timezone' => 'America/New_York',
 			    'Bucket' => $_POST['Bucket'],
 			    'Key' => $_POST['Key'],
-			    'Cloudfront' => $_POST['Cloudfront']
+			    'Cloudfront' => $_POST['Cloudfront'],
+			    'Server' => $_POST['Server']
 			);
 
 			if(!function_exists('curl_init')){
@@ -468,7 +500,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'SecretKey' => $s3bubble_secret_key,
 			    'Timezone' => 'America/New_York',
 			    'Bucket' => $_POST['Bucket'],
-			    'Key' => $_POST['Key']
+			    'Key' => $_POST['Key'],
+			    'Cloudfront' => $_POST['Cloudfront'],
+			    'Server' => $_POST['Server']
 			);
 
 			if(!function_exists('curl_init')){
@@ -913,6 +947,8 @@ if (!class_exists("s3bubble_audio")) {
 							shortcode = '[s3bubbleVideoSingle bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 							if($("#s3mediaelement").is(':checked')){
 							    shortcode = '[s3bubbleMediaElementVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+							}else if($("#s3videojs").is(':checked')){
+								shortcode = '[s3bubbleVideoSingleJs  bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 							}
 							tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    	tb_remove();
@@ -922,6 +958,9 @@ if (!class_exists("s3bubble_audio")) {
 								alert('To use HLS streaming your file extension needs to be .m3u8');
 							}else{
 								shortcode = '[s3bubbleHlsVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
+								if($("#s3videojs").is(':checked')){
+									shortcode = '[s3bubbleHlsVideoJs bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
+								}
 								tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    		tb_remove();
 							}
@@ -933,6 +972,8 @@ if (!class_exists("s3bubble_audio")) {
 								shortcode = '[s3bubbleRtmpVideoDefault bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 								if($("#s3mediaelement").is(':checked')){
 									shortcode = '[s3bubbleRtmpVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+								}else if($("#s3videojs").is(':checked')){
+									shortcode = '[s3bubbleRtmpVideoJs bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 								}
 								tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 		                   	 	tb_remove();
@@ -946,17 +987,17 @@ if (!class_exists("s3bubble_audio")) {
 	                <div class="s3bubble-video-main-form-alerts"></div>
 			    	<span>
 				    	<div class="s3bubble-pull-left s3bubble-width-left">
-				    		<label for="fname">Your S3Bubble Buckets/Folders</label>
+				    		<label for="fname">Your S3Bubble Buckets/Folders:</label>
 				    		<span id="s3bubble-buckets-shortcode">loading buckets...</span>
 				    	</div>
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
-				    		<label for="fname">Your S3Bubble Files</label>
+				    		<label for="fname">Your S3Bubble Files:</label>
 				    		<span id="s3bubble-folders-shortcode">Select bucket/folder...</span>
 				    	</div>
 					</span>
 					<span>
 						<div class="s3bubble-pull-left s3bubble-width-left">
-							<label for="fname">Select Streaming Type</label>
+							<label for="fname">Select Streaming Type:</label>
 				    		<select class="form-control input-lg" tabindex="1" name="s3bubble-streaming-type" id="s3bubble-streaming-type">
 				    			<option value="progressive">Progressive</option>
 				    			<option value="rtmp">Rtmp</option>
@@ -964,7 +1005,7 @@ if (!class_exists("s3bubble_audio")) {
 				    		</select>
 				    	</div>
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
-				    		<label for="fname">Set Cloudfront Distribution Id</label>
+				    		<label for="fname">Set Cloudfront Distribution Id:</label>
 				    		<input type="text" class="s3bubble-form-input" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">
 				    	</div>
 					</span>
@@ -973,12 +1014,18 @@ if (!class_exists("s3bubble_audio")) {
 				    		<label for="fname">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label>
 				    		<input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
 				    	</div>
+					</span>
+					<span>
+						<label for="fname">Player Selection: (Only the default player supports adverts)</label>
 					</span> 
+					<span>
+						<input type="checkbox" name="s3videojs" id="s3videojs" value="true">Use Video JS <i>(Changes the player from default to video js player - best option for HLS streaming)</i><br />
+						<input type="checkbox" name="mediaelement" id="s3mediaelement" value="true">Use Media Elements JS <i>(Changes the player from default to media element js player)</i>
+					</span>
 	                <blockquote class="bs-callout-s3bubble"><strong>Extra options:</strong> please just select any extra options from the list below, and S3Bubble will automatically add it to the shortcode.</blockquote>
 					<span>
-						<input type="checkbox" name="autoplay" id="s3autoplay">Autoplay <i>(Start Video On Page Load)</i><br />
-						<input type="checkbox" name="download" id="s3download" value="true">Show Download Links <i>(Add A Download Button To The Video)</i><br />
-						<input type="checkbox" name="mediaelement" id="s3mediaelement" value="true">Use Media Elements JS <i>(Changes the player from default to media element js player)</i>
+						<input type="checkbox" name="autoplay" id="s3autoplay">Autoplay: <i>(Start Video On Page Load)</i><br />
+						<input type="checkbox" name="download" id="s3download" value="true">Show Download Links <i>(Add A Download Button To The Video) - Not available for VideoJS or Media Element Players</i><br />
 					</span>
 					<span>
 						<a href="#"  id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
@@ -1122,6 +1169,66 @@ if (!class_exists("s3bubble_audio")) {
         	<?php
         	die();
 		}
+
+		/*
+		* Single audio button callback
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_live_stream_ajax(){
+		    // echo the form
+		    $s3bubble_access_key = get_option("s3-s3audible_username");
+		    ?>
+		    <script type="text/javascript">
+		        jQuery( document ).ready(function( $ ) {
+		        		
+                    $('#TB_ajaxContent').css({
+                    	'width' : 'auto',
+                    	'height' : 'auto',
+                    	'padding' : '0'
+                    }); 
+			        $('#s3bubble-mce-submit').click(function(){
+
+			        	var stream = $('#s3bubble-live-stream-url').val();
+			        	var aspect = '16:9';
+						if($('#s3aspect').val() != ''){
+						    aspect = $('#s3aspect').val();
+						}
+			        	
+						var shortcode = '[s3bubbleLiveStream stream="' + stream + '" aspect="' + aspect + '"/]';
+	                    if($("#s3mediaelement").is(':checked')){
+	                    	shortcode = '[s3bubbleLiveStreamMedia stream="' + stream + '" aspect="' + aspect + '"/]';
+						}
+	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
+	                    tb_remove();
+			        });
+		        })
+		    </script>
+		    <div class="s3bubble-lightbox-wrap">
+			    <form class="s3bubble-form-general">
+			    	<span>
+				    	<div>
+				    		<label for="s3bubble-live-stream-url">Your Live Stream Url:</label>
+				    		<input type="text" class="s3bubble-form-input" name="s3bubble-live-stream-url" id="s3bubble-live-stream-url">
+				    	</div>
+					</span>
+					<span>
+						<div class="s3bubble-pull-left s3bubble-width-left">
+				    		<label for="aspect">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label>
+				    		<input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
+				    	</div>
+					</span> 
+					<span>
+						<input type="checkbox" name="mediaelement" id="s3mediaelement" value="true">Use Media Elements JS <i>(Changes the player from default to media element js player)</i>
+					</span>
+					<span>
+						<a href="#"  id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
+					</span>
+				</form>
+			</div>
+        	<?php
+        	die();
+		}
         
 		/*
 		* Sets up tiny mce plugins
@@ -1151,7 +1258,7 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_register_buttons( $buttons ) {
-		    array_push( $buttons, 's3bubble_audio_single_shortcode', 's3bubble_audio_playlist_shortcode', 's3bubble_video_single_shortcode', 's3bubble_video_playlist_shortcode' ); 
+		    array_push( $buttons, 's3bubble_live_stream_shortcode', 's3bubble_audio_single_shortcode', 's3bubble_audio_playlist_shortcode', 's3bubble_video_single_shortcode', 's3bubble_video_playlist_shortcode' ); 
 		    return $buttons;
 		}
         
@@ -1369,8 +1476,356 @@ if (!class_exists("s3bubble_audio")) {
 		        return false;
 		}
 
+		// -------------------------- LIVE STREAM PLAYERS SETUPS BELOW ------------------------------ //
+
 		/*
-		* Run the jplater supports RTMP streaming
+		* Run the video js supports Live Streaming
+		* @author sameast
+		* @none
+		*/ 
+	   function s3bubble_live_stream_video($atts){
+	   	
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");
+
+	        extract( shortcode_atts( array(
+				'aspect'     => '16:9',
+				'stream'      => '',
+				'cloudfront' => '',
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleLiveStream' ) );
+			
+			$player_id = uniqid();
+
+			if(empty($stream)){
+				echo "No live steam url has been set";
+			}else{
+
+				return '<div class="video-wrap-' . $player_id . '" style="width:100%;position:relative;">
+					<video id="video-' . $player_id . '" class="video-js vjs-default-skin" controls preload="none" width="640" 
+					      poster="https://s3.amazonaws.com/s3bubble.assets/video.player/placeholder.png"
+					      data-setup=\'{"techOrder": ["flash"]}\'>
+					    <source src="' . $stream . '" type="video/mp4" />
+					</video>
+				</div>
+				<script>
+					jQuery(document).ready(function($) {
+						videojs.options.flash.swf = "https://s3.amazonaws.com/s3bubble.assets/videojs/video-js.swf";
+						var Current = -1;
+						var video_width = $(".video-wrap-' . $player_id . '").width();
+						var aspects  = "' . $aspect . '";
+						var aspects = aspects.split(":");
+						var aspect = video_width/aspects[0]*aspects[1];
+						var video = document.getElementById("video-' . $player_id . '");
+						video.height = Math.round(aspect);
+						video.width = video_width;
+					});
+				</script>';
+
+			}
+
+			//close connection
+			curl_close($ch);
+        }
+
+        /*
+		* Run the video js supports Live Streaming
+		* @author sameast
+		* @none
+		*/ 
+	   function s3bubble_live_stream_media_element_video($atts){
+	   	
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");
+
+	        extract( shortcode_atts( array(
+				'aspect'     => '16:9',
+				'stream'      => '',
+				'cloudfront' => '',
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleLiveStream' ) );
+			
+			$player_id = uniqid();
+
+			if(empty($stream)){
+				echo "No live steam url has been set";
+			}else{
+
+				return '<div class="video-wrap-' . $player_id . '">
+							<video id="video-' . $player_id . '" style="width:100%;height:100%;" controls="controls" preload="none">
+								<source type="application/x-mpegURL" src="' . $stream . '" />
+							</video>
+						</div>
+						<script>
+							jQuery(document).ready(function($) {
+								// Setup Aspect Ratio
+								var aspects  = "' . $aspect . '";
+								var video_width = $(".video-wrap-' . $player_id . '").width();
+								var aspects = aspects.split(":");
+								var aspect = video_width/aspects[0]*aspects[1];
+								var video = document.getElementById("video-' . $player_id . '");
+								video.height = Math.round(aspect);
+								video.width = video_width;
+								$("#video-' . $player_id . '").mediaelementplayer({
+					    			poster: "https://s3.amazonaws.com/s3bubble.assets/video.player/placeholder.png",
+					    			videoWidth: "100%",
+									videoHeight: "100%",
+									enableAutosize: true,
+									plugins: ["flash"],
+									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
+									flashName: "flashmediaelement.swf",
+					    			success: function(mediaElement, node, player) {
+					    				$(".mejs-time-rail, .mejs-time").hide();
+					    				$(".mejs-fullscreen-button").css("float","right");
+					    				$(".mejs-controls").append("<span class=\'s3bubble-live-media-element\'>LOADING...</span>");
+					    				// add event listener
+								        mediaElement.addEventListener("timeupdate", function(e) {
+								            if(e.currentTime){
+								            	$(".s3bubble-live-media-element").text("LIVE");
+								            }
+								        }, false);
+							     	}
+				    			});
+							});
+						</script>';
+
+			}
+
+			//close connection
+			curl_close($ch);
+        }
+
+       // -------------------------- HLS PLAYERS SETUPS BELOW ------------------------------ //
+
+       /*
+		* Run the media element video supports HLS streaming
+		* @author sameast
+		* @none
+		*/ 
+	   function s3bubble_hls_video($atts){
+	   	
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");	
+
+	        extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'track'      => '',
+				'aspect'     => '16:9',
+				'bucket'     => '',
+				'folder'     => '',
+				'style'      => '',
+				'cloudfront' => '',
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleHlsVideo' ) );
+            
+			//set POST variables
+			$url = $this->endpoint . 'main_plugin/single_video_hls';
+			$fields = array(
+				'AccessKey' => $s3bubble_access_key,
+			    'SecretKey' => $s3bubble_secret_key,
+			    'Timezone' => 'America/New_York',
+			    'Bucket' => $bucket,
+			    'Key' => $track,
+			    'Cloudfront' => $cloudfront
+			);
+			
+			if(!function_exists('curl_init')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
+			
+			//open connection
+			$ch = curl_init();
+			//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL, $url);
+			curl_setopt($ch,CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+		    $result = curl_exec($ch);
+			$track = json_decode($result, true);
+			//print_r($track);
+			if(!empty($track['error'])){
+				echo $track['error'];
+			}else{
+				$player_id = uniqid();
+				if(is_array($track)){
+					$source = '<source type="application/x-mpegURL" src="' . $track[0]['m3u8'] . '" />';
+					$url    = $track[0]['m3u8'];
+					$ismobile = $this->check_user_agent('mobile');
+					if($ismobile) {
+						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
+						$url    = $track[0]['m4v'];
+					}
+					return '<div class="video-wrap-' . $player_id . '">
+							<video id="video-' . $player_id . '" width="320" height="240" controls="controls" preload="none">
+							' . $source . '
+							 <object width="320" height="240" type="application/x-shockwave-flash" data="flashmediaelement.swf">
+						        <param name="movie" value="flashmediaelement.swf" />
+						        <param name="flashvars" value="controls=true&file=' . $url . '" />
+						    </object>
+							</video>
+						</div>
+						<script>
+							jQuery(document).ready(function($) {
+								var Bucket = "' . $bucket . '";
+								var Key = "' . $track[0]['key'] . '";
+								var Current = -1;
+								// Setup Aspect Ratio
+								var aspects  = "' . $aspect . '";
+								var video_width = $(".video-wrap-' . $player_id . '").width();
+								var aspects = aspects.split(":");
+								var aspect = video_width/aspects[0]*aspects[1];
+								var video = document.getElementById("video-' . $player_id . '");
+								video.height = Math.round(aspect);
+								video.width = video_width;
+								$("#video-' . $player_id . '").mediaelementplayer({
+					    			poster: "' . $track[0]['poster'] . '",
+					    			success: function(mediaElement, node, player) {
+					    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
+					    				// add event listener
+								        mediaElement.addEventListener("play", function(e) {
+								            if(Current < 0){
+												addListener({
+													app_id: s3bubble_all_object.s3appid,
+													server: s3bubble_all_object.serveraddress,
+													bucket: Bucket,
+													key: Key,
+													type: "video",
+													advert: false
+												});
+												Current = 1;
+											}
+								        }, false);
+										$("video").bind("contextmenu", function(e) {
+											return false
+										});
+							     	}
+				    			});
+							});
+						</script>';
+				}
+			}
+			//close connection
+			curl_close($ch);
+       }
+
+       /*
+		* Run the media element video supports HLS streaming
+		* @author sameast
+		* @none
+		*/ 
+	   function s3bubble_hls_video_js($atts){
+	   	
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");	
+			$loggedin            = get_option("s3-loggedin");
+			$search              = get_option("s3-search");
+			$stream              = get_option("s3-stream");
+	        extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'track'      => '',
+				'aspect'     => '16:9',
+				'bucket'     => '',
+				'folder'     => '',
+				'style'      => '',
+				'cloudfront' => '',
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleHlsVideo' ) );
+            
+			//set POST variables
+			$url = $this->endpoint . 'main_plugin/single_video_hls';
+			$fields = array(
+				'AccessKey' => $s3bubble_access_key,
+			    'SecretKey' => $s3bubble_secret_key,
+			    'Timezone' => 'America/New_York',
+			    'Bucket' => $bucket,
+			    'Key' => $track,
+			    'Cloudfront' => $cloudfront
+			);
+			
+			if(!function_exists('curl_init')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
+			
+			//open connection
+			$ch = curl_init();
+			//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL, $url);
+			curl_setopt($ch,CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+		    $result = curl_exec($ch);
+			$track = json_decode($result, true);
+			//print_r($track);
+			if(!empty($track['error'])){
+				echo $track['error'];
+			}else{
+				$player_id = uniqid();
+				if(is_array($track)){
+					$source = '<source type="video/mp4" src="' . $track[0]['m3u8'] . '" />';
+					$ismobile = $this->check_user_agent('mobile');
+					if($ismobile) {
+						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
+					}
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;">
+								<video id="video-' . $player_id . '" class="video-js vjs-default-skin" controls width="640">
+								    ' . $source . '
+								</video>
+							</div>
+							<script>
+								jQuery(document).ready(function($) {
+									videojs.options.flash.swf = "https://s3.amazonaws.com/s3bubble.assets/videojs/video-js.swf";
+									var Bucket = "' . $bucket . '";
+									var Key = "' . $track[0]['key'] . '";
+									var Current = -1;
+									var video_width = $(".video-wrap-' . $player_id . '").width();
+									var aspects  = "' . $aspect . '";
+									var aspects = aspects.split(":");
+									var aspect = video_width/aspects[0]*aspects[1];
+									var video = document.getElementById("video-' . $player_id . '");
+									video.height = Math.round(aspect);
+									video.width = video_width;
+									videojs("video-' . $player_id . '", {
+										"preload" : "auto",
+										"techOrder": ["flash"],
+										"poster": "' . $track[0]['poster'] . '",
+										"autoplay": '. (($autoplay == 'true') ? "true" : "false") . '
+									}, function(){
+										this.on("play", function() { 
+								          	if(Current < 0){
+												addListener({
+													app_id: s3bubble_all_object.s3appid,
+													server: s3bubble_all_object.serveraddress,
+													bucket: Bucket,
+													key: Key,
+													type: "video",
+													advert: false
+												});
+												Current = 1;
+											}
+								        });
+									});  
+								});
+							</script>';
+				}
+			}
+			//close connection
+			curl_close($ch);
+       }
+
+       // -------------------------- RTMP SETUPS BELOW ------------------------------ //
+
+       /*
+		* Run the jplayer supports RTMP streaming
 		* @author sameast
 		* @none
 		*/ 
@@ -1602,8 +2057,7 @@ if (!class_exists("s3bubble_audio")) {
 				</script>';
 
        }
- 
-       
+
        /*
 		* Run the media element video supports RTMP streaming
 		* @author sameast
@@ -1668,7 +2122,7 @@ if (!class_exists("s3bubble_audio")) {
 					if($ismobile) {
 						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
 					}
-					return '<div class="video-wrap-' . $player_id . '" style="width:100%;position:relative;">
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;">
 								<video id="video-' . $player_id . '" style="width:100%;" controls="controls"> 
 									' . $source . '
 								</video>
@@ -1723,11 +2177,11 @@ if (!class_exists("s3bubble_audio")) {
        }
 
        /*
-		* Run the media element video supports HLS streaming
+		* Run the VIDEO JS video supports RTMP streaming
 		* @author sameast
 		* @none
 		*/ 
-	   function s3bubble_hls_video($atts){
+	   function s3bubble_rtmp_video_js($atts){
 	   	
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");	
@@ -1744,10 +2198,10 @@ if (!class_exists("s3bubble_audio")) {
 				'style'      => '',
 				'cloudfront' => '',
 				'autoplay'   => 'false',
-			), $atts, 's3bubbleHlsVideo' ) );
+			), $atts, 's3bubbleRtmpVideoJs' ) );
             
 			//set POST variables
-			$url = $this->endpoint . 'main_plugin/single_video_hls';
+			$url = $this->endpoint . 'main_plugin/single_video_rtmp';
 			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
@@ -1771,8 +2225,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-			//<source type="video/mp4" src="' . $track[0]['m4v'] . '" />
+
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
 			//print_r($track);
@@ -1781,34 +2234,36 @@ if (!class_exists("s3bubble_audio")) {
 			}else{
 				$player_id = uniqid();
 				if(is_array($track)){
-					$source = '<source type="application/x-mpegURL" src="' . $track[0]['m3u8'] . '" />';
+					$end = explode('mp4:', $track[0]['video']);
+					$source = '<source src="' . $end[0] . '&mp4:' . $end[1] . '" type="rtmp/mp4" />';
 					$ismobile = $this->check_user_agent('mobile');
 					if($ismobile) {
 						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
 					}
-					return '<div style="width:100%;position:relative;">
-						<video id="video-' . $player_id . '" style="width:100%;" controls="controls">
-						' . $source . '
-						<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
-							<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
-							<param name="flashvars" value="controls=true&amp;file=' . $track[0]['m4v'] . '" />
-						</object></video></div>
-						<script>
-							jQuery(document).ready(function($) {
-								var Bucket = "' . $bucket . '";
-								var Key = "' . $track[0]['key'] . '";
-								var Current = -1;
-								var aspects  = "' . $aspect . '";
-								var aspects = aspects.split(":");
-								var aspect = $("#video-' . $player_id . '").width()/aspects[0]*aspects[1];
-								$(".mejs-container").height(aspect);
-								$("#video-' . $player_id . '").mediaelementplayer({
-					    			poster: "' . $track[0]['poster'] . '",
-					    			success: function(mediaElement, node, player) {
-					    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
-					    				// add event listener
-								        mediaElement.addEventListener("play", function(e) {
-								            if(Current < 0){
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;position:relative;">
+								<video id="video-' . $player_id . '" class="video-js vjs-default-skin" controls width="640">
+								    ' . $source . '
+								</video>
+							</div>
+							<script>
+								jQuery(document).ready(function($) {
+									videojs.options.flash.swf = "https://s3.amazonaws.com/s3bubble.assets/videojs/video-rtmp.swf";
+									var Current = -1;
+									var video_width = $(".video-wrap-' . $player_id . '").width();
+									var aspects  = "' . $aspect . '";
+									var aspects = aspects.split(":");
+									var aspect = video_width/aspects[0]*aspects[1];
+									var video = document.getElementById("video-' . $player_id . '");
+									video.height = Math.round(aspect);
+									video.width = video_width;
+									videojs("video-' . $player_id . '", {
+										"preload" : "auto",
+										"techOrder": ["flash"],
+										"poster": "' . $track[0]['poster'] . '",
+										"autoplay": '. (($autoplay == 'true') ? "true" : "false") . '
+									}, function(){
+										this.on("play", function() { 
+								          	if(Current < 0){
 												addListener({
 													app_id: s3bubble_all_object.s3appid,
 													server: s3bubble_all_object.serveraddress,
@@ -1819,21 +2274,102 @@ if (!class_exists("s3bubble_audio")) {
 												});
 												Current = 1;
 											}
-								        }, false);
-										$("video").bind("contextmenu", function(e) {
-											return false
-										});
-							     	},
-							     	enablePluginDebug: false,
-							     	videoWidth: "100%",
-		  							videoHeight: "100%",
-		  							defaultVideoWidth: 480,  
-								    defaultVideoHeight: 270,
-							     	enableAutosize: false,
-							     	videoVolume: "horizontal"
-				    			});
-							});
-						</script>';
+								        });
+									}); 
+								});
+							</script>';
+				}
+			}
+			//close connection
+			curl_close($ch);
+       }
+
+       // ------------------------------ PROGRESSIVE PLAYERS BELOW --------------------------- //
+
+       /*
+		* Run the media element video supports VIDEO JS streaming
+		* @author sameast
+		* @none
+		*/ 
+	   function s3bubble_video_single_player_videojs($atts){
+	   	
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");	
+
+	        extract( shortcode_atts( array(
+				'playlist'   => '',
+				'height'     => '',
+				'track'      => '',
+				'aspect'     => '16:9',
+				'bucket'     => '',
+				'folder'     => '',
+				'style'      => '',
+				'cloudfront' => '',
+				'autoplay'   => 'false',
+			), $atts, 's3bubbleVideoSingleJs' ) );
+            
+			//set POST variables
+			$url = $this->endpoint . 'main_plugin/single_video_videojs';
+			$fields = array(
+				'AccessKey' => $s3bubble_access_key,
+			    'SecretKey' => $s3bubble_secret_key,
+			    'Timezone' => 'America/New_York',
+			    'Bucket' => $bucket,
+			    'Key' => $track,
+			    'Cloudfront' => $cloudfront,
+			    'Server' => $_SERVER['REMOTE_ADDR']
+			);
+			
+			if(!function_exists('curl_init')){
+    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			exit();
+    		}
+			
+			//open connection
+			$ch = curl_init();
+			//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL, $url);
+			curl_setopt($ch,CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+
+		    $result = curl_exec($ch);
+			$track = json_decode($result, true);
+
+			if(!empty($track['error'])){
+				echo $track['error'];
+			}else{
+				$player_id = uniqid();
+				if(is_array($track)){
+
+					//Setup vars
+					$video    = $track['results'][0]['m4v'];
+					$poster   = $track['results'][0]['poster'];
+
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;position:relative;">
+								<video id="video-' . $player_id . '" class="video-js vjs-default-skin" controls '. (($autoplay == 'true') ? 'autoplay' : '') . ' preload="none" width="640" 
+								      poster="' . $poster . '"
+								      data-setup="{}">
+								    <source type="video/mp4" src="' . $video . '" />
+								</video>
+							</div>
+							<script>
+								jQuery(document).ready(function($) {
+									var Current = -1;
+									var video_width = $(".video-wrap-' . $player_id . '").width();
+									var aspects  = "' . $aspect . '";
+									var aspects = aspects.split(":");
+									var aspect = video_width/aspects[0]*aspects[1];
+									var video = document.getElementById("video-' . $player_id . '");
+									video.height = Math.round(aspect);
+									video.width = video_width;
+									$("video").bind("contextmenu", function(e) {
+										return false
+									});
+								});
+							</script>';
 				}
 			}
 			//close connection
@@ -1849,9 +2385,7 @@ if (!class_exists("s3bubble_audio")) {
 	   	
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");	
-			$loggedin            = get_option("s3-loggedin");
-			$search              = get_option("s3-search");
-			$stream              = get_option("s3-stream");
+
 	        extract( shortcode_atts( array(
 				'playlist'   => '',
 				'height'     => '',
@@ -1872,7 +2406,8 @@ if (!class_exists("s3bubble_audio")) {
 			    'Timezone' => 'America/New_York',
 			    'Bucket' => $bucket,
 			    'Key' => $track,
-			    'Cloudfront' => $cloudfront
+			    'Cloudfront' => $cloudfront,
+			    'Server' => $_SERVER['REMOTE_ADDR']
 			);
 			
 			if(!function_exists('curl_init')){
@@ -1896,26 +2431,32 @@ if (!class_exists("s3bubble_audio")) {
 			if(!empty($track['error'])){
 				echo $track['error'];
 			}else{
+				
+				// Setup vars
 				$player_id = uniqid();
+				$video     = $track[0]['m4v'];
+				$key       = $track[0]['key'];
+				$poster    = $track[0]['poster'];
+				
 				if(is_array($track)){
 					return '<div style="width:100%;position:relative;">
 					<video id="video-' . $player_id . '" controls="controls" style="width:100%;">
-						<source type="video/mp4" src="' . $track[0]['m4v'] . '" />
+						<source type="video/mp4" src="' . $video . '" />
 						<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
 							<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
-							<param name="flashvars" value="controls=true&amp;file=' . $track[0]['m4v'] . '" />
+							<param name="flashvars" value="controls=true&amp;file=' . $video . '" />
 						</object></video></div>
 						<script>
 							jQuery(document).ready(function($) {
 								var Bucket = "' . $bucket . '";
-								var Key = "' . $track[0]['key'] . '";
+								var Key = "' . $key . '";
 								var Current = -1;
 								var aspects  = "' . $aspect . '";
 								var aspects = aspects.split(":");
 								var aspect = $("#video-' . $player_id . '").width()/aspects[0]*aspects[1];
 								$(".mejs-container").height(aspect);
 								$("#video-' . $player_id . '").mediaelementplayer({
-					    			poster: "' . $track[0]['poster'] . '",
+					    			poster: "' . $poster . '",
 					    			success: function(mediaElement, node, player) {
 					    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
 					    				// add event listener
@@ -2392,6 +2933,7 @@ if (!class_exists("s3bubble_audio")) {
 			 $s3bubble_secret_key = get_option("s3-s3audible_email");		
 			 $loggedin            = get_option("s3-loggedin");
 			 $search              = get_option("s3-search");
+
 			 extract( shortcode_atts( array(
 				'style'      => '',
 				'bucket'     => '',
@@ -2507,7 +3049,9 @@ if (!class_exists("s3bubble_audio")) {
 							"action": "s3bubble_audio_single_internal_ajax",
 							"Timezone":"America/New_York",
 						    "Bucket" : "' . $bucket. '",
-						    "Key" : "' . $track. '"
+						    "Key" : "' . $track . '",
+						    "Cloudfront" : "' . $cloudfront . '",
+						    "Server" : s3bubble_all_object.serveraddress
 						}
 						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 							if(response.error !== undefined){
@@ -3174,7 +3718,8 @@ if (!class_exists("s3bubble_audio")) {
 								"Timezone":"America/New_York",
 							    "Bucket" : "' . $bucket. '",
 							    "Key" : "' . $track. '",
-							    "Cloudfront" : "' . $cloudfront .'"
+							    "Cloudfront" : "' . $cloudfront .'",
+							    "Server" : s3bubble_all_object.serveraddress
 							}
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 								if(response.error){

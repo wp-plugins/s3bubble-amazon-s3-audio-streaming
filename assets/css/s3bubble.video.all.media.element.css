@@ -38,3 +38,10 @@
 .mejs-controls .mejs-button button:focus {
   outline: none !important;
 }
+.s3bubble-live-media-element {
+   color: white;
+   padding: 4px;
+   margin: 2px;
+   line-height: 30px;
+   font-size: 12px;
+}

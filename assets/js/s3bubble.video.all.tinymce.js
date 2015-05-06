@@ -5,6 +5,18 @@
             /*
              * S3bubble audio playlist
              */
+            ed.addButton('s3bubble_live_stream_shortcode', {
+                title : 'Generate S3Bubble Live Steam Shortcode',
+                cmd : 's3bubble_live_stream_shortcode',
+                image : url + '/s3bubbletiny_live_stream.png'
+            });
+            ed.addCommand('s3bubble_live_stream_shortcode', function() {
+                tb_show('Generate S3Bubble Live Stream', 'admin-ajax.php?action=s3bubble_live_stream_ajax');
+            });
+
+            /*
+             * S3bubble audio playlist
+             */
             ed.addButton('s3bubble_audio_playlist_shortcode', {
                 title : 'Generate S3Bubble Audio Playlist Shortcode',
                 cmd : 's3bubble_audio_playlist_shortcode',

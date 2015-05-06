@@ -34,11 +34,11 @@
 	border-radius: 5px !important
 }
 .s3bubble-video-form-alerts, .s3bubble-video-main-form-alerts {
+	width: 100%;
 	background: #61B3E4;
     height: auto;
     text-align: center;
     color: #fff;
-    padding: 10px;
     display: block;
     float: left;
     margin: 0;
