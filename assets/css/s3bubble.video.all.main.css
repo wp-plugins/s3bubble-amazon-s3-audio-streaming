@@ -86,15 +86,19 @@
     position: absolute;
     width: 116px;
     height: 70px;
-    top: 50%;
-    left: 50%;
+    top: 20px;
+    left: 20px;
     z-index: 9;
-    margin-left: -58px;
-    margin-top: -35px;
     text-align: center;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px
+    -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -khtml-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -o-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -webkit-border-radius: 3px;
+   -khtml-border-radius: 3px;
+   -moz-border-radius: 3px;
+   -o-border-radius: 3px;
 }
 .s3bubble-media-main-video-play .s3icon-play {
   font-size: 35px;
@@ -112,6 +116,10 @@
     text-align: center;
 }
 .s3bubble-media-main-video-loading .s3icon-refresh {
+  font-size: 35px;
+  line-height: 70px;
+}
+.s3bubble-media-main-video-loading .s3icon-circle-o-notch {
   font-size: 35px;
   line-height: 70px;
 }
@@ -146,8 +154,17 @@
     position: absolute;
     width: 100%;
     height: 35px;
-    background: #6F6F6E;
-    bottom: 0
+    bottom: 0;
+    background-color: #222222;
+    -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -khtml-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -o-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -webkit-border-radius: 3px;
+   -khtml-border-radius: 3px;
+   -moz-border-radius: 3px;
+   -o-border-radius: 3px;
 }
 .s3bubble-media-main-interface > * a:focus {
     outline: 0;
@@ -155,7 +172,9 @@
 }
 .s3bubble-media-main-interface-audio-playlist {
     position: relative;
-    top: 0
+    top: 0;
+    height: 35px;
+    float: left;
 }
 div.s3bubble-media-main-controls-holder {
     clear: both;
@@ -180,30 +199,28 @@ a.s3bubble-media-main-pause {
 }
 .s3bubble-media-main-progress {
     background: #706d6d;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .4);
-    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .4);
-    box-shadow: inset 0 1px 4px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .4);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
     width: 280px;
     height: 10px;
     float: left;
     margin-top: 12px;
+    overflow: hidden;
 }
 .s3bubble-media-main-seek-bar {
     width: 0;
     height: 100%;
     cursor: pointer;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
 }
 .s3bubble-media-main-seeking-bg {
     background: #575555;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
 }
 .s3bubble-media-main-play-bar {
     background: #000;
@@ -211,9 +228,9 @@ a.s3bubble-media-main-pause {
     height: 10px;
     position: relative;
     z-index: 1001;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
 }
 .ui-slider .ui-slider-handle {
     background: black;
@@ -228,9 +245,9 @@ a.s3bubble-media-main-pause {
 }
 .s3bubble-media-main-play-bar span {
     position: absolute;
-    top: -1px;
-    right: -6px;
-    background: url(../images/handle.png)center no-repeat;
+    top: -2px;
+    right: 0px;
+    background: url(../images/volume.png)center no-repeat;
     width: 12px;
     height: 13px;
     outline: 0;
@@ -293,21 +310,18 @@ a.s3bubble-media-main-pause {
     height: 10px;
     cursor: pointer;
     background: #706d6d;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .4);
-    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .4);
-    box-shadow: inset 0 1px 4px rgba(0, 0, 0, .4), 0 1px 0 rgba(255, 255, 255, .4)
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
 }
 .s3bubble-media-main-volume-bar-value {
     background: #000;
     width: 0;
     height: 10px;
     position: relative;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
 }
 .s3bubble-media-main-volume-bar-value span {
     background: url(../images/volume.png) no-repeat center;

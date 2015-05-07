@@ -2,16 +2,36 @@
     height: 100%;
 }
 .mejs-controls {
-    background: #222;
+    background-color: #222222;
+   -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -khtml-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -o-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -webkit-border-radius: 3px;
+   -khtml-border-radius: 3px;
+   -moz-border-radius: 3px;
+   -o-border-radius: 3px;
 }
 .mejs-overlay-button {
 	background: #222 url(../images/play48.png)center no-repeat;
     height: 70px;
     width: 116px;
     border-radius: 5px;
-    margin-left: -58px;
-    margin-top: -35px !important;
+    margin: 0px !important;
+    top: 20px !important;
+    left: 20px !important;
+    -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -khtml-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -o-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -webkit-border-radius: 3px;
+   -khtml-border-radius: 3px;
+   -moz-border-radius: 3px;
+   -o-border-radius: 3px;
 }
+.mejs-overlay-button
 .mejs-controls a.mejs-horizontal-volume-slider {
     text-decoration: none !important;
     border: none !important;

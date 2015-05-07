@@ -212,7 +212,6 @@ if (!class_exists("s3bubble_audio")) {
 
 		}
 
-
 		/*
 		* Sets up a admin alert notice
 		* @author sameast
@@ -299,8 +298,9 @@ if (!class_exists("s3bubble_audio")) {
 			wp_enqueue_style('wp-mediaelement');
 			wp_register_style('s3bubble.video.all.media.element.min', plugins_url('assets/css/s3bubble.video.all.media.element.min.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble.video.all.media.element.min');
+			
 			// Video js
-			wp_register_style('s3bubble.video.js.css.include', ('//vjs.zencdn.net/4.12/video-js.css'), array(), $this->version  );
+			wp_register_style('s3bubble.video.js.css.include', plugins_url('assets/videojs/video-js.min.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble.video.js.css.include');
 
 			echo '<style type="text/css">
@@ -309,6 +309,7 @@ if (!class_exists("s3bubble_audio")) {
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;text-decoration: none !important;}
+					.s3bubble-media-main-playlist-current {color: '.stripcslashes($seek).' !important;}
 					.mejs-controls {background-color: '.stripcslashes($background).' !important;}
 					.mejs-overlay-button {background: '.stripcslashes($background).' url(' . plugins_url('assets/images/play48.png', __FILE__) . ')center no-repeat !important;}
 					.mejs-time-current, .mejs-horizontal-volume-current {background-color: '.stripcslashes($seek).' !important;}
@@ -408,7 +409,7 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
 			//set POST variables
-			$url = $this->endpoint . 'main_plugin/single_video_object_test';
+			$url = $this->endpoint . 'main_plugin/single_video_object';
 			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
@@ -1019,7 +1020,7 @@ if (!class_exists("s3bubble_audio")) {
 						<label for="fname">Player Selection: (Only the default player supports adverts)</label>
 					</span> 
 					<span>
-						<input type="checkbox" name="s3videojs" id="s3videojs" value="true">Use Video JS <i>(Changes the player from default to video js player - best option for HLS streaming)</i><br />
+						<!--<input type="checkbox" name="s3videojs" id="s3videojs" value="true">Use Video JS <i>(Changes the player from default to video js player - best option for HLS streaming)</i><br />-->
 						<input type="checkbox" name="mediaelement" id="s3mediaelement" value="true">Use Media Elements JS <i>(Changes the player from default to media element js player)</i>
 					</span>
 	                <blockquote class="bs-callout-s3bubble"><strong>Extra options:</strong> please just select any extra options from the list below, and S3Bubble will automatically add it to the shortcode.</blockquote>
@@ -1572,8 +1573,9 @@ if (!class_exists("s3bubble_audio")) {
 									videoHeight: "100%",
 									enableAutosize: true,
 									plugins: ["flash"],
+									features: ["playpause","volume","fullscreen"],
 									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
-									flashName: "flashmediaelement.swf",
+									flashName: "flashmediaelement-live.swf",
 					    			success: function(mediaElement, node, player) {
 					    				$(".mejs-time-rail, .mejs-time").hide();
 					    				$(".mejs-fullscreen-button").css("float","right");
@@ -1663,10 +1665,6 @@ if (!class_exists("s3bubble_audio")) {
 					return '<div class="video-wrap-' . $player_id . '">
 							<video id="video-' . $player_id . '" width="320" height="240" controls="controls" preload="none">
 							' . $source . '
-							 <object width="320" height="240" type="application/x-shockwave-flash" data="flashmediaelement.swf">
-						        <param name="movie" value="flashmediaelement.swf" />
-						        <param name="flashvars" value="controls=true&file=' . $url . '" />
-						    </object>
 							</video>
 						</div>
 						<script>
@@ -1684,6 +1682,12 @@ if (!class_exists("s3bubble_audio")) {
 								video.width = video_width;
 								$("#video-' . $player_id . '").mediaelementplayer({
 					    			poster: "' . $track[0]['poster'] . '",
+					    			videoVolume: "horizontal",
+									enableAutosize: true,
+									features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+									plugins: ["flash"],
+									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
+									flashName: "flashmediaelement.swf",
 					    			success: function(mediaElement, node, player) {
 					    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
 					    				// add event listener
@@ -1855,7 +1859,7 @@ if (!class_exists("s3bubble_audio")) {
 						<img id="s3bubble-media-main-skip-tumbnail" src=""/>
 					</div>
 				    <div class="s3bubble-media-main-video-loading">
-				    	<i class="s3icon s3icon-refresh s3icon-spin"></i>
+				    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 				    </div>
 				    <div class="s3bubble-media-main-video-play">
 						<i class="s3icon s3icon-play"></i>
@@ -1867,13 +1871,13 @@ if (!class_exists("s3bubble_audio")) {
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 								<div class="s3bubble-media-main-progress">
 								    <div class="s3bubble-media-main-seek-bar">
-								        <div class="s3bubble-media-main-play-bar"><span></span></div>
+								        <div class="s3bubble-media-main-play-bar"></div>
 								    </div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 								<div class="s3bubble-media-main-volume-bar">
-								    <div class="s3bubble-media-main-volume-bar-value"><span class="handle"></span></div>
+								    <div class="s3bubble-media-main-volume-bar-value"></div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -1950,6 +1954,9 @@ if (!class_exists("s3bubble_audio")) {
 								}else{
 									$("#s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
 									s3bubbleRtmpPlaylist.setPlaylist(response.results);
+									setTimeout(function(){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
+									},2000);
 								}
 							},"json");
 							// Remove right click
@@ -1967,7 +1974,7 @@ if (!class_exists("s3bubble_audio")) {
 							});
 						},
 						loadedmetadata: function (event) {
-
+							
 					    },
 					    resize: function (event) {
 					    	$(".s3bubble-media-main-progress").fadeOut();
@@ -2132,14 +2139,23 @@ if (!class_exists("s3bubble_audio")) {
 									var Bucket = "' . $bucket . '";
 									var Key = "' . $track[0]['key'] . '";
 									var Current = -1;
+									var video_width = $(".video-wrap-' . $player_id . '").width();
 									var aspects  = "' . $aspect . '";
 									var aspects = aspects.split(":");
-									var aspect = $(".video-wrap-' . $player_id . '").width()/aspects[0]*aspects[1];
-									//$(".mejs-container").height(aspect);
+									var aspect = video_width/aspects[0]*aspects[1];
+									var video = document.getElementById("video-' . $player_id . '");
+									video.height = Math.round(aspect);
+									video.width = video_width;
+
 									$("#video-' . $player_id . '").mediaelementplayer({
 										flashStreamer:"' . $track[0]['video'] . '",
 										plugins: ["flash", "silverlight"],
 						    			poster: "' . $track[0]['poster'] . '",
+						    			videoVolume: "horizontal",
+										enableAutosize: true,
+										features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+										pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
+										flashName: "flashmediaelement.swf",
 						    			success: function(mediaElement, node, player) {
 						    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
 						    				// add event listener
@@ -2159,14 +2175,7 @@ if (!class_exists("s3bubble_audio")) {
 											$("video").bind("contextmenu", function(e) {
 												return false
 											});
-								     	},
-								     	enablePluginDebug: false,
-								     	videoWidth: "100%",
-			  							videoHeight: "100%",
-			  							defaultVideoWidth: 480,  
-									    defaultVideoHeight: 270,
-								     	enableAutosize: true,
-								     	videoVolume: "horizontal"
+								     	}
 					    			});
 								});
 							</script>';
@@ -2440,12 +2449,10 @@ if (!class_exists("s3bubble_audio")) {
 				
 				if(is_array($track)){
 					return '<div style="width:100%;position:relative;">
-					<video id="video-' . $player_id . '" controls="controls" style="width:100%;">
-						<source type="video/mp4" src="' . $video . '" />
-						<object style="width: 100%; height: 100%; z-index: 4001;" type="application/x-shockwave-flash" data="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '">
-							<param name="movie" value="' . plugins_url('assets/mediaelementjs/build/flashmediaelement.swf',__FILE__ ) . '" />
-							<param name="flashvars" value="controls=true&amp;file=' . $video . '" />
-						</object></video></div>
+								<video id="video-' . $player_id . '" controls="controls" style="width:100%;">
+									<source type="video/mp4" src="' . $video . '" />
+								</video>
+							</div>
 						<script>
 							jQuery(document).ready(function($) {
 								var Bucket = "' . $bucket . '";
@@ -2457,6 +2464,12 @@ if (!class_exists("s3bubble_audio")) {
 								$(".mejs-container").height(aspect);
 								$("#video-' . $player_id . '").mediaelementplayer({
 					    			poster: "' . $poster . '",
+					    			videoVolume: "horizontal",
+					    			enableAutosize: true,
+					    			features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+					    			plugins: ["flash"],
+									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
+									flashName: "flashmediaelement.swf",
 					    			success: function(mediaElement, node, player) {
 					    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
 					    				// add event listener
@@ -2476,14 +2489,7 @@ if (!class_exists("s3bubble_audio")) {
 										$("video").bind("contextmenu", function(e) {
 											return false
 										});
-							     	},
-							     	enablePluginDebug: false,
-							     	videoWidth: "100%",
-		  							videoHeight: "100%",
-		  							defaultVideoWidth: 480,  
-								    defaultVideoHeight: 270,
-							     	enableAutosize: true,
-							     	videoVolume: "horizontal"
+							     	}
 				    			});
 							});
 						</script>';
@@ -2557,6 +2563,11 @@ if (!class_exists("s3bubble_audio")) {
 										var Key = "' . $track[0]['key'] . '";
 										var Current = -1;
 										$("#audio-' . $player_id . '").mediaelementplayer({
+											videoVolume: "horizontal",
+							    			features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+							    			plugins: ["flash"],
+											pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
+											flashName: "flashmediaelement.swf",
 							    			success: function(mediaElement, node, player) {
 							    				'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
 							    				// add event listener
@@ -2573,9 +2584,7 @@ if (!class_exists("s3bubble_audio")) {
 														Current = 1;
 													}
 										        }, false);
-									     	},
-									     	enablePluginDebug: false,
-									     	videoVolume: "horizontal"
+									     	}
 						    			});
 									});
 								</script>';
@@ -2642,13 +2651,13 @@ if (!class_exists("s3bubble_audio")) {
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
-								        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
+								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
 								<div class="s3bubble-media-main-volume-bar" dir="auto">
-								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
+								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -2820,7 +2829,7 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						keyBindings: {
 					        play: {
-					            key: 32, // p
+					            key: 32,
 					            fn: function(f) {
 					                if (f.status.paused) {
 					                    f.play();
@@ -2830,55 +2839,55 @@ if (!class_exists("s3bubble_audio")) {
 					            }
 					        },
 					        muted: {
-					            key: 77, // m
+					            key: 77,
 					            fn: function(f) {
 					                f._muted(!f.options.muted);
 					            }
 					        },
 					        volumeUp: {
-					            key: 190, // .
+					            key: 190,
 					            fn: function(f) {
 					                f.volume(f.options.volume + 0.1);
 					            }
 					        },
 					        volumeDown: {
-					            key: 188, // ,
+					            key: 188,
 					            fn: function(f) {
 					                f.volume(f.options.volume - 0.1);
 					            }
 					        },
 					        loop: {
-					            key: 76, // l
+					            key: 76,
 					            fn: function(f) {
 					                f._loop(!f.options.loop);
 					            }
 					        },
 					        goForwardFive: {
-					            key: 72, //  h
+					            key: 72,
 					            fn: function(f) {
 					                f.playHead(f.status.currentPercentAbsolute + 5);
 					            }
 					        },
 					        goBackFive: {
-					            key: 66, //  h
+					            key: 66,
 					            fn: function(f) {
 					                f.playHead(f.status.currentPercentAbsolute - 5);
 					            }
 					        },
 					        loopOn: {
-					            key: 49, //  f1
+					            key: 49,
 					            fn: function(f) {
 					                f.options.lon = f.status.currentPercentAbsolute;
 					            }
 					        },
 					        loopOff: {
-					            key: 50, //  f2
+					            key: 50,
 					            fn: function(f) {
 					                f.options.loff = f.status.currentPercentAbsolute;
 					            }
 					        },
 					        loopfinish: {
-					            key: 51, //  f3
+					            key: 51,
 					            fn: function(f) {
 					            	if (f.options.lfinish) {
 					                    f.options.lfinish = false;
@@ -2888,25 +2897,25 @@ if (!class_exists("s3bubble_audio")) {
 					            }
 					        },
 					        speedUp: {
-					            key: 83, //  s
+					            key: 83,
 					            fn: function(f) {
 					                f.playbackRate(f.status.playbackRate + 0.1);
 					            }
 					        },
 					        slowDown: {
-					            key: 65, //  a
+					            key: 65,
 					            fn: function(f) {
 					                f.playbackRate(f.status.playbackRate - 0.1);
 					            }
 					        },
 					        normalSpeed: {
-					            key: 68, //  d
+					            key: 68,
 					            fn: function(f) {
 					                f.playbackRate(1);
 					            }
 					        }
 					    },
-		                swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+		                swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
 		                preload: "'.$preload.'",
 	                    supplied: "mp3,m4a",
 		                wmode: "window",
@@ -2954,7 +2963,6 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3audibleSingle' ) );
 			
 			// Check download
-			// Check download
 			if($loggedin == 'true'){
 				if ( is_user_logged_in() ) {
 					$download = 1;
@@ -2973,11 +2981,11 @@ if (!class_exists("s3bubble_audio")) {
 							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 							<div class="s3bubble-media-main-progress" dir="auto">
 							    <div class="s3bubble-media-main-seek-bar" dir="auto">
-							        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
+							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 							    </div>
 							</div>
 							<div class="s3bubble-media-main-volume-bar" dir="auto">
-							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
+							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
 							</div>
 							<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -3112,7 +3120,7 @@ if (!class_exists("s3bubble_audio")) {
 					},
 					keyBindings: {
 				        play: {
-				            key: 32, // space
+				            key: 32,
 				            fn: function(f) {
 				                if (f.status.paused) {
 				                    f.play();
@@ -3122,57 +3130,57 @@ if (!class_exists("s3bubble_audio")) {
 				            }
 				        },
 				        muted: { 
-				            key: 77, // m
+				            key: 77,
 				            fn: function(f) {
 				                f._muted(!f.options.muted);
 				            }
 				        },
 				        volumeUp: {
-				            key: 190, // .
+				            key: 190,
 				            fn: function(f) {
 				                f.volume(f.options.volume + 0.1);
 								$(".single-audio-volume-' . $player_id .  '").val(f.options.volume + 0.1);
 				            }
 				        },
 				        volumeDown: {
-				            key: 188, // ,
+				            key: 188,
 				            fn: function(f) {
 				                f.volume(f.options.volume - 0.1);
 								$(".single-audio-volume-' . $player_id .  '").val(f.options.volume - 0.1);
 				            }
 				        },
 				        loop: {
-				            key: 76, // l
+				            key: 76,
 				            fn: function(f) {
 				                f._loop(!f.options.loop);
 				            }
 				        },
 				        goForwardFive: {
-				            key: 72, //  h
+				            key: 72,
 				            fn: function(f) {
 				                f.playHead(f.status.currentPercentAbsolute + 5);
 				            }
 				        },
 				        goBackFive: {
-				            key: 66, //  h
+				            key: 66,
 				            fn: function(f) {
 				                f.playHead(f.status.currentPercentAbsolute - 5);
 				            }
 				        },
 				        loopOn: {
-				            key: 49, //  f1
+				            key: 49,
 				            fn: function(f) {
 				                f.options.lon = f.status.currentPercentAbsolute;
 				            }
 				        },
 				        loopOff: {
-				            key: 50, //  f2
+				            key: 50,
 				            fn: function(f) {
 				                f.options.loff = f.status.currentPercentAbsolute;
 				            }
 				        },
 				        loopfinish: {
-				            key: 51, //  f3
+				            key: 51,
 				            fn: function(f) {
 				            	if (f.options.lfinish) {
 				                    f.options.lfinish = false;
@@ -3182,25 +3190,25 @@ if (!class_exists("s3bubble_audio")) {
 				            }
 				        },
 				        speedUp: {
-				            key: 83, //  s
+				            key: 83,
 				            fn: function(f) {
 				                f.playbackRate(f.status.playbackRate + 0.1);
 				            }
 				        },
 				        slowDown: {
-				            key: 65, //  a
+				            key: 65,
 				            fn: function(f) {
 				                f.playbackRate(f.status.playbackRate - 0.1);
 				            }
 				        },
 				        normalSpeed: {
-				            key: 68, //  d
+				            key: 68,
 				            fn: function(f) {
 				                f.playbackRate(1);
 				            }
 				        }
 				    },
-	                swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+	                swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
                     supplied: "mp3,m4a,wav",
 	                wmode: "window",
 	                preload: "metadata",
@@ -3279,7 +3287,7 @@ if (!class_exists("s3bubble_audio")) {
 						<input type="text" id="s3bubble-video-playlist-tsearch-' . $player_id .  '" class="s3bubble-video-playlist-tsearch" name="s3bubble-video-playlist-tsearch" placeholder="Search">
 					</div>
 				    <div class="s3bubble-media-main-video-loading">
-				    	<i class="s3icon s3icon-refresh s3icon-spin"></i>
+				    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 				    </div>
 				    <div class="s3bubble-media-main-video-play">
 						<i class="s3icon s3icon-play"></i>
@@ -3291,7 +3299,7 @@ if (!class_exists("s3bubble_audio")) {
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
-								        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
+								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
@@ -3299,7 +3307,7 @@ if (!class_exists("s3bubble_audio")) {
 								<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
 								<div class="s3bubble-media-main-volume-bar" dir="auto">
-								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
+								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
 								</div>
 								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -3413,6 +3421,7 @@ if (!class_exists("s3bubble_audio")) {
 											"overflow-y" : "scroll"
 										});
 									}
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
 								},2000);
 							}
 						},"json");
@@ -3508,7 +3517,7 @@ if (!class_exists("s3bubble_audio")) {
 					},
 					keyBindings: {
 					  play: {
-					    key: 32, // space
+					    key: 32,
 					    fn: function(f) {
 					      if(f.status.paused) {
 					        f.play();
@@ -3518,7 +3527,7 @@ if (!class_exists("s3bubble_audio")) {
 					    }
 					  },
 					  fullScreen: {
-					    key: 70, // f
+					    key: 70,
 					    fn: function(f) {
 					      if(f.status.video || f.options.audioFullScreen) {
 					        f._setOption("fullScreen", !f.options.fullScreen);
@@ -3526,31 +3535,31 @@ if (!class_exists("s3bubble_audio")) {
 					    }
 					  },
 					  muted: {
-					    key: 77, // m
+					    key: 77,
 					    fn: function(f) {
 					      f._muted(!f.options.muted);
 					    }
 					  },
 					  volumeUp: {
-					    key: 190, // .
+					    key: 190,
 					    fn: function(f) {
 					      f.volume(f.options.volume + 0.1);
 					    }
 					  },
 					  volumeDown: {
-					    key: 188, // ,
+					    key: 188,
 					    fn: function(f) {
 					      f.volume(f.options.volume - 0.1);
 					    }
 					  },
 					  loop: {
-					    key: 76, // l
+					    key: 76,
 					    fn: function(f) {
 					      f._loop(!f.options.loop);
 					    }
 					  }
 					},
-					swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+					swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
                     supplied: "m4v",
 	                wmode: "window",
 	                preload: "metadata",
@@ -3628,7 +3637,7 @@ if (!class_exists("s3bubble_audio")) {
 					<img id="s3bubble-media-main-skip-tumbnail" src=""/>
 				</div>
 			    <div class="s3bubble-media-main-video-loading">
-			    	<i class="s3icon s3icon-refresh s3icon-spin"></i>
+			    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 			    </div>
 			    <div class="s3bubble-media-main-video-play">
 					<i class="s3icon s3icon-play"></i>
@@ -3640,13 +3649,13 @@ if (!class_exists("s3bubble_audio")) {
 							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 							<div class="s3bubble-media-main-progress" dir="auto">
 							    <div class="s3bubble-media-main-seek-bar" dir="auto">
-							        <div class="s3bubble-media-main-play-bar" dir="auto"><span></span></div>
+							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 							    </div>
 							</div>
 							<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 							<div class="s3bubble-media-main-volume-bar" dir="auto">
-							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"><span class="handle"></span></div>
+							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
 							</div>
 							<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
@@ -3737,8 +3746,10 @@ if (!class_exists("s3bubble_audio")) {
 										}, 50, function() {
 										    videoSingleS3Bubble.next();
 										});
-										
 									});
+									setTimeout(function(){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
+									},2000);
 								}
 							},"json");
 						},
@@ -3835,7 +3846,7 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						keyBindings: {
 						  play: {
-						    key: 32, // space
+						    key: 32,
 						    fn: function(f) {
 						      if(f.status.paused) {
 						        f.play();
@@ -3845,7 +3856,7 @@ if (!class_exists("s3bubble_audio")) {
 						    }
 						  },
 						  fullScreen: {
-						    key: 70, // f
+						    key: 70,
 						    fn: function(f) {
 						      if(f.status.video || f.options.audioFullScreen) {
 						        f._setOption("fullScreen", !f.options.fullScreen);
@@ -3853,31 +3864,31 @@ if (!class_exists("s3bubble_audio")) {
 						    }
 						  },
 						  muted: {
-						    key: 77, // m
+						    key: 77,
 						    fn: function(f) {
 						      f._muted(!f.options.muted);
 						    }
 						  },
 						  volumeUp: {
-						    key: 190, // .
+						    key: 190,
 						    fn: function(f) {
 						      f.volume(f.options.volume + 0.1);
 						    }
 						  },
 						  volumeDown: {
-						    key: 188, // ,
+						    key: 188,
 						    fn: function(f) {
 						      f.volume(f.options.volume - 0.1);
 						    }
 						  },
 						  loop: {
-						    key: 76, // l
+						    key: 76, 
 						    fn: function(f) {
 						      f._loop(!f.options.loop);
 						    }
 						  }
 						},
-						swfPath: "https://s3.amazonaws.com/s3bubble.davec/jquery.jplayer.swf",
+						swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
 	                    supplied: "m4v",
 		                wmode: "window",
 		                preload: "metadata",
