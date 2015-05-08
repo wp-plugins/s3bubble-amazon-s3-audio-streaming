@@ -1491,10 +1491,13 @@ if (!class_exists("s3bubble_audio")) {
 
 	        extract( shortcode_atts( array(
 				'aspect'     => '16:9',
-				'stream'      => '',
-				'cloudfront' => '',
 				'autoplay'   => 'false',
+				'stream'      => '',
+				'cloudfront' => ''
 			), $atts, 's3bubbleLiveStream' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			
 			$player_id = uniqid();
 
@@ -1541,10 +1544,13 @@ if (!class_exists("s3bubble_audio")) {
 
 	        extract( shortcode_atts( array(
 				'aspect'     => '16:9',
-				'stream'      => '',
-				'cloudfront' => '',
 				'autoplay'   => 'false',
+				'stream'      => '',
+				'cloudfront' => ''
 			), $atts, 's3bubbleLiveStream' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			
 			$player_id = uniqid();
 
@@ -1610,16 +1616,19 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");	
 
 	        extract( shortcode_atts( array(
+	        	'aspect'     => '16:9',
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
-				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleHlsVideo' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_hls';
@@ -1729,17 +1738,21 @@ if (!class_exists("s3bubble_audio")) {
 			$loggedin            = get_option("s3-loggedin");
 			$search              = get_option("s3-search");
 			$stream              = get_option("s3-stream");
+
 	        extract( shortcode_atts( array(
+	        	'aspect'     => '16:9',
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
-				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleHlsVideo' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_hls';
@@ -1839,19 +1852,23 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");	
 			
         	extract( shortcode_atts( array(
-				'bucket'     => '',
-				'track'        => '',
-				'time'       => '',
-				'skip'       => 'false',
+        		'skip'       => 'false',
 				'autoplay'   => 'false',
 				'aspect'     => '16:9',
+				'bucket'     => '',
+				'track'      => '',
+				'time'       => '',
 				'cloudfront' => '',
 				'advert'     => ''
 			), $atts, 's3bubbleRtmpVideoDefault' ) );
 
-           $player_id = uniqid();
+        	$skip     = ((empty($skip)) ? 'false' : $skip);
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 
-           return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-video">
+            $player_id = uniqid();
+
+            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-video">
 				    <div id="jquery_jplayer_RTMP_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
 				    <div class="s3bubble-media-main-video-skip">
 						<h2>Skip Ad</h2>
@@ -2078,16 +2095,19 @@ if (!class_exists("s3bubble_audio")) {
 			$search              = get_option("s3-search");
 			$stream              = get_option("s3-stream");
 	        extract( shortcode_atts( array(
+	        	'aspect'     => '16:9',
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
-				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleRtmpVideo' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_rtmp';
@@ -2198,16 +2218,19 @@ if (!class_exists("s3bubble_audio")) {
 			$search              = get_option("s3-search");
 			$stream              = get_option("s3-stream");
 	        extract( shortcode_atts( array(
+	        	'aspect'     => '16:9',
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
-				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleRtmpVideoJs' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_rtmp';
@@ -2306,16 +2329,19 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");	
 
 	        extract( shortcode_atts( array(
+	        	'aspect'     => '16:9',
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
-				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleVideoSingleJs' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_videojs';
@@ -2396,16 +2422,19 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");	
 
 	        extract( shortcode_atts( array(
+	        	'aspect'     => '16:9',
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
-				'aspect'     => '16:9',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleMediaElementVideo' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_media_element';
@@ -2512,15 +2541,17 @@ if (!class_exists("s3bubble_audio")) {
 			$search              = get_option("s3-search");
 			$stream              = get_option("s3-stream");
 	        extract( shortcode_atts( array(
+	        	'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
 				'bucket'     => '',
 				'folder'     => '',
 				'style'      => '',
-				'cloudfront' => '',
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleMediaElementAudio' ) );
+
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 
 			$url = $this->endpoint . 'main_plugin/single_audio_media_element';
 			$fields = http_build_query(array(
@@ -2608,28 +2639,33 @@ if (!class_exists("s3bubble_audio")) {
 			$search              = get_option("s3-search");
 	        extract( shortcode_atts( array(
 				'playlist'   => 'show',
+				'order'      => 'asc',
+				'download'   => 'false',
+				'search'     => $search,
+				'autoplay'   => 'false',
+				'preload'   => 'auto',
 				'height'     => '',
 				'bucket'     => '',
 				'folder'     => '',
-				'order'      => 'asc',
-				'download'   => false,
-				'search'     => $search,
-				'cloudfront' => '',
-				'autoplay'   => 'false',
-				'preload'   => 'auto',
+				'cloudfront' => ''
 			), $atts, 's3bubbleAudio' ) );
 			extract( shortcode_atts( array(
 				'playlist'   => 'show',
+				'order'      => 'asc',
+				'download'   => 'false',
+				'search'     => $search,
+				'autoplay'   => 'false',
+				'preload'   => 'auto',
 				'height'     => '',
 				'bucket'     => '',
 				'folder'     => '',
-				'order'      => 'asc',
-				'download'   => false,
-				'search'     => $search,
-				'cloudfront' => '',
-				'autoplay'   => 'false',
-				'preload'   => 'auto',
+				'cloudfront' => ''
 			), $atts, 's3audible' ) );
+
+			$playlist = ((empty($playlist)) ? 'show' : $playlist);
+			$download = ((empty($download)) ? 'false' : $download);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
+			$preload  = ((empty($preload)) ? 'auto' : $preload);
 			
 			// Check download
 			if($loggedin == 'true'){
@@ -2944,23 +2980,28 @@ if (!class_exists("s3bubble_audio")) {
 			 $search              = get_option("s3-search");
 
 			 extract( shortcode_atts( array(
-				'style'      => '',
-				'bucket'     => '',
-				'track'      => '',
+				'style'      => 'bar',
 				'download'   => 'false',
-				'cloudfront' => '',
 				'autoplay'   => 'false',
 				'preload'   => 'auto',
+				'bucket'     => '',
+				'track'      => '',
+				'cloudfront' => ''
 			), $atts, 's3bubbleAudioSingle' ) );
 			extract( shortcode_atts( array(
-				'style'      => '',
-				'bucket'     => '',
-				'track'      => '',
+				'style'      => 'bar',
 				'download'   => 'false',
-				'cloudfront' => '',
 				'autoplay'   => 'false',
 				'preload'   => 'auto',
+				'bucket'     => '',
+				'track'      => '',
+				'cloudfront' => ''
 			), $atts, 's3audibleSingle' ) );
+
+			$style    = ((empty($style)) ? 'bar' : $style);
+			$download = ((empty($download)) ? 'false' : $download);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
+			$preload  = ((empty($preload)) ? 'auto' : $preload);
 			
 			// Check download
 			if($loggedin == 'true'){
@@ -3264,6 +3305,11 @@ if (!class_exists("s3bubble_audio")) {
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
 			), $atts, 's3video' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$playlist = ((empty($playlist)) ? 'show' : $playlist);
+			$download = ((empty($download)) ? 'false' : $download);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			
 			// Check download
 			if($loggedin == 'true'){
@@ -3618,6 +3664,10 @@ if (!class_exists("s3bubble_audio")) {
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
 			), $atts, 's3videoSingle' ) );
+
+			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$download = ((empty($download)) ? 'false' : $download);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			
 			// Check download
 			if($loggedin == 'true'){
