@@ -2672,7 +2672,11 @@ if (!class_exists("s3bubble_audio")) {
 				if ( is_user_logged_in() ) {
 					$download = 1;
 				}else{
-					$download = 0;
+					if($download == 'true'){
+						$download = 1;
+					}else{
+						$download = 0;
+					}
 				}
 			}
             $player_id = uniqid();
@@ -2682,7 +2686,10 @@ if (!class_exists("s3bubble_audio")) {
 				    <div id="jquery_jplayer_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
 				    <div class="s3bubble-media-main-gui">
 				        <div class="s3bubble-media-main-interface s3bubble-media-main-interface-audio-playlist">
-				            <div class="s3bubble-media-main-controls-holder">
+				        	<div class="s3bubble-media-main-audio-loading">
+						    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
+						    </div>
+				            <div class="s3bubble-media-main-controls-holder" style="display:none;">
 								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 								<div class="s3bubble-media-main-progress" dir="auto">
@@ -2719,7 +2726,7 @@ if (!class_exists("s3bubble_audio")) {
 			</div>
 			<script type="text/javascript">
 				jQuery(document).ready(function($) {
-					
+
 					var S3Bucket = "' . $bucket. '";
 					var Current = -1;
 
@@ -2772,6 +2779,10 @@ if (!class_exists("s3bubble_audio")) {
 							    "Folder" : "' . $folder. '"
 							}
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
+								
+								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
+								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
+								
 								if(response.error !== undefined){
 									console.log(response.error);
 								}else{		
@@ -2983,7 +2994,7 @@ if (!class_exists("s3bubble_audio")) {
 				'style'      => 'bar',
 				'download'   => 'false',
 				'autoplay'   => 'false',
-				'preload'   => 'auto',
+				'preload'    => 'auto',
 				'bucket'     => '',
 				'track'      => '',
 				'cloudfront' => ''
@@ -2992,7 +3003,7 @@ if (!class_exists("s3bubble_audio")) {
 				'style'      => 'bar',
 				'download'   => 'false',
 				'autoplay'   => 'false',
-				'preload'   => 'auto',
+				'preload'    => 'auto',
 				'bucket'     => '',
 				'track'      => '',
 				'cloudfront' => ''
@@ -3008,7 +3019,11 @@ if (!class_exists("s3bubble_audio")) {
 				if ( is_user_logged_in() ) {
 					$download = 1;
 				}else{
-					$download = 0;
+					if($download == 'true'){
+						$download = 1;
+					}else{
+						$download = 0;
+					}
 				}
 			}
             $player_id = uniqid();
@@ -3017,7 +3032,10 @@ if (!class_exists("s3bubble_audio")) {
 			    <div id="jquery_jplayer_' . $player_id .  '" class="s3bubble-media-main-jplayer"></div>
 			    <div class="s3bubble-media-main-gui">
 			        <div class="s3bubble-media-main-interface s3bubble-media-main-interface-audio-playlist">
-			            <div class="s3bubble-media-main-controls-holder">
+			        	<div class="s3bubble-media-main-audio-loading">
+					    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
+					    </div>
+			            <div class="s3bubble-media-main-controls-holder" style="display:none;">
 							<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
 							<div class="s3bubble-media-main-progress" dir="auto">
@@ -3090,6 +3108,10 @@ if (!class_exists("s3bubble_audio")) {
 						    "Server" : s3bubble_all_object.serveraddress
 						}
 						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
+							
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
+							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
+							
 							if(response.error !== undefined){
 								console.log(response.error);
 							}else{
@@ -3281,29 +3303,29 @@ if (!class_exists("s3bubble_audio")) {
 			$stream             = get_option("s3-stream");
         	 extract( shortcode_atts( array(
 				'playlist'   => 'show',
-				'height'     => '',
-				'bucket'     => '',
-				'folder'     => '',
-				'order'      => 'asc',
-				'cloudfront' => '',
 				'download'   => 'false',
 				'aspect'     => '16:9',
 				'search'     => $search,
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
+				'order'      => 'asc',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'cloudfront' => ''
 			), $atts, 's3bubbleVideo' ) );
 			extract( shortcode_atts( array(
 				'playlist'   => 'show',
-				'height'     => '',
-				'bucket'     => '',
-				'folder'     => '',
-				'order'      => 'asc',
-				'cloudfront' => '',
 				'download'   => 'false',
 				'aspect'     => '16:9',
 				'search'     => $search,
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
+				'order'      => 'asc',
+				'height'     => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'cloudfront' => ''
 			), $atts, 's3video' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
@@ -3316,7 +3338,11 @@ if (!class_exists("s3bubble_audio")) {
 				if ( is_user_logged_in() ) {
 					$download = 1;
 				}else{
-					$download = 0;
+					if($download == 'true'){
+						$download = 1;
+					}else{
+						$download = 0;
+					}
 				}
 			}
             $player_id = uniqid();
@@ -3642,27 +3668,28 @@ if (!class_exists("s3bubble_audio")) {
 			$responsive          = get_option("s3-responsive");
 			$stream              = get_option("s3-stream");
 	        extract( shortcode_atts( array(
+	        	'download'   => 'false',
+				'aspect'     => '16:9',
+				'responsive' => $responsive,
+				'autoplay'   => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
 				'bucket'     => '',
 				'folder'     => '',
-				'cloudfront' => '',
-				'download'   => 'false',
-				'aspect'     => '16:9',
-				'responsive' => $responsive,
-				'autoplay'   => 'false',
+				'cloudfront' => ''
 			), $atts, 's3bubbleVideoSingle' ) );
 			extract( shortcode_atts( array(
-				'playlist'   => '',
-				'height'     => '',
-				'bucket'     => '',
-				'folder'     => '',
-				'cloudfront' => '',
 				'download'   => 'false',
 				'aspect'     => '16:9',
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
+				'playlist'   => '',
+				'height'     => '',
+				'track'      => '',
+				'bucket'     => '',
+				'folder'     => '',
+				'cloudfront' => ''
 			), $atts, 's3videoSingle' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
@@ -3674,7 +3701,11 @@ if (!class_exists("s3bubble_audio")) {
 				if ( is_user_logged_in() ) {
 					$download = 1;
 				}else{
-					$download = 0;
+					if($download == 'true'){
+						$download = 1;
+					}else{
+						$download = 0;
+					}
 				}
 			}
             $player_id = uniqid();

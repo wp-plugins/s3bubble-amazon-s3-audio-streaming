@@ -123,6 +123,19 @@
   font-size: 35px;
   line-height: 70px;
 }
+.s3bubble-media-main-audio-loading {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    text-align: center;
+}
+.s3bubble-media-main-audio-loading .s3icon-circle-o-notch {
+  font-size: 15px;
+  line-height: 35px;
+}
 .s3bubble-media-main-jplayer img {
     max-width: 100% !important;
     border: 0 !important;
@@ -384,6 +397,7 @@ a.s3bubble-media-main-pause {
     float: left!important;
     margin: 0 !important;
     outline: 0 !important;
+    list-style: none !important;
 }
 .s3bubble-media-main-playlist li div {
     margin: 0 !important;
