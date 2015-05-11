@@ -1919,10 +1919,25 @@ if (!class_exists("s3bubble_audio")) {
 				jQuery(document).ready(function( $ ) {
 					
 					// Set aspect ratio
-					var aspect = $("#s3bubble-media-main-container-' . $player_id . '").width()/16*9;
-					var IsMobile = false;
+					var Bucket     = "' . $bucket . '";
+					var Key        = "' . $track . '";
+					var Cloudfront = "' . $cloudfront . '";
+					var Current    = -1;
+					var aspect     = $("#s3bubble-media-main-container-' . $player_id . '").width()/16*9;
+					var IsMobile   = false;
 					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 						IsMobile = true;
+					}
+					var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
+					if(main_width < 400){
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-160);	
+					}else{
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-280);	
 					}
 					var s3bubbleRtmpPlaylist = new jPlayerPlaylist({
 						jPlayer: "#jquery_jplayer_RTMP_' . $player_id . '",
@@ -1960,9 +1975,9 @@ if (!class_exists("s3bubble_audio")) {
 							var sendData = {
 								"action": "s3bubble_video_rtmp_internal_ajax",
 								"Timezone":"America/New_York",
-							    "Bucket" : "' . $bucket. '",
-							    "Key" : "' . $track. '",
-							    "Cloudfront" : "' . $cloudfront .'",
+							    "Bucket" : Bucket,
+							    "Key" : Key,
+							    "Cloudfront" : Cloudfront,
 							    "IsMobile" : IsMobile
 							} 
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
@@ -2036,10 +2051,10 @@ if (!class_exists("s3bubble_audio")) {
 							}
 							if(Current !== CurrentState && PlaylistKey.advert !== true){
 								addListener({
-									app_id: s3bubble_object.s3appid,
-									server: s3bubble_object.serveraddress,
-									bucket: ' . $bucket. ',
-									key: PlaylistKey.key,
+									app_id: s3bubble_all_object.s3appid,
+									server: s3bubble_all_object.serveraddress,
+									bucket: Bucket,
+									key: Key,
 									type: "video",
 									advert: false
 								});
@@ -3413,6 +3428,19 @@ if (!class_exists("s3bubble_audio")) {
 					IsMobile = true;
 				}
 				$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-playlist-wrap").height(aspect);
+				var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
+				if(main_width < 400){
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").hide();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-130);	
+				}else{
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").show();
+					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-360);	
+				}
 				var videoPlaylistS3Bubble = new jPlayerPlaylist({
 					jPlayer: "#jquery_jplayer_' . $player_id . '",
 					cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
@@ -3768,6 +3796,18 @@ if (!class_exists("s3bubble_audio")) {
 					var IsMobile = false;
 					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 						IsMobile = true;
+					}
+					// Add Responsive
+					var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
+					if(main_width < 400){
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-160);	
+					}else{
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
+						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-280);	
 					}
 					var videoSingleS3Bubble = new jPlayerPlaylist({
 						jPlayer: "#jquery_jplayer_' . $player_id . '",

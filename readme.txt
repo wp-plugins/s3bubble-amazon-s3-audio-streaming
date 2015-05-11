@@ -1,7 +1,7 @@
 ﻿=== S3Bubble Amazon S3 Video And Audio Streaming With Analytics ===
 Contributors: Samuel East
 Donate link: https://s3bubble.com
-Tags: S3Bubble, S3 Bubble, Amazon, Cloudfront, AmazonS3, Amazon S3, Amazon-S3, S3, Analytics, Analytics Tracking, HTML 5 Player, HTML5 Player, HTML5Player, HTML-5 Player, Audio, Audioplayer, Audio-player, Audio player, Video, VideoPlayer, Video-Player, Video player, Media, MediaPlayer, Media-Player, Media player, Music, MusicPlayer, Music-Player, Music player, MP3, MP3 Player, MP3-player, MP3 player, MP4, MP4 Player, MP4-player, MP4 player, MediaStreaming, Media-Streaming, Media Streaming, AudioStreaming, Audio-streaming, Audio Streaming, VideoStreaming, Video-streaming, Video Streaming, MediaStream, Media-Stream, Media Stream, stream-media, stream media, AudioStream, Mobile, Audio Stream, Stream-audio, stream audio, VideoStream, Video-stream, Video Stream, Stream-video, stream video, cross-platform, Video-blog, video blog, vlog, v-log, Cross Platform, pod-cast, pod cast, CDN, Content Distribution Network, accessibility, accessibile, android, Uploads, stream, streaming, player, cloud
+Tags: S3Bubble, S3 Bubble, Amazon, AmazonS3, Amazon S3, Amazon-S3, S3, Analytics, Analytics Tracking, HTML 5 Player, HTML5 Player, HTML5Player, HLS Streaming, Audio, Audioplayer, Audio-player, Audio player, Video, VideoPlayer, Video-Player, Video player, Media, MediaPlayer, Media-Player, Media player, Music, MusicPlayer, Music-Player, Music player, MP3, MP3 Player, RTMP, MP3 player, MP4, Security, Adaptive Bitrate, MP4 player, MediaStreaming, Media-Streaming, Media Streaming, AudioStreaming, Audio-streaming, Audio Streaming, VideoStreaming, Video-streaming, Video Streaming, MediaStream, Real Time Messaging Protocol, Cloudfront, Amazon Web Services, AWS, IAM, Mobile, Audio Stream, Stream-audio, stream audio, VideoStream, Video-stream, Video Stream, Advertising, Advertisements, cross-platform, Video-blog, video blog, vlog, v-log, Cross Platform, pod-cast, pod cast, CDN, Content Distribution Network, accessibility, accessibile, android, Uploads, stream, streaming, player, cloud
 Requires at least: 2.0
 Tested up to: 4.2
 Stable tag: 1.7.6
@@ -11,6 +11,15 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 S3Bubble offers simple, media streaming from Amazon S3 to Wordpress all in just 4 simple steps!
 
 == Description ==
+
+**Streaming Types Available.**
+
+* Video RTMP Streaming: (with cloudfront) - [View Example](https://s3bubble.com/rtmp-streaming-example-s3bubble-wordpress-plugin/ "View Example")
+* Video HLS Streaming: (.ts segments .m3u8) - [View Example](https://s3bubble.com/hls-adaptive-bitrate-streaming-example/ "View Example")
+* Video Advertising: (.mp4 h.264 encode) - [View Example](https://s3bubble.com/s3bubble-with-advertisement-streaming-example-wordpress-plugin/ "View Example")
+* Audio Playlist: (.mp3/.m4a/.wav) - [View Example](https://s3bubble.com/s3bubble-audio-playlist-example-wordpress-plugin/ "View Example")
+* Audio Single: (.mp3/.m4a/.wav) - [View Example](https://s3bubble.com/s3bubble-audio-single-example-wordpress-plugin/ "View Example")
+* Video Progressive Streaming: (.mp4 h.264 encode) - [View Example](https://s3bubble.com/progressive-streaming-example/ "View Example")
 
 Now with WYSIWYG buttons [View more information on this](https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/ "View more information on this")
 
