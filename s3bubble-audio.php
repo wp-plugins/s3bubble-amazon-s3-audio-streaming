@@ -1693,7 +1693,7 @@ if (!class_exists("s3bubble_audio")) {
 					    			poster: "' . $track[0]['poster'] . '",
 					    			videoVolume: "horizontal",
 									enableAutosize: true,
-									features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+									features: ["playpause","current","progress","duration","tracks","volume","fullscreen"],
 									plugins: ["flash"],
 									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
 									flashName: "flashmediaelement.swf",
@@ -2188,7 +2188,7 @@ if (!class_exists("s3bubble_audio")) {
 						    			poster: "' . $track[0]['poster'] . '",
 						    			videoVolume: "horizontal",
 										enableAutosize: true,
-										features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+										features: ["playpause","current","progress","duration","tracks","volume","fullscreen"],
 										pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
 										flashName: "flashmediaelement.swf",
 						    			success: function(mediaElement, node, player) {
@@ -2492,7 +2492,7 @@ if (!class_exists("s3bubble_audio")) {
 				$poster    = $track[0]['poster'];
 				
 				if(is_array($track)){
-					return '<div style="width:100%;position:relative;">
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;position:relative;">
 								<video id="video-' . $player_id . '" controls="controls" style="width:100%;">
 									<source type="video/mp4" src="' . $video . '" />
 								</video>
@@ -2502,10 +2502,13 @@ if (!class_exists("s3bubble_audio")) {
 								var Bucket = "' . $bucket . '";
 								var Key = "' . $key . '";
 								var Current = -1;
+								var video_width = $(".video-wrap-' . $player_id . '").width();
 								var aspects  = "' . $aspect . '";
 								var aspects = aspects.split(":");
-								var aspect = $("#video-' . $player_id . '").width()/aspects[0]*aspects[1];
-								$(".mejs-container").height(aspect);
+								var aspect = video_width/aspects[0]*aspects[1];
+								var video = document.getElementById("video-' . $player_id . '");
+								video.height = Math.round(aspect);
+								video.width = video_width;
 								$("#video-' . $player_id . '").mediaelementplayer({
 					    			poster: "' . $poster . '",
 					    			videoVolume: "horizontal",
@@ -2610,7 +2613,7 @@ if (!class_exists("s3bubble_audio")) {
 										var Current = -1;
 										$("#audio-' . $player_id . '").mediaelementplayer({
 											videoVolume: "horizontal",
-							    			features: ["playpause","progress","duration","tracks","volume","fullscreen"],
+							    			features: ["playpause","current","progress","duration","tracks","volume","fullscreen"],
 							    			plugins: ["flash"],
 											pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
 											flashName: "flashmediaelement.swf",
