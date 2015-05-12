@@ -3,7 +3,7 @@ Contributors: Samuel East
 Donate link: https://s3bubble.com
 Tags: S3Bubble, S3 Bubble, Amazon, AmazonS3, Amazon S3, Amazon-S3, S3, Analytics, Analytics Tracking, HTML 5 Player, HTML5 Player, HTML5Player, HLS Streaming, Audio, Audioplayer, Audio-player, Audio player, Video, VideoPlayer, Video-Player, Video player, Media, MediaPlayer, Media-Player, Media player, Music, MusicPlayer, Music-Player, Music player, MP3, MP3 Player, RTMP, MP3 player, MP4, Security, Adaptive Bitrate, MP4 player, MediaStreaming, Media-Streaming, Media Streaming, AudioStreaming, Audio-streaming, Audio Streaming, VideoStreaming, Video-streaming, Video Streaming, MediaStream, Real Time Messaging Protocol, Cloudfront, Amazon Web Services, AWS, IAM, Mobile, Audio Stream, Stream-audio, stream audio, VideoStream, Video-stream, Video Stream, Advertising, Advertisements, cross-platform, Video-blog, video blog, vlog, v-log, Cross Platform, pod-cast, pod cast, CDN, Content Distribution Network, accessibility, accessibile, android, Uploads, stream, streaming, player, cloud
 Requires at least: 2.0
-Tested up to: 4.2
+Tested up to: 4.2.2
 Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -159,6 +159,10 @@ Once you’ve installed the plug-in, the S3 Bubble Tutorial will guide you along
 
 == Changelog ==
 
+= 2.0 =
+
+* RTMP Streaming added [S3Bubble](https://s3bubble.com/video_tutorials/starter-setting-up-rtmp-streaming/ "S3bubble").
+* Netflix HLS Adaptive bitrate Streaming added [S3Bubble](https://s3bubble.com/hls-adaptive-bitrate-streaming-example/ "S3bubble").
 * Brand new Analytic tracking find out more [S3Bubble](https://s3bubble.com/video_tutorials/quick-analytics-intro-tutorial/ "S3bubble").
 * Brand new Admin Manager [S3Bubble](https://s3bubble.com "S3bubble").
 * Brand new player design see in action [S3Bubble](https://s3bubble.com/video_tutorials "S3bubble").
