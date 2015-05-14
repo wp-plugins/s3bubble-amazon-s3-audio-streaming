@@ -47,7 +47,7 @@ if (!class_exists("s3bubble_audio")) {
 		public  $responsive      = 'responsive';
 		public  $theme           = 's3bubble_clean';
 		public  $stream          = 'm4v';
-		public  $version         =  36;
+		public  $version         =  37;
 		public  $s3bubble_video_all_bar_colours = '#adadad';
 		public  $s3bubble_video_all_bar_seeks   = '#dd0000';
 		public  $s3bubble_video_all_controls_bg = '#010101';
@@ -303,12 +303,16 @@ if (!class_exists("s3bubble_audio")) {
 			wp_register_style('s3bubble.video.js.css.include', plugins_url('assets/videojs/video-js.min.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble.video.js.css.include');
 
+			// Important CDN fixes
+			wp_register_style('s3bubble.helpers', ("//s3.amazonaws.com/s3bubble.assets/plugin.css/style.css"), array(),  $this->version );
+			wp_enqueue_style('s3bubble.helpers');
+
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
-					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep {color: '.stripcslashes($icons).' !important;text-decoration: none !important;}
+					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep, .s3icon-cloud-download {color: '.stripcslashes($icons).' !important;text-decoration: none !important;font-style: normal !important;}
 					.s3bubble-media-main-playlist-current {color: '.stripcslashes($seek).' !important;}
 					.mejs-controls {background-color: '.stripcslashes($background).' !important;}
 					.mejs-overlay-button {background: '.stripcslashes($background).' url(' . plugins_url('assets/images/play48.png', __FILE__) . ')center no-repeat !important;}
@@ -334,13 +338,9 @@ if (!class_exists("s3bubble_audio")) {
 				));
 				wp_register_script( 's3bubble.mobile.browser.check', plugins_url('assets/js/mobile.browser.check.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 				wp_register_script( 's3bubble.analytics.min', plugins_url('assets/js/s3analytics.min.js',__FILE__ ), array('jquery'),  $this->version, true );
-				
-				//wp_register_script( 'media.element.test', plugins_url('assets/mediaelementjs/build/mediaelement-and-player.js',__FILE__ ), array('jquery'),  $this->version, true );
-				//wp_enqueue_script('media.element.test');
 
 				//Video js
 				wp_register_script( 's3bubble.video.js.include', plugins_url('assets/videojs/video.min.js',__FILE__ ), array('jquery'),  $this->version, true );
-				//wp_register_script('s3bubble.video.js.include', ("//vjs.zencdn.net/4.12/video.js"), array('jquery'),  $this->version, true );
 
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-migrate');
