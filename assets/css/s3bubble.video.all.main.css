@@ -2,8 +2,12 @@
     outline: 0;
 }
 .s3bubble-media-main-audio {
-    float: left;
-    width: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: relative;
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+    overflow: hidden
 }
 .s3bubble-media-main-video {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
