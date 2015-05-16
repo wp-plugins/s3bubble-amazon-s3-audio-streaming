@@ -344,6 +344,7 @@ a.s3bubble-media-main-pause {
 .s3bubble-media-main-audio a.s3bubble-media-main-mute,
 .s3bubble-media-main-audio a.s3bubble-media-main-unmute,
 .s3bubble-media-main-audio a.s3bubble-media-main-logo {
+    position: relative;
     float: right;
     height: 35px;
     color: #fff;
