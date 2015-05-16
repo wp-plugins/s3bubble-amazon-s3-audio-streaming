@@ -3419,12 +3419,12 @@ if (!class_exists("s3bubble_audio")) {
 								videoPlaylistS3Bubble.setPlaylist(response);
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
 								if(IsMobile){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 120px 0 40px");	
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 160px 0 40px");	
 								}
 								if(response.user === "s2member_level1"){
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 360px 0 40px");
 									if(IsMobile){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 180px 0 40px");	
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");	
 									}
 									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 								}
