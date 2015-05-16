@@ -155,19 +155,18 @@
 .s3bubble-media-main-video-full .s3bubble-media-main-interface {
     position: absolute !important;
     position: relative;
-    bottom: 0;
-    left: 0;
+    bottom: 2%;
+    left: 1%;
     z-index: 1000
 }
+
 .s3bubble-media-main-audio .s3bubble-media-main-gui {
     height: 35px;
     width: 100%;
 }
-.s3bubble-media-main-interface {
-    position: absolute;
+.s3bubble-media-main-audio .s3bubble-media-main-interface {
     width: 100%;
     height: 35px;
-    bottom: 0;
     background-color: #222222;
     -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
    -khtml-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
@@ -178,6 +177,42 @@
    -khtml-border-radius: 3px;
    -moz-border-radius: 3px;
    -o-border-radius: 3px;
+   border-radius: 3px;
+}
+.s3bubble-media-main-video .s3bubble-media-main-interface {
+    position: absolute;
+    width: 98%;
+    height: 35px;
+    bottom: 2%;
+    left: 1%;
+    right: 1%;
+    background-color: #222222;
+    -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -khtml-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -o-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+   -webkit-border-radius: 3px;
+   -khtml-border-radius: 3px;
+   -moz-border-radius: 3px;
+   -o-border-radius: 3px;
+   border-radius: 3px;
+}
+.s3bubble-media-main-left-controls {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: auto;
+    display: block;
+    height: 35px;
+}
+.s3bubble-media-main-right-controls {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: auto;
+    display: block;
+    height: 35px;
 }
 .s3bubble-media-main-interface > * a:focus {
     outline: 0;
@@ -194,7 +229,8 @@ div.s3bubble-media-main-controls-holder {
     width: 100%;
     margin: 0 auto;
     position: relative;
-    overflow: hidden
+    overflow: hidden;
+    height: 35px;
 }
 a.s3bubble-media-main-play,
 a.s3bubble-media-main-pause {
@@ -215,11 +251,11 @@ a.s3bubble-media-main-pause {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    width: 280px;
     height: 10px;
-    float: left;
-    margin-top: 12px;
     overflow: hidden;
+    display: block;
+    width: auto;
+    margin: 12px 240px 0 40px;
 }
 .s3bubble-media-main-seek-bar {
     width: 0;
@@ -304,8 +340,10 @@ a.s3bubble-media-main-pause {
 }
 .s3bubble-media-main-video a.s3bubble-media-main-mute,
 .s3bubble-media-main-video a.s3bubble-media-main-unmute,
+.s3bubble-media-main-video a.s3bubble-media-main-logo,
 .s3bubble-media-main-audio a.s3bubble-media-main-mute,
-.s3bubble-media-main-audio a.s3bubble-media-main-unmute {
+.s3bubble-media-main-audio a.s3bubble-media-main-unmute,
+.s3bubble-media-main-audio a.s3bubble-media-main-logo {
     float: right;
     height: 35px;
     color: #fff;

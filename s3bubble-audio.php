@@ -289,9 +289,11 @@ if (!class_exists("s3bubble_audio")) {
 			$icons	    = get_option("s3bubble_video_all_icons");
 			
 			wp_register_style( 'font-s3bubble.min', plugins_url('assets/css/font-awesome.min.css', __FILE__), array(), $this->version );
+			wp_register_style( 'font-s3bubble-icon.min', plugins_url('assets/css/font-awesome-s3bubble.min.css', __FILE__), array(), $this->version );
 			wp_register_style( 's3bubble.video.all.main', plugins_url('assets/css/s3bubble.video.all.main.min.css', __FILE__), array(), $this->version );
 			
 			wp_enqueue_style('font-s3bubble.min');
+			wp_enqueue_style('font-s3bubble-icon.min');
 			wp_enqueue_style('s3bubble.video.all.main');
 
 			// Depreciated
@@ -1558,8 +1560,8 @@ if (!class_exists("s3bubble_audio")) {
 				echo "No live steam url has been set";
 			}else{
 
-				return '<div class="video-wrap-' . $player_id . '">
-							<video id="video-' . $player_id . '" style="width:100%;height:100%;" controls="controls" preload="none">
+				return '<div class="video-wrap-' . $player_id . '" style="width:100%;overflow:hidden;">
+							<video id="video-' . $player_id . '" style="width:100%;" controls="controls" preload="none">
 								<source type="application/x-mpegURL" src="' . $stream . '" />
 							</video>
 						</div>
@@ -1671,8 +1673,8 @@ if (!class_exists("s3bubble_audio")) {
 						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
 						$url    = $track[0]['m4v'];
 					}
-					return '<div class="video-wrap-' . $player_id . '">
-							<video id="video-' . $player_id . '" width="320" height="240" controls="controls" preload="none">
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;overflow:hidden;">
+							<video id="video-' . $player_id . '" style="width:100%;" controls="controls" preload="none">
 							' . $source . '
 							</video>
 						</div>
@@ -1793,7 +1795,7 @@ if (!class_exists("s3bubble_audio")) {
 					if($ismobile) {
 						$source = '<source type="video/mp4" src="' . $track[0]['m4v'] . '" />';
 					}
-					return '<div class="video-wrap-' . $player_id . '" style="width:100%;">
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;overflow:hidden;">
 								<video id="video-' . $player_id . '" class="video-js vjs-default-skin" controls width="640">
 								    ' . $source . '
 								</video>
@@ -1881,26 +1883,30 @@ if (!class_exists("s3bubble_audio")) {
 				    <div class="s3bubble-media-main-video-play">
 						<i class="s3icon s3icon-play"></i>
 					</div>
-				    <div class="s3bubble-media-main-gui">
+				    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
 				        <div class="s3bubble-media-main-interface">
 				            <div class="s3bubble-media-main-controls-holder">
-								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+					            <span class="s3bubble-media-main-left-controls">
+									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+								</span>
 								<div class="s3bubble-media-main-progress">
 								    <div class="s3bubble-media-main-seek-bar">
 								        <div class="s3bubble-media-main-play-bar"></div>
 								    </div>
 								</div>
-								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-								<div class="s3bubble-media-main-volume-bar">
-								    <div class="s3bubble-media-main-volume-bar-value"></div>
-								</div>
-								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-								<div class="s3bubble-media-main-time-container">
-									<div class="s3bubble-media-main-duration"></div>
-								</div>
+								<span class="s3bubble-media-main-right-controls">
+									<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
+									<div class="s3bubble-media-main-volume-bar">
+									    <div class="s3bubble-media-main-volume-bar-value"></div>
+									</div>
+									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
+									<div class="s3bubble-media-main-time-container">
+										<div class="s3bubble-media-main-duration"></div>
+									</div>
+								</span>
 				            </div>
 				        </div>
 				    </div>
@@ -1928,17 +1934,6 @@ if (!class_exists("s3bubble_audio")) {
 					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 						IsMobile = true;
 					}
-					var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
-					if(main_width < 400){
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-160);	
-					}else{
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-280);	
-					}
 					var s3bubbleRtmpPlaylist = new jPlayerPlaylist({
 						jPlayer: "#jquery_jplayer_RTMP_' . $player_id . '",
 						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
@@ -1947,31 +1942,6 @@ if (!class_exists("s3bubble_audio")) {
 							enableRemoveControls: true
 						},
 						ready : function(event) {
-							// Add Responsive
-							var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
-							if(main_width < 400){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-160);	
-							}else{
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-280);	
-							}
-							$( window ).resize(function() {
-								var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . '").width();
-								if(main_width_resize < 400){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-160);	
-								}else{
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-280);	
-								}
-							});
 							var sendData = {
 								"action": "s3bubble_video_rtmp_internal_ajax",
 								"Timezone":"America/New_York",
@@ -1984,10 +1954,24 @@ if (!class_exists("s3bubble_audio")) {
 								if(response.error){
 									console.log(response.message);
 								}else{
+									
 									$("#s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
 									s3bubbleRtmpPlaylist.setPlaylist(response.results);
+
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");	
+									if(IsMobile){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
+									}
+									if(response.user === "s2member_level1"){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
+										if(IsMobile){
+											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
+										}
+										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									}
 									setTimeout(function(){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
+										$(".s3bubble-media-main-gui").css("visibility", "visible");
 									},2000);
 								}
 							},"json");
@@ -2009,10 +1993,7 @@ if (!class_exists("s3bubble_audio")) {
 							
 					    },
 					    resize: function (event) {
-					    	$(".s3bubble-media-main-progress").fadeOut();
-					    	setTimeout(function(){
-					    		$(".s3bubble-media-main-progress").width($(".s3bubble-media-main-gui").width()-280).fadeIn();	
-					    	},2000);
+
 					    },
 					    click: function (event) {
 
@@ -2492,7 +2473,7 @@ if (!class_exists("s3bubble_audio")) {
 				$poster    = $track[0]['poster'];
 				
 				if(is_array($track)){
-					return '<div class="video-wrap-' . $player_id . '" style="width:100%;position:relative;">
+					return '<div class="video-wrap-' . $player_id . '" style="width:100%;overflow:hidden;">
 								<video id="video-' . $player_id . '" controls="controls" style="width:100%;">
 									<source type="video/mp4" src="' . $video . '" />
 								</video>
@@ -2708,23 +2689,27 @@ if (!class_exists("s3bubble_audio")) {
 						    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 						    </div>
 				            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+					            <span class="s3bubble-media-main-left-controls">
+									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+								</span>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
 								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
-								<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
-								<div class="s3bubble-media-main-volume-bar" dir="auto">
-								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-								</div>
-								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-								<div class="s3bubble-media-main-time-container">
-									<div class="s3bubble-media-main-duration"></div>
-								</div>
+								<span class="s3bubble-media-main-right-controls">
+									<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
+									<div class="s3bubble-media-main-volume-bar" dir="auto">
+									    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
+									</div>
+									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
+									<div class="s3bubble-media-main-time-container">
+										<div class="s3bubble-media-main-duration"></div>
+									</div>
+								</span>
 				            </div>
 				        </div>
 				    </div>
@@ -2744,15 +2729,12 @@ if (!class_exists("s3bubble_audio")) {
 			</div>
 			<script type="text/javascript">
 				jQuery(document).ready(function($) {
-
 					var S3Bucket = "' . $bucket. '";
 					var Current = -1;
-
 					var IsMobile = false;				
 					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 						IsMobile = true;
 					}
-				
 					var audioPlaylistS3Bubble = new jPlayerPlaylist({
 		                jPlayer: "#jquery_jplayer_' . $player_id . '",
 						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
@@ -2765,31 +2747,6 @@ if (!class_exists("s3bubble_audio")) {
 		                    enableRemoveControls: false
 		                },
 		                ready: function(event) {
-							// Add Responsive
-							var main_width = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
-							if(main_width < 400){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-190);	
-							}else{
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-320);	
-							}
-							$( window ).resize(function() {
-								var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
-								if(main_width_resize < 400){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-190);	
-								}else{
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-320);	
-								}
-							});
 							var sendData = {
 								"action": "s3bubble_audio_playlist_internal_ajax",
 								"Timezone":"America/New_York",
@@ -2803,8 +2760,19 @@ if (!class_exists("s3bubble_audio")) {
 								
 								if(response.error !== undefined){
 									console.log(response.error);
-								}else{		
+								}else{
 									audioPlaylistS3Bubble.setPlaylist(response);
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
+									if(IsMobile){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 120px 0 40px");	
+									}
+									if(response.user === "s2member_level1"){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
+										if(IsMobile){
+											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 180px 0 40px");	
+										}
+										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									}
 									// hide playlist 
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-list").click(function() {
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist").slideToggle();
@@ -3054,21 +3022,25 @@ if (!class_exists("s3bubble_audio")) {
 					    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 					    </div>
 			            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-							<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+				            <span class="s3bubble-media-main-left-controls">
+								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
+								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+							</span>
 							<div class="s3bubble-media-main-progress" dir="auto">
 							    <div class="s3bubble-media-main-seek-bar" dir="auto">
 							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 							    </div>
 							</div>
-							<div class="s3bubble-media-main-volume-bar" dir="auto">
-							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-							</div>
-							<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-							<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-							<div class="s3bubble-media-main-time-container">
-								<div class="s3bubble-media-main-duration"></div>
-							</div>
+							<span class="s3bubble-media-main-right-controls">
+								<div class="s3bubble-media-main-volume-bar" dir="auto">
+								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
+								</div>
+								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
+								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
+								<div class="s3bubble-media-main-time-container">
+									<div class="s3bubble-media-main-duration"></div>
+								</div>
+							</span>
 			            </div>
 			        </div>
 			    </div>
@@ -3105,18 +3077,6 @@ if (!class_exists("s3bubble_audio")) {
 	                    enableRemoveControls: false
 	                },
 	                ready: function(event) {
-	                	// Add Responsive
-						var main_width = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
-						if(main_width < 400){
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-110);	
-						}else{
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-240);	
-						}
 						var sendData = {
 							"action": "s3bubble_audio_single_internal_ajax",
 							"Timezone":"America/New_York",
@@ -3134,6 +3094,17 @@ if (!class_exists("s3bubble_audio")) {
 								console.log(response.error);
 							}else{
 								audioSingleS3Bubble.setPlaylist(response);
+								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");
+								if(IsMobile){
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
+								}
+								if(response.user === "s2member_level1"){
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");
+									if(IsMobile){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
+									}
+									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+								}
 								//Make it plain
 								if ("' . $style . '" === "plain") {
 									$("#s3bubble-media-main-container-' . $player_id . '").css({
@@ -3145,17 +3116,7 @@ if (!class_exists("s3bubble_audio")) {
 						},"json");
 	                },
 					resize: function (event) {
-				    	var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width();
-						if(main_width_resize < 400){
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-110);	
-						}else{
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-240);	
-						}
+
 				    },
 	                loadedmetadata: function() {
 						
@@ -3382,28 +3343,32 @@ if (!class_exists("s3bubble_audio")) {
 				    <div class="s3bubble-media-main-video-play">
 						<i class="s3icon s3icon-play"></i>
 					</div>
-				    <div class="s3bubble-media-main-gui">
+				    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
 				        <div class="s3bubble-media-main-interface">
 				            <div class="s3bubble-media-main-controls-holder">
-								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+					            <span class="s3bubble-media-main-left-controls">
+									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+								</span>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
 								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
-								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
-								<div class="s3bubble-media-main-volume-bar" dir="auto">
-								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-								</div>
-								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-								<div class="s3bubble-media-main-time-container">
-									<div class="s3bubble-media-main-duration"></div>
-								</div>
+								<span class="s3bubble-media-main-right-controls">
+									<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
+									<div class="s3bubble-media-main-volume-bar" dir="auto">
+									    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
+									</div>
+									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
+									<div class="s3bubble-media-main-time-container">
+										<div class="s3bubble-media-main-duration"></div>
+									</div>
+								</span>
 				            </div>
 				        </div>
 				    </div>
@@ -3431,19 +3396,7 @@ if (!class_exists("s3bubble_audio")) {
 					IsMobile = true;
 				}
 				$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-playlist-wrap").height(aspect);
-				var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
-				if(main_width < 400){
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").hide();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-130);	
-				}else{
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").show();
-					$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-360);	
-				}
+
 				var videoPlaylistS3Bubble = new jPlayerPlaylist({
 					jPlayer: "#jquery_jplayer_' . $player_id . '",
 					cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
@@ -3453,35 +3406,6 @@ if (!class_exists("s3bubble_audio")) {
 						downloadSet: '.$download.'
 					},
 					ready : function(event) {
-						// Add Responsive
-						var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
-						if(main_width < 400){
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").hide();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-130);	
-						}else{
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").show();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-360);	
-						}
-						$( window ).resize(function() {
-							var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . '").width();
-							if(main_width_resize < 400){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-130);	
-							}else{
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-360);	
-							}
-						});
 						var sendData = {
 							"action": "s3bubble_video_playlist_internal_ajax",
 							"Timezone":"America/New_York",
@@ -3493,6 +3417,17 @@ if (!class_exists("s3bubble_audio")) {
 								console.log(response.error);
 							}else{
 								videoPlaylistS3Bubble.setPlaylist(response);
+								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
+								if(IsMobile){
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 120px 0 40px");	
+								}
+								if(response.user === "s2member_level1"){
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 360px 0 40px");
+									if(IsMobile){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 180px 0 40px");	
+									}
+									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+								}
 								$("video").bind("contextmenu", function(e) {
 									return false
 								});
@@ -3525,6 +3460,7 @@ if (!class_exists("s3bubble_audio")) {
 										});
 									}
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
+									$(".s3bubble-media-main-gui").css("visibility", "visible");
 								},2000);
 							}
 						},"json");
@@ -3536,10 +3472,7 @@ if (!class_exists("s3bubble_audio")) {
 						}
 					},
 					resize: function (event) {
-				    	$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").fadeOut();
-				    	setTimeout(function(){
-				    		$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width($("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width()-360).fadeIn();	
-				    	},2000);
+
 				    },
 				    click: function (event) {
 				    	if(event.jPlayer.status.paused){
@@ -3754,26 +3687,30 @@ if (!class_exists("s3bubble_audio")) {
 			    <div class="s3bubble-media-main-video-play">
 					<i class="s3icon s3icon-play"></i>
 				</div>
-			    <div class="s3bubble-media-main-gui">
+			    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
 			        <div class="s3bubble-media-main-interface">
 			            <div class="s3bubble-media-main-controls-holder">
-							<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-							<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+			            	<span class="s3bubble-media-main-left-controls">
+								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
+								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+							</span>
 							<div class="s3bubble-media-main-progress" dir="auto">
 							    <div class="s3bubble-media-main-seek-bar" dir="auto">
 							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 							    </div>
 							</div>
-							<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-							<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-							<div class="s3bubble-media-main-volume-bar" dir="auto">
-							    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-							</div>
-							<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-							<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-							<div class="s3bubble-media-main-time-container">
-								<div class="s3bubble-media-main-duration"></div>
-							</div>
+							<span class="s3bubble-media-main-right-controls">
+								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
+								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
+								<div class="s3bubble-media-main-volume-bar" dir="auto">
+								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
+								</div>
+								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
+								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
+								<div class="s3bubble-media-main-time-container">
+									<div class="s3bubble-media-main-duration"></div>
+								</div>
+							</span>
 			            </div>
 			        </div>
 			    </div>
@@ -3795,23 +3732,11 @@ if (!class_exists("s3bubble_audio")) {
 					var aspects  = "' . $aspect . '";
 					var aspects = aspects.split(":");
 					var aspect = $("#s3bubble-media-main-container-' . $player_id . '").width()/aspects[0]*aspects[1];
-				
 					var IsMobile = false;
 					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 						IsMobile = true;
 					}
-					// Add Responsive
-					var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
-					if(main_width < 400){
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-160);	
-					}else{
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-280);	
-					}
+
 					var videoSingleS3Bubble = new jPlayerPlaylist({
 						jPlayer: "#jquery_jplayer_' . $player_id . '",
 						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
@@ -3821,31 +3746,6 @@ if (!class_exists("s3bubble_audio")) {
 							downloadSet: '.$download.'
 						},
 						ready : function(event) {
-							// Add Responsive
-							var main_width = $("#s3bubble-media-main-container-' . $player_id . '").width();
-							if(main_width < 400){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-160);	
-							}else{
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width-280);	
-							}
-							$( window ).resize(function() {
-								var main_width_resize = $("#s3bubble-media-main-container-' . $player_id . '").width();
-								if(main_width_resize < 400){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-unmute").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").hide();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-160);	
-								}else{
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-mute").show();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-volume-bar").show();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width(main_width_resize-280);	
-								}
-							});
 							var sendData = {
 								"action": "s3bubble_video_single_internal_ajax",
 								"Timezone":"America/New_York",
@@ -3858,8 +3758,20 @@ if (!class_exists("s3bubble_audio")) {
 								if(response.error){
 									console.log(response.message);   
 								}else{
+									videoSingleS3Bubble.setPlaylist(response.results);	
+
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");	
+									if(IsMobile){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
+									}
+									if(response.user === "s2member_level1"){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
+										if(IsMobile){
+											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
+										}
+										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									}
 									$("#s3bubble-media-main-container-' . $player_id . ' #s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
-									videoSingleS3Bubble.setPlaylist(response.results);
 									$("video").bind("contextmenu", function(e) {
 										return false;
 									}); 
@@ -3873,7 +3785,9 @@ if (!class_exists("s3bubble_audio")) {
 									});
 									setTimeout(function(){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
+										$(".s3bubble-media-main-gui").css("visibility", "visible");
 									},2000);
+									
 								}
 							},"json");
 						},
@@ -3883,10 +3797,7 @@ if (!class_exists("s3bubble_audio")) {
 							}
 						},
 						resize: function (event) {
-					    	$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").fadeOut();
-					    	setTimeout(function(){
-					    		$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").width($("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-gui").width()-280).fadeIn();	
-					    	},2000);
+
 					    },
 					    click: function (event) {
 					    	if(event.jPlayer.status.paused){
