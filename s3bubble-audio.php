@@ -1962,7 +1962,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
 									}
-									if(response.user === "s2member_level1"){
+									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
@@ -2766,7 +2766,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 150px 0 40px");	
 									}
-									if(response.user === "s2member_level1"){
+									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 190px 0 40px");	
@@ -3098,7 +3098,7 @@ if (!class_exists("s3bubble_audio")) {
 								if(IsMobile){
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
 								}
-								if(response.user === "s2member_level1"){
+								if(response.user === "s2member_level1" || response.user === "s2member_level2"){
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
@@ -3421,7 +3421,7 @@ if (!class_exists("s3bubble_audio")) {
 								if(IsMobile){
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 160px 0 40px");	
 								}
-								if(response.user === "s2member_level1"){
+								if(response.user === "s2member_level1" || response.user === "s2member_level2"){
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 360px 0 40px");
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");	
@@ -3764,7 +3764,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
 									}
-									if(response.user === "s2member_level1"){
+									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
