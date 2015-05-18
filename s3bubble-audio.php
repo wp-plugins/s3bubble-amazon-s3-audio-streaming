@@ -1967,7 +1967,7 @@ if (!class_exists("s3bubble_audio")) {
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
 										}
-										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 									}
 									setTimeout(function(){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
@@ -2771,7 +2771,7 @@ if (!class_exists("s3bubble_audio")) {
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 190px 0 40px");	
 										}
-										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 									}
 									// hide playlist 
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-list").click(function() {
@@ -3103,7 +3103,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
 									}
-									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 								}
 								//Make it plain
 								if ("' . $style . '" === "plain") {
@@ -3426,7 +3426,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");	
 									}
-									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 								}
 								$("video").bind("contextmenu", function(e) {
 									return false
@@ -3769,7 +3769,7 @@ if (!class_exists("s3bubble_audio")) {
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
 										}
-										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 									}
 									$("#s3bubble-media-main-container-' . $player_id . ' #s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
 									$("video").bind("contextmenu", function(e) {
