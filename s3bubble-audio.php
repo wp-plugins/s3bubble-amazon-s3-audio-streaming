@@ -47,7 +47,7 @@ if (!class_exists("s3bubble_audio")) {
 		public  $responsive      = 'responsive';
 		public  $theme           = 's3bubble_clean';
 		public  $stream          = 'm4v';
-		public  $version         =  37;
+		public  $version         =  40;
 		public  $s3bubble_video_all_bar_colours = '#adadad';
 		public  $s3bubble_video_all_bar_seeks   = '#dd0000';
 		public  $s3bubble_video_all_controls_bg = '#010101';
@@ -97,7 +97,7 @@ if (!class_exists("s3bubble_audio")) {
 			 * @params none
 			 */ 
 			add_action( 'wp_head', array( $this, 's3bubble_audio_css' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 's3bubble_audio_javascript' ), 11 );
+			add_action( 'wp_enqueue_scripts', array( $this, 's3bubble_audio_javascript' ), 12 );
 			
 			/*
 			 * Add javascript to the frontend footer connects to wp_footer
@@ -351,6 +351,9 @@ if (!class_exists("s3bubble_audio")) {
 				wp_enqueue_script('s3player.all.s3bubble');
 				wp_enqueue_script('s3bubble.mobile.browser.check');
 				wp_enqueue_script('s3bubble.analytics.min');
+
+				// remove jplayer if exists
+				wp_deregister_script( 'jplayer' );
 				
             }
 		}
@@ -1919,7 +1922,6 @@ if (!class_exists("s3bubble_audio")) {
 				        <span>Update Required</span>
 				        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
 				    </div>
-				     
 				</div>
 				<script type="text/javascript">
 				jQuery(document).ready(function( $ ) {
@@ -1952,6 +1954,7 @@ if (!class_exists("s3bubble_audio")) {
 							} 
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 								if(response.error){
+									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ". <a href=\"https://s3bubble.com/video_tutorials/starter-setting-up-rtmp-streaming/\" target=\"_blank\">Watch Video</a></p></span>");
 									console.log(response.message);
 								}else{
 									

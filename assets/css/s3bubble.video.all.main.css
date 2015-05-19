@@ -500,7 +500,7 @@ a.s3bubble-media-main-pause {
     width: 98% !important;
     border: none !important;
     height: 35px !important;
-    padding: 1% !important;
+    padding: 1px 1% !important;
     outline: 0;
     background: #fff !important;
     color: #000 !important;
@@ -509,4 +509,17 @@ a.s3bubble-media-main-pause {
 }
 .s3bubble-media-main-artist {
     float: right
+}
+.s3bubble-alert {
+    position: absolute;
+    z-index: 999;
+    background: white;
+    top: 50%;
+    width: 100%;
+    height: 70px;
+    margin-top: -35px;
+}
+.s3bubble-alert p {
+    padding: 10px;
+    margin: 0px;
 }
