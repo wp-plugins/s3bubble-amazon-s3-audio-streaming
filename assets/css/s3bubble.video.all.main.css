@@ -515,6 +515,7 @@ a.s3bubble-media-main-pause {
     z-index: 999;
     background: white;
     top: 50%;
+    left: 0;
     width: 100%;
     height: 70px;
     margin-top: -35px;

@@ -204,6 +204,9 @@ if (!class_exists("s3bubble_audio")) {
 			add_action( 'wp_ajax_s3bubble_video_rtmp_internal_ajax', array( $this, 's3bubble_video_rtmp_internal_ajax' ) );
 			add_action('wp_ajax_nopriv_s3bubble_video_rtmp_internal_ajax', array( $this, 's3bubble_video_rtmp_internal_ajax' ) ); 
 			
+			add_action( 'wp_ajax_s3bubble_audio_rtmp_internal_ajax', array( $this, 's3bubble_audio_rtmp_internal_ajax' ) );
+			add_action('wp_ajax_nopriv_s3bubble_audio_rtmp_internal_ajax', array( $this, 's3bubble_audio_rtmp_internal_ajax' ) ); 
+
 			/*
 			 * Admin dismiss message
 			 */
@@ -370,6 +373,51 @@ if (!class_exists("s3bubble_audio")) {
 
 			//set POST variables
 			$url = $this->endpoint . 'rtmp/video';
+			$fields = array(
+				'AccessKey' => $s3bubble_access_key,
+			    'SecretKey' => $s3bubble_secret_key,
+			    'Timezone' => 'America/New_York',
+			    'Bucket' => $_POST['Bucket'],
+			    'Key' => $_POST['Key'],
+			    'Cloudfront' => $_POST['Cloudfront'],
+			    'IsMobile' => $_POST['IsMobile']
+			);
+
+			if(!function_exists('curl_init')){
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
+    			exit();
+    		}
+			
+			//open connection
+			$ch = curl_init();
+			//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL, $url);
+			curl_setopt($ch,CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			//execute post
+		    $result = curl_exec($ch);
+			echo $result;
+			curl_close($ch);
+
+			die();	
+			
+		}
+
+		/*
+		* Audio playlist internal ajax call
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_audio_rtmp_internal_ajax(){
+			
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");
+
+			//set POST variables
+			$url = $this->endpoint . 'rtmp/audio';
 			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
@@ -1053,7 +1101,10 @@ if (!class_exists("s3bubble_audio")) {
 		    ?>
 		    <script type="text/javascript">
 		        jQuery( document ).ready(function( $ ) {
-		        		
+		        	
+		        	// Setup vars
+		        	var StreamingType  = 'progressive';
+
                     $('#TB_ajaxContent').css({
                     	'width' : 'auto',
                     	'height' : 'auto',
@@ -1108,10 +1159,13 @@ if (!class_exists("s3bubble_audio")) {
 						   },'json');
 						});				
 					},'json');
+					$( "#s3bubble-streaming-type" ).change(function() {
+						StreamingType = $(this).val();
+					});	
 			        $('#s3bubble-mce-submit').click(function(){
-			        	var bucket     = $('#s3bucket').val();
-			        	var folder     = $('#s3folder').val();
-			        	var cloudfront = $('#s3cloudfront').val();
+			        	var bucket       = $('#s3bucket').val();
+			        	var folder       = $('#s3folder').val();
+			        	var cloudfrontid = $('#s3bubble-cloudfrontid').val();
 			        	if(bucket === '' || folder === ''){
 			        		alert('Please select a bucket and track');
 			        		return false;
@@ -1139,7 +1193,15 @@ if (!class_exists("s3bubble_audio")) {
 						var shortcode = '[s3bubbleAudioSingle bucket="' + bucket + '" track="' + folder + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
 						if($("#s3mediaelement").is(':checked')){
 						    shortcode = '[s3bubbleMediaElementAudio bucket="' + bucket + '" track="' + folder + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
-						}  
+							
+						} 
+						if(StreamingType === 'rtmp'){
+							if(cloudfrontid === ''){
+								alert('To use RTMP streaming you need to specify a Cloudfront Distribution ID');
+							}else{
+								shortcode = '[s3bubbleRtmpAudioDefault bucket="' + bucket + '" track="' + folder + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"  style="' + style + '" preload="' + preload + '"/]';
+		                   	}
+						} 
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
 			        });
@@ -1156,6 +1218,19 @@ if (!class_exists("s3bubble_audio")) {
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
 				    		<label for="fname">Your S3Bubble Files:</label>
 				    		<span id="s3bubble-folders-shortcode">Select bucket/folder...</span>
+				    	</div>
+					</span>
+					<span>
+						<div class="s3bubble-pull-left s3bubble-width-left">
+							<label for="fname">Select Streaming Type:</label>
+				    		<select class="form-control input-lg" tabindex="1" name="s3bubble-streaming-type" id="s3bubble-streaming-type">
+				    			<option value="progressive">Progressive</option>
+				    			<option value="rtmp">Rtmp</option>
+				    		</select>
+				    	</div>
+				    	<div class="s3bubble-pull-right s3bubble-width-right">
+				    		<label for="fname">Set Cloudfront Distribution Id:</label>
+				    		<input type="text" class="s3bubble-form-input" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">
 				    	</div>
 					</span>
 					<input type="hidden" class="s3bubble-form-input" name="cloudfront" id="s3cloudfront">
@@ -1970,7 +2045,7 @@ if (!class_exists("s3bubble_audio")) {
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
 										}
-										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 									}
 									setTimeout(function(){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
@@ -2075,6 +2150,205 @@ if (!class_exists("s3bubble_audio")) {
 							restored : true,
 							hold : 3000
 						}
+					});
+				});
+				</script>';
+
+       }
+
+       /*
+		* Run the jplayer supports RTMP streaming
+		* @author sameast
+		* @none
+		*/ 
+	   function s3bubble_rtmp_audio_default($atts){
+
+	   		$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");		
+			$loggedin            = get_option("s3-loggedin");
+			$search              = get_option("s3-search");
+
+			 extract( shortcode_atts( array(
+				'style'      => 'bar',
+				'download'   => 'false',
+				'autoplay'   => 'false',
+				'preload'    => 'auto',
+				'bucket'     => '',
+				'track'      => '',
+				'cloudfront' => ''
+			), $atts, 's3bubbleRtmpAudioDefault' ) );
+			extract( shortcode_atts( array(
+				'style'      => 'bar',
+				'download'   => 'false',
+				'autoplay'   => 'false',
+				'preload'    => 'auto',
+				'bucket'     => '',
+				'track'      => '',
+				'cloudfront' => ''
+			), $atts, 's3bubbleRtmpAudioDefault' ) );
+
+			$style    = ((empty($style)) ? 'bar' : $style);
+			$download = ((empty($download)) ? 'false' : $download);
+			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
+			$preload  = ((empty($preload)) ? 'auto' : $preload);
+			
+			// Check download
+			if($loggedin == 'true'){
+				if ( is_user_logged_in() ) {
+					$download = 1;
+				}else{
+					if($download == 'true'){
+						$download = 1;
+					}else{
+						$download = 0;
+					}
+				}
+			}
+            $player_id = uniqid();
+
+            return '<div id="s3bubble-media-main-container-' . $player_id .  '" class="s3bubble-media-main-audio">
+			    <div id="jquery_jplayer_rtmp_audio_' . $player_id .  '" class="s3bubble-media-main-jplayer"></div>
+				    <div class="s3bubble-media-main-gui">
+				        <div class="s3bubble-media-main-interface s3bubble-media-main-interface-audio-playlist">
+				        	<div class="s3bubble-media-main-audio-loading">
+						    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
+						    </div>
+				            <div class="s3bubble-media-main-controls-holder" style="display:none;">
+					            <span class="s3bubble-media-main-left-controls">
+									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
+								</span>
+								<div class="s3bubble-media-main-progress" dir="auto">
+								    <div class="s3bubble-media-main-seek-bar" dir="auto">
+								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
+								    </div>
+								</div>
+								<span class="s3bubble-media-main-right-controls">
+									<div class="s3bubble-media-main-volume-bar" dir="auto">
+									    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
+									</div>
+									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
+									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
+									<div class="s3bubble-media-main-time-container">
+										<div class="s3bubble-media-main-duration"></div>
+									</div>
+								</span>
+				            </div>
+				        </div>
+				    </div>
+				    <div class="s3bubble-media-main-playlist">
+						<ul>
+							<li></li>
+						</ul>
+					</div>
+				    <div class="s3bubble-media-main-no-solution" style="display:none;">
+				        <span>Update Required</span>
+				        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
+				    </div>
+				</div>
+				<script type="text/javascript">
+				jQuery(document).ready(function( $ ) {
+					
+					// Set aspect ratio
+					var Bucket     = "' . $bucket . '";
+					var Key        = "' . $track . '";
+					var Cloudfront = "' . $cloudfront . '";
+					var Current    = -1;
+					var IsMobile   = false;
+					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+						IsMobile = true;
+					}
+
+					var s3bubbleAudioRtmpPlaylist = new jPlayerPlaylist({
+						jPlayer: "#jquery_jplayer_rtmp_audio_' . $player_id . '",
+						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
+					}, s3bubbleAudioRtmpPlaylist, {
+						playlistOptions: {
+		                    displayTime: 0,
+		                    playerWidth: $(this).width(),
+		                    enableRemoveControls: false
+		                },
+						ready : function(event) {
+							var sendData = {
+								"action": "s3bubble_audio_rtmp_internal_ajax",
+								"Timezone":"America/New_York",
+							    "Bucket" : Bucket,
+							    "Key" : Key,
+							    "Cloudfront" : Cloudfront,
+							    "IsMobile" : IsMobile
+							}
+							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
+
+								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
+								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
+
+								if(response.error){
+									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ". <a href=\"https://s3bubble.com/video_tutorials/starter-setting-up-rtmp-streaming/\" target=\"_blank\">Watch Video</a></p></span>");
+									console.log(response.message);
+								}else{
+
+									s3bubbleAudioRtmpPlaylist.setPlaylist(response.results);
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");
+									if(IsMobile){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
+									}
+									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");
+										if(IsMobile){
+											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
+										}
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									}
+									//Make it plain
+									if ("' . $style . '" === "plain") {
+										$("#s3bubble-media-main-container-' . $player_id . '").css({
+											overflow : "hidden",
+											height : "35px"
+										})
+									}
+
+								}
+							},"json");
+
+						},
+						loadedmetadata: function (event) {
+							
+					    },
+					    resize: function (event) {
+
+					    },
+					    click: function (event) {
+
+					    },
+					    error: function (event) {
+
+					    },
+					    warning: function (event) {
+
+					    },
+					    loadstart: function (event) {
+
+					    },
+					    progress: function (event) {
+
+					    },
+					    play: function (event) {
+							
+					    },
+					    ended : function(event) {
+							console.log("ended");
+						},
+					    timeupdate : function(event) {
+
+						},
+						swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/s3bubble.audio.rtmp.swf",
+				        supplied: ((IsMobile) ? "mp3,wav,m4a" : "rtmpa"),
+						useStateClassSkin: true,
+						autoBlur: false,
+						smoothPlayBar: false,
+						keyEnabled: true,
+						audioFullScreen: true,
+						remainingDuration: true
 					});
 				});
 				</script>';
@@ -2762,6 +3036,7 @@ if (!class_exists("s3bubble_audio")) {
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
 								
 								if(response.error !== undefined){
+									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.error + ".</p></span>");
 									console.log(response.error);
 								}else{
 									audioPlaylistS3Bubble.setPlaylist(response);
@@ -2774,7 +3049,7 @@ if (!class_exists("s3bubble_audio")) {
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 190px 0 40px");	
 										}
-										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 									}
 									// hide playlist 
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-list").click(function() {
@@ -3094,6 +3369,7 @@ if (!class_exists("s3bubble_audio")) {
 							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
 							
 							if(response.error !== undefined){
+								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.error + ".</p></span>");
 								console.log(response.error);
 							}else{
 								audioSingleS3Bubble.setPlaylist(response);
@@ -3106,7 +3382,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
 									}
-									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 								}
 								//Make it plain
 								if ("' . $style . '" === "plain") {
@@ -3417,6 +3693,7 @@ if (!class_exists("s3bubble_audio")) {
 						}
 						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 							if(response.error !== undefined){
+								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.error + ".</p></span>");
 								console.log(response.error);
 							}else{
 								videoPlaylistS3Bubble.setPlaylist(response);
@@ -3429,7 +3706,7 @@ if (!class_exists("s3bubble_audio")) {
 									if(IsMobile){
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");	
 									}
-									$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 								}
 								$("video").bind("contextmenu", function(e) {
 									return false
@@ -3759,6 +4036,7 @@ if (!class_exists("s3bubble_audio")) {
 							}
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 								if(response.error){
+									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
 									console.log(response.message);   
 								}else{
 									videoSingleS3Bubble.setPlaylist(response.results);	
@@ -3772,7 +4050,7 @@ if (!class_exists("s3bubble_audio")) {
 										if(IsMobile){
 											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
 										}
-										$(".s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
+										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
 									}
 									$("#s3bubble-media-main-container-' . $player_id . ' #s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
 									$("video").bind("contextmenu", function(e) {
