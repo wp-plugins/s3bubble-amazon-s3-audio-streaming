@@ -276,11 +276,11 @@ a.s3bubble-media-main-pause {
     border-radius: 3px
 }
 .s3bubble-media-main-play-bar {
-    background: #000;
+    background: #d00;
     width: 0;
     height: 10px;
     position: relative;
-    z-index: 1001;
+    z-index: 2;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px
@@ -371,7 +371,7 @@ a.s3bubble-media-main-pause {
     border-radius: 3px
 }
 .s3bubble-media-main-volume-bar-value {
-    background: #000;
+    background: #d00;
     width: 0;
     height: 10px;
     position: relative;
@@ -460,6 +460,9 @@ a.s3bubble-media-main-pause {
     font-size: 13px;
     outline: 0;
 }
+.s3bubble-media-main-playlist li div a.s3bubble-media-main-playlist-current {
+    color: #d00;
+}
 .s3bubble-media-main-no-solution {
     display: block;
     position: absolute;
@@ -523,4 +526,25 @@ a.s3bubble-media-main-pause {
 .s3bubble-alert p {
     padding: 10px;
     margin: 0px;
+}
+.s3bubble-cloud-download {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-color: black;
+    padding: 10px;
+    width: 58px;
+    text-align: center;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.5);
+    -khtml-box-shadow: 0 1px 1px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,.5);
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    font-size: 30px !important;
+    z-index: 9
+}
+.s3bubble-cloud-download i {
+    font-size: 38px;
 }

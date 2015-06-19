@@ -8,7 +8,7 @@ Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-S3Bubble offers simple, media streaming from Amazon S3 to Wordpress all in just 4 simple steps!
+S3Bubble offers secure, Media Streaming from Amazon S3 to WordPress. 
 
 == Description ==
 
@@ -20,6 +20,11 @@ S3Bubble offers simple, media streaming from Amazon S3 to Wordpress all in just 
 * Audio Playlist: (.mp3/.m4a/.wav) - [View Example](https://s3bubble.com/s3bubble-audio-playlist-example-wordpress-plugin/ "View Example")
 * Audio Single: (.mp3/.m4a/.wav) - [View Example](https://s3bubble.com/s3bubble-audio-single-example-wordpress-plugin/ "View Example")
 * Video Progressive Streaming: (.mp4 h.264 encode) - [View Example](https://s3bubble.com/progressive-streaming-example/ "View Example")
+
+**Live Streaming Video On Demand.**
+* Video Live HLS or RTMP Streaming: (HLS RTMP VOD) - [View Example](https://s3bubble.com/s3bubble-live-streaming-example/ "View Example")
+
+Please contact us if you require a full Live Streaming setup powered by Amazon Web Services [support@s3bubble.com](mailto:support@s3bubble.com "support@s3bubble.com")
 
 Now with WYSIWYG buttons [View more information on this](https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/ "View more information on this")
 
@@ -44,24 +49,6 @@ Youtube is great but if you’d rather get users to pay for your content S3Bubbl
 Hosting video, galleries and audio files is heavyweight work. S3Bubble adds powerful functionality to your existing Amazon S3 account, so you can forget about hosting issues. Because of this, you only ever pay for what you use.
 
 Download the plugin or Sign Up for an account at [S3Bubble](https://s3bubble.com "S3bubble")
-
-= Keyboard Functions: =
-* Spacebar: Play/Pause
-* h key: Forward 5
-* b key: Backward 5
-* m key: Mute
-* a key: Slow Playback Speed
-* s key: Increase Playback Speed
-* d key: Set Playback To Normal
-* l key: Loop Track
-* 1 key: Loop In
-* 2 key: Loop Out
-* 3 key: Loop Off
-* f key: Fullscreen
-* > key: Volume Up
-* < key: Volume Down
-* Right Arrow: Next Track
-* Left Arrow: Previous Track
 
 [youtube https://www.youtube.com/watch?v=VFG3-nvV6F0]
 
