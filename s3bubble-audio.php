@@ -96,7 +96,7 @@ if (!class_exists("s3bubble_audio")) {
 			 * @author sameast
 			 * @params none
 			 */ 
-			add_action( 'wp_head', array( $this, 's3bubble_audio_css' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 's3bubble_audio_css' ), 12 );
 			add_action( 'wp_enqueue_scripts', array( $this, 's3bubble_audio_javascript' ), 12 );
 			
 			/*
@@ -315,7 +315,7 @@ if (!class_exists("s3bubble_audio")) {
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
-					.s3bubble-media-main-interface, .s3bubble-media-main-video-play {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
+					.s3bubble-media-main-interface, .s3bubble-media-main-video-play, .s3bubble-media-main-video-skip {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep, .s3icon-cloud-download {color: '.stripcslashes($icons).' !important;text-decoration: none !important;font-style: normal !important;}
 					.s3bubble-media-main-playlist-current {color: '.stripcslashes($seek).' !important;}
@@ -537,6 +537,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_close($ch);
 			
 			die();	
+
 		}
 
 		/*
@@ -581,6 +582,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_close($ch);
 			
 			die();	
+
 		}
 
         /*
@@ -623,6 +625,7 @@ if (!class_exists("s3bubble_audio")) {
 			curl_close($ch);
 			
 			die();	
+
 		}
         
         /*
@@ -1604,8 +1607,8 @@ if (!class_exists("s3bubble_audio")) {
 
 			}
 
-			//close connection
-			curl_close($ch);
+			
+			
         }
 
         /*
@@ -1630,13 +1633,33 @@ if (!class_exists("s3bubble_audio")) {
 			
 			$player_id = uniqid();
 
+			//Split the key
+			$path_parts = pathinfo($stream);
+
+			if(isset($path_parts['extension']) && $path_parts['extension'] == 'm3u8'){
+
+				// Setup secure url
+				$secret = 'secret'; // To make the hash more difficult to reproduce.
+				$path   = '/hls/' . $path_parts['filename'] . '.m3u8'; // This is the file to send to the user.
+				$expire = time() + 3600; // At which point in time the file should expire. time() + x; would be the usual usage.
+				$md5 = base64_encode(md5($secret .  $path . $expire , true)); // Using binary hashing.
+				$md5 = strtr($md5, '+/', '-_'); // + and / are considered special characters in URLs, see the wikipedia page linked in references.
+				$md5 = str_replace('=', '', $md5); // When used in query parameters the base64 padding character is considered special.
+				$url = $stream . '?st=' . $md5 . '&e=' . time();
+
+			}else{
+
+				$url = $stream;
+
+			}
+
 			if(empty($stream)){
 				echo "No live steam url has been set";
 			}else{
 
 				return '<div class="video-wrap-' . $player_id . '" style="width:100%;overflow:hidden;">
 							<video id="video-' . $player_id . '" style="width:100%;" controls="controls" preload="none">
-								<source type="application/x-mpegURL" src="' . $stream . '" />
+								<source type="application/x-mpegURL" src="' . $url . '" />
 							</video>
 						</div>
 						<script>
@@ -1673,8 +1696,8 @@ if (!class_exists("s3bubble_audio")) {
 
 			}
 
-			//close connection
-			curl_close($ch);
+			
+			
         }
 
        // -------------------------- HLS PLAYERS SETUPS BELOW ------------------------------ //
@@ -1704,7 +1727,7 @@ if (!class_exists("s3bubble_audio")) {
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
             
-			//set POST variables
+            //set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_hls';
 			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
@@ -1714,9 +1737,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'Key' => $track,
 			    'Cloudfront' => $cloudfront
 			);
-			
+
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -1729,9 +1752,10 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
+			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
 
 			if(!empty($track['error'])){
 				echo $track['error'];
@@ -1796,8 +1820,8 @@ if (!class_exists("s3bubble_audio")) {
 						</script>';
 				}
 			}
-			//close connection
-			curl_close($ch);
+			
+			
        }
 
        /*
@@ -1827,7 +1851,7 @@ if (!class_exists("s3bubble_audio")) {
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
-            
+
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_hls';
 			$fields = array(
@@ -1838,9 +1862,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'Key' => $track,
 			    'Cloudfront' => $cloudfront
 			);
-			
+
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -1853,9 +1877,10 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
+			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
 
 			if(!empty($track['error'])){
 				echo $track['error'];
@@ -1909,8 +1934,8 @@ if (!class_exists("s3bubble_audio")) {
 							</script>';
 				}
 			}
-			//close connection
-			curl_close($ch);
+			
+			
        }
 
        // -------------------------- RTMP SETUPS BELOW ------------------------------ //
@@ -1947,7 +1972,6 @@ if (!class_exists("s3bubble_audio")) {
 				    <div class="s3bubble-media-main-video-skip">
 						<h2>Skip Ad</h2>
 						<i class="s3icon s3icon-step-forward"></i>
-						<img id="s3bubble-media-main-skip-tumbnail" src=""/>
 					</div>
 				    <div class="s3bubble-media-main-video-loading">
 				    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
@@ -1958,16 +1982,16 @@ if (!class_exists("s3bubble_audio")) {
 				    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
 				        <div class="s3bubble-media-main-interface">
 				            <div class="s3bubble-media-main-controls-holder">
-					            <span class="s3bubble-media-main-left-controls">
+					            <div class="s3bubble-media-main-left-controls">
 									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</span>
+								</div>
 								<div class="s3bubble-media-main-progress">
 								    <div class="s3bubble-media-main-seek-bar">
 								        <div class="s3bubble-media-main-play-bar"></div>
 								    </div>
 								</div>
-								<span class="s3bubble-media-main-right-controls">
+								<div class="s3bubble-media-main-right-controls">
 									<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 									<div class="s3bubble-media-main-volume-bar">
@@ -1978,7 +2002,7 @@ if (!class_exists("s3bubble_audio")) {
 									<div class="s3bubble-media-main-time-container">
 										<div class="s3bubble-media-main-duration"></div>
 									</div>
-								</span>
+								</div>
 				            </div>
 				        </div>
 				    </div>
@@ -2026,8 +2050,7 @@ if (!class_exists("s3bubble_audio")) {
 									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ". <a href=\"https://s3bubble.com/video_tutorials/starter-setting-up-rtmp-streaming/\" target=\"_blank\">Watch Video</a></p></span>");
 									console.log(response.message);
 								}else{
-									
-									$("#s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
+
 									s3bubbleRtmpPlaylist.setPlaylist(response.results);
 
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");	
@@ -2054,7 +2077,7 @@ if (!class_exists("s3bubble_audio")) {
 							$(".s3bubble-media-main-video-skip").on( "click", function() {
 								$(".s3bubble-media-main-video-loading").fadeIn();
 								$(".s3bubble-media-main-video-skip").animate({
-								    left: "-230"
+								    left: "-120"
 								}, 50, function() {
 								    s3bubbleRtmpPlaylist.next();
 								});
@@ -2096,7 +2119,7 @@ if (!class_exists("s3bubble_audio")) {
 									});
 								}else{
 									$(".s3bubble-media-main-video-skip").animate({
-									    left: "-230"
+									    left: "-120"
 									}, 50, function() {
 									    s3bubbleRtmpPlaylist.next();
 									});
@@ -2208,16 +2231,16 @@ if (!class_exists("s3bubble_audio")) {
 						    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 						    </div>
 				            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-					            <span class="s3bubble-media-main-left-controls">
+					            <div class="s3bubble-media-main-left-controls">
 									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</span>
+								</div>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
 								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
-								<span class="s3bubble-media-main-right-controls">
+								<div class="s3bubble-media-main-right-controls">
 									<div class="s3bubble-media-main-volume-bar" dir="auto">
 									    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
 									</div>
@@ -2226,7 +2249,7 @@ if (!class_exists("s3bubble_audio")) {
 									<div class="s3bubble-media-main-time-container">
 										<div class="s3bubble-media-main-duration"></div>
 									</div>
-								</span>
+								</div>
 				            </div>
 				        </div>
 				    </div>
@@ -2375,7 +2398,7 @@ if (!class_exists("s3bubble_audio")) {
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
-            
+
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_rtmp';
 			$fields = array(
@@ -2386,9 +2409,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'Key' => $track,
 			    'Cloudfront' => $cloudfront
 			);
-			
+
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -2404,6 +2427,7 @@ if (!class_exists("s3bubble_audio")) {
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
 
 			if(!empty($track['error'])){
 				echo $track['error'];
@@ -2468,8 +2492,8 @@ if (!class_exists("s3bubble_audio")) {
 							</script>';
 				}
 			}
-			//close connection
-			curl_close($ch);
+			
+			
        }
 
        /*
@@ -2498,7 +2522,7 @@ if (!class_exists("s3bubble_audio")) {
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
-            
+
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_rtmp';
 			$fields = array(
@@ -2509,9 +2533,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'Key' => $track,
 			    'Cloudfront' => $cloudfront
 			);
-			
+
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -2524,9 +2548,10 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
+			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
 
 			if(!empty($track['error'])){
 				echo $track['error'];
@@ -2579,8 +2604,8 @@ if (!class_exists("s3bubble_audio")) {
 							</script>';
 				}
 			}
-			//close connection
-			curl_close($ch);
+			
+			
        }
 
        // ------------------------------ PROGRESSIVE PLAYERS BELOW --------------------------- //
@@ -2609,7 +2634,7 @@ if (!class_exists("s3bubble_audio")) {
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
-            
+
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_videojs';
 			$fields = array(
@@ -2621,9 +2646,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'Cloudfront' => $cloudfront,
 			    'Server' => $_SERVER['REMOTE_ADDR']
 			);
-			
+
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -2636,9 +2661,10 @@ if (!class_exists("s3bubble_audio")) {
 			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-
+			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
 
 			if(!empty($track['error'])){
 				echo $track['error'];
@@ -2674,8 +2700,8 @@ if (!class_exists("s3bubble_audio")) {
 							</script>';
 				}
 			}
-			//close connection
-			curl_close($ch);
+			
+			
        }
 	   
 	   /*
@@ -2702,7 +2728,7 @@ if (!class_exists("s3bubble_audio")) {
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
-            
+
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_media_element';
 			$fields = array(
@@ -2714,9 +2740,9 @@ if (!class_exists("s3bubble_audio")) {
 			    'Cloudfront' => $cloudfront,
 			    'Server' => $_SERVER['REMOTE_ADDR']
 			);
-			
+
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -2732,6 +2758,7 @@ if (!class_exists("s3bubble_audio")) {
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
 
 			if(!empty($track['error'])){
 				echo $track['error'];
@@ -2794,8 +2821,8 @@ if (!class_exists("s3bubble_audio")) {
 						</script>';
 				}
 			}
-			//close connection
-			curl_close($ch);
+			
+			
        }
        
 	   /*
@@ -2823,17 +2850,18 @@ if (!class_exists("s3bubble_audio")) {
 
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 
+			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_audio_media_element';
-			$fields = http_build_query(array(
+			$fields = array(
 				'AccessKey' => $s3bubble_access_key,
 			    'SecretKey' => $s3bubble_secret_key,
 			    'Timezone' => 'America/New_York',
 			    'Bucket' => $bucket,
 			    'Key' => $track
-			));
+			);
 
 			if(!function_exists('curl_init')){
-    			return "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>";
+    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
     			exit();
     		}
 			
@@ -2849,6 +2877,8 @@ if (!class_exists("s3bubble_audio")) {
 			//execute post
 		    $result = curl_exec($ch);
 			$track = json_decode($result, true);
+			curl_close($ch);
+
 			if(!empty($track['error'])){
 				echo $track['error'];
 			}else{
@@ -2892,7 +2922,7 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				}
 			}
-			curl_close($ch);
+			
        }
 	   
 	    /*
@@ -2960,16 +2990,16 @@ if (!class_exists("s3bubble_audio")) {
 						    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 						    </div>
 				            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-					            <span class="s3bubble-media-main-left-controls">
+					            <div class="s3bubble-media-main-left-controls">
 									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</span>
+								</div>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
 								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
-								<span class="s3bubble-media-main-right-controls">
+								<div class="s3bubble-media-main-right-controls">
 									<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
 									<div class="s3bubble-media-main-volume-bar" dir="auto">
@@ -2980,7 +3010,7 @@ if (!class_exists("s3bubble_audio")) {
 									<div class="s3bubble-media-main-time-container">
 										<div class="s3bubble-media-main-duration"></div>
 									</div>
-								</span>
+								</div>
 				            </div>
 				        </div>
 				    </div>
@@ -3294,16 +3324,16 @@ if (!class_exists("s3bubble_audio")) {
 					    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
 					    </div>
 			            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-				            <span class="s3bubble-media-main-left-controls">
+				            <div class="s3bubble-media-main-left-controls">
 								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-							</span>
+							</div>
 							<div class="s3bubble-media-main-progress" dir="auto">
 							    <div class="s3bubble-media-main-seek-bar" dir="auto">
 							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 							    </div>
 							</div>
-							<span class="s3bubble-media-main-right-controls">
+							<div class="s3bubble-media-main-right-controls">
 								<div class="s3bubble-media-main-volume-bar" dir="auto">
 								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
 								</div>
@@ -3312,7 +3342,7 @@ if (!class_exists("s3bubble_audio")) {
 								<div class="s3bubble-media-main-time-container">
 									<div class="s3bubble-media-main-duration"></div>
 								</div>
-							</span>
+							</div>
 			            </div>
 			        </div>
 			    </div>
@@ -3605,7 +3635,6 @@ if (!class_exists("s3bubble_audio")) {
 				    <div class="s3bubble-media-main-video-skip">
 						<h2>Skip Ad</h2>
 						<i class="s3icon s3icon-step-forward"></i>
-						<img id="s3bubble-media-main-skip-tumbnail" src=""/>
 					</div>
 					<div class="s3bubble-media-main-video-search">
 						<input type="text" id="s3bubble-video-playlist-tsearch-' . $player_id .  '" class="s3bubble-video-playlist-tsearch" name="s3bubble-video-playlist-tsearch" placeholder="Search">
@@ -3619,16 +3648,16 @@ if (!class_exists("s3bubble_audio")) {
 				    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
 				        <div class="s3bubble-media-main-interface">
 				            <div class="s3bubble-media-main-controls-holder">
-					            <span class="s3bubble-media-main-left-controls">
+					            <div class="s3bubble-media-main-left-controls">
 									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</span>
+								</div>
 								<div class="s3bubble-media-main-progress" dir="auto">
 								    <div class="s3bubble-media-main-seek-bar" dir="auto">
 								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 								    </div>
 								</div>
-								<span class="s3bubble-media-main-right-controls">
+								<div class="s3bubble-media-main-right-controls">
 									<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 									<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
@@ -3641,7 +3670,7 @@ if (!class_exists("s3bubble_audio")) {
 									<div class="s3bubble-media-main-time-container">
 										<div class="s3bubble-media-main-duration"></div>
 									</div>
-								</span>
+								</div>
 				            </div>
 				        </div>
 				    </div>
@@ -3959,7 +3988,6 @@ if (!class_exists("s3bubble_audio")) {
 			    <div class="s3bubble-media-main-video-skip">
 					<h2>Skip Ad</h2>
 					<i class="s3icon s3icon-step-forward"></i>
-					<img id="s3bubble-media-main-skip-tumbnail" src=""/>
 				</div>
 			    <div class="s3bubble-media-main-video-loading">
 			    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
@@ -3970,16 +3998,16 @@ if (!class_exists("s3bubble_audio")) {
 			    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
 			        <div class="s3bubble-media-main-interface">
 			            <div class="s3bubble-media-main-controls-holder">
-			            	<span class="s3bubble-media-main-left-controls">
+			            	<div class="s3bubble-media-main-left-controls">
 								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-							</span>
+							</div>
 							<div class="s3bubble-media-main-progress" dir="auto">
 							    <div class="s3bubble-media-main-seek-bar" dir="auto">
 							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
 							    </div>
 							</div>
-							<span class="s3bubble-media-main-right-controls">
+							<div class="s3bubble-media-main-right-controls">
 								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
 								<div class="s3bubble-media-main-volume-bar" dir="auto">
@@ -3990,7 +4018,7 @@ if (!class_exists("s3bubble_audio")) {
 								<div class="s3bubble-media-main-time-container">
 									<div class="s3bubble-media-main-duration"></div>
 								</div>
-							</span>
+							</div>
 			            </div>
 			        </div>
 			    </div>
@@ -4067,14 +4095,13 @@ if (!class_exists("s3bubble_audio")) {
 											$("#s3bubble-media-main-container-' . $player_id . '").prepend("<a href=\"" + response.results[0].download + "\" class=\"s3bubble-cloud-download\" title=\"Free Download\"><i class=\"s3icon s3icon-cloud-download\"></i></a>");
 										}	
 									}
-									$("#s3bubble-media-main-container-' . $player_id . ' #s3bubble-media-main-skip-tumbnail").attr("src", response.results[0].poster);
 									$("video").bind("contextmenu", function(e) {
 										return false;
 									}); 
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").on( "click", function() {
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn();
 										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-										    left: "-230"
+										    left: "-120"
 										}, 50, function() {
 										    videoSingleS3Bubble.next();
 										});
@@ -4127,7 +4154,7 @@ if (!class_exists("s3bubble_audio")) {
 								});
 							}else{
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-								    left: "-230"
+								    left: "-120"
 								}, 50, function() {
 								    
 								});
