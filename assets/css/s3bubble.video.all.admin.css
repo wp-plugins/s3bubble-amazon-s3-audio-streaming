@@ -47,3 +47,17 @@
 .s3bubble-video-form-alerts p, .s3bubble-video-main-form-alerts p{
     padding: 10px;
 }
+#s3bubble-mce-submit-iframe {
+	width: 48%;
+  	height: auto;
+  	padding: 10px;
+  	text-align: center;
+  	font-size: 16px;
+}
+#s3bubble-mce-submit {
+	width: 48%;
+  	height: auto;
+  	padding: 10px;
+  	text-align: center;
+  	font-size: 16px;
+}

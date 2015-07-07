@@ -41,7 +41,7 @@ if (!class_exists("s3bubble_audio")) {
 		public  $colour          = '#1abc98';
 		public  $width           = '100%';
 		public  $autoplay        = 'yes';
-		public  $jtoggle		    = 'true';
+		public  $jtoggle		 = 'true';
 		public  $loggedin        = 'false';
 		public  $search          = 'false';
 		public  $responsive      = 'responsive';
@@ -89,7 +89,7 @@ if (!class_exists("s3bubble_audio")) {
 			 * @author sameast
 			 * @params none
 			 */ 
-			add_action('admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
+			add_action( 'admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
 			
 			/*
 			 * Add css to the header of the document
@@ -173,6 +173,15 @@ if (!class_exists("s3bubble_audio")) {
 			add_shortcode( 's3audibleSingle', array( $this, 's3bubble_audio_single_player' ) );	
 			add_shortcode( 's3video', array( $this, 's3bubble_video_player' ) );	
 			add_shortcode( 's3videoSingle', array( $this, 's3bubble_video_single_player' ) );	
+
+			/*
+			 * Iframe codes for the plugin
+			 * @author sameast
+			 * @params none
+			 */ 
+			add_shortcode( 's3bubbleVideoSingleIframe', array( $this, 's3bubble_video_single_player_iframe' ) );
+			add_shortcode( 's3bubbleAudioSingleIframe', array( $this, 's3bubble_audio_single_player_iframe' ) );
+			
 			
 			/*
 			 * Tiny mce button for the plugin
@@ -190,22 +199,22 @@ if (!class_exists("s3bubble_audio")) {
 			 * Internal Ajax
 			 */
 			add_action( 'wp_ajax_s3bubble_video_single_internal_ajax', array( $this, 's3bubble_video_single_internal_ajax' ) );
-			add_action('wp_ajax_nopriv_s3bubble_video_single_internal_ajax', array( $this, 's3bubble_video_single_internal_ajax' ) ); 
+			add_action( 'wp_ajax_nopriv_s3bubble_video_single_internal_ajax', array( $this, 's3bubble_video_single_internal_ajax' ) ); 
 		    
 		    add_action( 'wp_ajax_s3bubble_video_playlist_internal_ajax', array( $this, 's3bubble_video_playlist_internal_ajax' ) );
-			add_action('wp_ajax_nopriv_s3bubble_video_playlist_internal_ajax', array( $this, 's3bubble_video_playlist_internal_ajax' ) ); 
+			add_action( 'wp_ajax_nopriv_s3bubble_video_playlist_internal_ajax', array( $this, 's3bubble_video_playlist_internal_ajax' ) ); 
 			
 			add_action( 'wp_ajax_s3bubble_audio_single_internal_ajax', array( $this, 's3bubble_audio_single_internal_ajax' ) );
-			add_action('wp_ajax_nopriv_s3bubble_audio_single_internal_ajax', array( $this, 's3bubble_audio_single_internal_ajax' ) ); 
+			add_action( 'wp_ajax_nopriv_s3bubble_audio_single_internal_ajax', array( $this, 's3bubble_audio_single_internal_ajax' ) ); 
             
 			add_action( 'wp_ajax_s3bubble_audio_playlist_internal_ajax', array( $this, 's3bubble_audio_playlist_internal_ajax' ) );
-			add_action('wp_ajax_nopriv_s3bubble_audio_playlist_internal_ajax', array( $this, 's3bubble_audio_playlist_internal_ajax' ) ); 
+			add_action( 'wp_ajax_nopriv_s3bubble_audio_playlist_internal_ajax', array( $this, 's3bubble_audio_playlist_internal_ajax' ) ); 
 
 			add_action( 'wp_ajax_s3bubble_video_rtmp_internal_ajax', array( $this, 's3bubble_video_rtmp_internal_ajax' ) );
-			add_action('wp_ajax_nopriv_s3bubble_video_rtmp_internal_ajax', array( $this, 's3bubble_video_rtmp_internal_ajax' ) ); 
+			add_action( 'wp_ajax_nopriv_s3bubble_video_rtmp_internal_ajax', array( $this, 's3bubble_video_rtmp_internal_ajax' ) ); 
 			
 			add_action( 'wp_ajax_s3bubble_audio_rtmp_internal_ajax', array( $this, 's3bubble_audio_rtmp_internal_ajax' ) );
-			add_action('wp_ajax_nopriv_s3bubble_audio_rtmp_internal_ajax', array( $this, 's3bubble_audio_rtmp_internal_ajax' ) ); 
+			add_action( 'wp_ajax_nopriv_s3bubble_audio_rtmp_internal_ajax', array( $this, 's3bubble_audio_rtmp_internal_ajax' ) ); 
 
 			/*
 			 * Admin dismiss message
@@ -213,6 +222,21 @@ if (!class_exists("s3bubble_audio")) {
 			add_action('admin_notices', array( $this, 's3bubble_admin_notice' ) );
 			add_action('admin_init', array( $this, 's3bubble_nag_ignore' ) );
 
+			/*
+			 * Heartbeat fix
+			 */
+			add_action( 'init', array( $this, 's3bubble_stop_heartbeat' ), 1 );
+		}
+
+		/*
+		* Fix for poor hosts
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_stop_heartbeat() {
+		  global $pagenow;
+		  if ( $pagenow != 'edit.php' )
+		  wp_deregister_script('heartbeat');
 		}
 
 		/*
@@ -375,36 +399,43 @@ if (!class_exists("s3bubble_audio")) {
 
 			//set POST variables
 			$url = $this->endpoint . 'rtmp/video';
-			$fields = array(
-				'AccessKey' => $s3bubble_access_key,
-			    'SecretKey' => $s3bubble_secret_key,
-			    'Timezone' => 'America/New_York',
-			    'Bucket' => $_POST['Bucket'],
-			    'Key' => $_POST['Key'],
-			    'Cloudfront' => $_POST['Cloudfront'],
-			    'IsMobile' => $_POST['IsMobile']
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => true,
+				'timeout' => 10,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'Timezone' => 'America/New_York',
+				    'Bucket' => $_POST['Bucket'],
+				    'Key' => $_POST['Key'],
+				    'Cloudfront' => $_POST['Cloudfront'],
+				    'IsMobile' => $_POST['IsMobile']
+				),
+				'cookies' => array()
+			    )
 			);
 
-			if(!function_exists('curl_init')){
-    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
-    			exit();
-    		}
-			
-			//open connection
-			$ch = curl_init();
-			//set the url, number of POST vars, POST data
-			curl_setopt($ch,CURLOPT_URL, $url);
-			curl_setopt($ch,CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-		    $result = curl_exec($ch);
-			echo $result;
-			curl_close($ch);
+			if ( is_wp_error( $response ) ) {
 
-			die();	
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
+
+			wp_die();	
 			
 		}
 
@@ -420,37 +451,53 @@ if (!class_exists("s3bubble_audio")) {
 
 			//set POST variables
 			$url = $this->endpoint . 'rtmp/audio';
-			$fields = array(
-				'AccessKey' => $s3bubble_access_key,
-			    'SecretKey' => $s3bubble_secret_key,
-			    'Timezone' => 'America/New_York',
-			    'Bucket' => $_POST['Bucket'],
-			    'Key' => $_POST['Key'],
-			    'Cloudfront' => $_POST['Cloudfront'],
-			    'IsMobile' => $_POST['IsMobile']
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => true,
+				'timeout' => 10,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'Timezone' => 'America/New_York',
+				    'Bucket' => $_POST['Bucket'],
+				    'Key' => $_POST['Key'],
+				    'Cloudfront' => $_POST['Cloudfront'],
+				    'IsMobile' => $_POST['IsMobile']
+				),
+				'cookies' => array()
+			    )
 			);
 
-			if(!function_exists('curl_init')){
-    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
-    			exit();
-    		}
-			
-			//open connection
-			$ch = curl_init();
-			//set the url, number of POST vars, POST data
-			curl_setopt($ch,CURLOPT_URL, $url);
-			curl_setopt($ch,CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-		    $result = curl_exec($ch);
-			echo $result;
-			curl_close($ch);
+			if ( is_wp_error( $response ) ) {
 
-			die();	
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
+
+			wp_die();	
 			
+		}
+
+		function s3bubble_convert_memory(){
+
+		    $mem_usage = memory_get_usage(true); 
+	        $unit=array('b','kb','mb','gb','tb','pb');
+	        $mem_out = @round($mem_usage/pow(1024,($i=floor(log($mem_usage,1024)))),2).' '.$unit[$i];
+            return "Memory usage: " . $mem_out . ". Max execution time: " . ini_get('max_execution_time');
+
 		}
 
 		/*
@@ -459,42 +506,52 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_video_single_internal_ajax(){
-			
+
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_video_object';
-			$fields = array(
-				'AccessKey' => $s3bubble_access_key,
-			    'SecretKey' => $s3bubble_secret_key,
-			    'Timezone' => 'America/New_York',
-			    'Bucket' => $_POST['Bucket'],
-			    'Key' => $_POST['Key'],
-			    'Cloudfront' => $_POST['Cloudfront'],
-			    'Server' => $_POST['Server']
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => true,
+				'timeout' => 10,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'Timezone' => 'America/New_York',
+				    'Bucket' => $_POST['Bucket'],
+				    'Key' => $_POST['Key'],
+				    'Cloudfront' => $_POST['Cloudfront'],
+				    'Server' => $_POST['Server']
+				),
+				'cookies' => array()
+			    )
 			);
 
-			if(!function_exists('curl_init')){
-    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
-    			exit();
-    		}
+			if ( is_wp_error( $response ) ) {
+
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
 			
-			//open connection
-			$ch = curl_init();
-			//set the url, number of POST vars, POST data
-			curl_setopt($ch,CURLOPT_URL, $url);
-			curl_setopt($ch,CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-		    $result = curl_exec($ch);
-			echo $result;
-			curl_close($ch);
-			
-			die();	
+			wp_die();	
+
 		}
 
 		/*
@@ -509,34 +566,41 @@ if (!class_exists("s3bubble_audio")) {
 
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/playlist_video_objects';
-			$fields = array(
-				'AccessKey' => $s3bubble_access_key,
-			    'SecretKey' => $s3bubble_secret_key,
-			    'Timezone' => 'America/New_York',
-			    'Bucket' => $_POST['Bucket'],
-			    'Folder' => $_POST['Folder']
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => true,
+				'timeout' => 30,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'Timezone' => 'America/New_York',
+				    'Bucket' => $_POST['Bucket'],
+				    'Folder' => $_POST['Folder']
+				),
+				'cookies' => array()
+			    )
 			);
 
-			if(!function_exists('curl_init')){
-    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
-    			exit();
-    		}
+			if ( is_wp_error( $response ) ) {
+
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
 			
-			//open connection
-			$ch = curl_init();
-			//set the url, number of POST vars, POST data
-			curl_setopt($ch,CURLOPT_URL, $url);
-			curl_setopt($ch,CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-		    $result = curl_exec($ch);
-			echo $result;
-			curl_close($ch);
-			
-			die();	
+			wp_die();	
 
 		}
 
@@ -552,36 +616,43 @@ if (!class_exists("s3bubble_audio")) {
 
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/single_audio_object';
-			$fields = array(
-				'AccessKey' => $s3bubble_access_key,
-			    'SecretKey' => $s3bubble_secret_key,
-			    'Timezone' => 'America/New_York',
-			    'Bucket' => $_POST['Bucket'],
-			    'Key' => $_POST['Key'],
-			    'Cloudfront' => $_POST['Cloudfront'],
-			    'Server' => $_POST['Server']
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => true,
+				'timeout' => 10,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'Timezone' => 'America/New_York',
+				    'Bucket' => $_POST['Bucket'],
+				    'Key' => $_POST['Key'],
+				    'Cloudfront' => $_POST['Cloudfront'],
+				    'Server' => $_POST['Server']
+				),
+				'cookies' => array()
+			    )
 			);
 
-			if(!function_exists('curl_init')){
-    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
-    			exit();
-    		}
+			if ( is_wp_error( $response ) ) {
+
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
 			
-			//open connection
-			$ch = curl_init();
-			//set the url, number of POST vars, POST data
-			curl_setopt($ch,CURLOPT_URL, $url);
-			curl_setopt($ch,CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-		    $result = curl_exec($ch);
-			echo $result;
-			curl_close($ch);
-			
-			die();	
+			wp_die();	
 
 		}
 
@@ -597,34 +668,41 @@ if (!class_exists("s3bubble_audio")) {
 
 			//set POST variables
 			$url = $this->endpoint . 'main_plugin/playlist_audio_objects';
-			$fields = array(
-				'AccessKey' => $s3bubble_access_key,
-			    'SecretKey' => $s3bubble_secret_key,
-			    'Timezone' => 'America/New_York',
-			    'Bucket' => $_POST['Bucket'],
-			    'Folder' => $_POST['Folder']
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => true,
+				'timeout' => 30,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'Timezone' => 'America/New_York',
+				    'Bucket' => $_POST['Bucket'],
+				    'Folder' => $_POST['Folder']
+				),
+				'cookies' => array()
+			    )
 			);
 
-			if(!function_exists('curl_init')){
-    			echo json_encode(array("error" => "<i>Your hosting does not have PHP curl installed. Please install php curl S3Bubble requires PHP curl to work!</i>"));
-    			exit();
-    		}
+			if ( is_wp_error( $response ) ) {
+
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
 			
-			//open connection
-			$ch = curl_init();
-			//set the url, number of POST vars, POST data
-			curl_setopt($ch,CURLOPT_URL, $url);
-			curl_setopt($ch,CURLOPT_POST, true);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch,CURLOPT_POSTFIELDS, $fields);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			//execute post
-		    $result = curl_exec($ch);
-			echo $result;
-			curl_close($ch);
-			
-			die();	
+			wp_die();	
 
 		}
         
@@ -764,7 +842,7 @@ if (!class_exists("s3bubble_audio")) {
 				</form>
 			</div>
         	<?php
-        	die();
+        	wp_die();
 		}
 		
 		/*
@@ -901,7 +979,7 @@ if (!class_exists("s3bubble_audio")) {
 				</form>
 			</div>
         	<?php
-        	die();
+        	wp_die();
 		}
         
 		/*
@@ -976,7 +1054,57 @@ if (!class_exists("s3bubble_audio")) {
 					},'json');
 					$( "#s3bubble-streaming-type" ).change(function() {
 						StreamingType = $(this).val();
-					});	
+					});
+
+					$('#s3bubble-mce-submit-iframe').click(function(){
+
+						// Setup vars
+			        	var bucket       = $('#s3bucket').val();
+			        	var folder       = $('#s3folder').val();
+			        	var cloudfrontid = $('#s3bubble-cloudfrontid').val();
+			        	var extension    = $('#s3folder').find(':selected').data('ext');
+			        	//Set extra options
+			        	if($("#s3autoplay").is(':checked')){
+						    var autoplay = true;
+						}else{
+						    var autoplay = false;
+						}
+						if($("#s3download").is(':checked')){
+						    var download = true;
+						}else{
+						    var download = false;
+						}
+						var aspect = '16:9';
+						if($('#s3aspect').val() != ''){
+						    aspect = $('#s3aspect').val();
+						}
+
+						var data = {
+							AccessKey: '<?php echo $s3bubble_access_key; ?>',
+							bucket: bucket,
+							key: folder,
+							Distribution : cloudfrontid,
+							StreamingType : StreamingType
+						};
+
+						$.post("<?php echo $this->endpoint; ?>iframe/get_code/", data, function(response) {
+
+							if(response.error){
+
+								alert(response.message);
+
+							}else{
+								
+								var code = response.data;
+						   		shortcode = '[s3bubbleVideoSingleIframe code="' + code + '" supplied="' + StreamingType + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+								tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
+		                    	tb_remove();
+		                    }
+
+                    	},'json');
+
+					});
+
 			        $('#s3bubble-mce-submit').click(function(){
 
 			        	// Setup vars
@@ -1000,6 +1128,14 @@ if (!class_exists("s3bubble_audio")) {
 						if($('#s3aspect').val() != ''){
 						    aspect = $('#s3aspect').val();
 						}
+
+						var data = {
+							AccessKey: '<?php echo $s3bubble_access_key; ?>',
+							bucket: bucket,
+							key: folder,
+							Distribution : cloudfrontid
+						};
+						console.log(data);
 
 						var shortcode = '';
 						if(StreamingType === 'progressive'){
@@ -1087,12 +1223,13 @@ if (!class_exists("s3bubble_audio")) {
 						<input type="checkbox" name="download" id="s3download" value="true">Show Download Links <i>(Add A Download Button To The Video) - Not available for VideoJS or Media Element Players</i><br />
 					</span>
 					<span>
-						<a href="#"  id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
+						<a href="#" id="s3bubble-mce-submit-iframe" class="s3bubble-pull-left button media-button button-primary button-large media-button-gallery">Insert Iframe</a>
+						<a href="#" id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
 					</span>
 				</form>
 		    </div>
         	<?php
-        	die();
+        	wp_die();
 		}
 
         /*
@@ -1167,6 +1304,64 @@ if (!class_exists("s3bubble_audio")) {
 					$( "#s3bubble-streaming-type" ).change(function() {
 						StreamingType = $(this).val();
 					});	
+
+					$('#s3bubble-mce-submit-iframe').click(function(){
+
+						// Setup vars
+			        	var bucket       = $('#s3bucket').val();
+			        	var folder       = $('#s3folder').val();
+			        	var cloudfrontid = $('#s3bubble-cloudfrontid').val();
+			        	if(bucket === '' || folder === ''){
+			        		alert('Please select a bucket and track');
+			        		return false;
+			        	}
+			        	if($("#s3autoplay").is(':checked')){
+						    var autoplay = true;
+						}else{
+						    var autoplay = false;
+						}
+						if($("#s3download").is(':checked')){
+						    var download = true;
+						}else{
+						    var download = false;
+						}
+						if($("#s3style").is(':checked')){
+						    var style = 'plain';
+						}else{
+						    var style = 'bar';
+						}
+						if($("#s3preload").is(':checked')){
+						    var preload = 'none';
+						}else{
+						    var preload = 'auto';
+						}
+
+						var data = {
+							AccessKey: '<?php echo $s3bubble_access_key; ?>',
+							bucket: bucket,
+							key: folder,
+							Distribution : cloudfrontid,
+							StreamingType : StreamingType
+						};
+
+						$.post("<?php echo $this->endpoint; ?>iframe/get_code/", data, function(response) {
+
+							if(response.error){
+
+								alert(response.message);
+
+							}else{
+								
+								var code = response.data;
+						   		shortcode = '[s3bubbleAudioSingleIframe code="' + code + '" supplied="' + StreamingType + '" autoplay="' + autoplay + '" download="' + download + '" style="' + style + '" preload="' + preload + '"/]';
+								tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
+		                    	tb_remove();
+		                    }
+
+                    	},'json');
+
+					});
+
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket       = $('#s3bucket').val();
 			        	var folder       = $('#s3folder').val();
@@ -1248,12 +1443,13 @@ if (!class_exists("s3bubble_audio")) {
 						<input type="checkbox" name="mediaelement" id="s3mediaelement" value="true">Use Media Elements JS <i>(Changes the player from default to media element js player)</i>
 					</span>
 					<span>
-						<a href="#"  id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
+						<a href="#" id="s3bubble-mce-submit-iframe" class="s3bubble-pull-left button media-button button-primary button-large media-button-gallery">Insert Iframe</a>
+						<a href="#" id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
 					</span>
 				</form>
 			</div>
         	<?php
-        	die();
+        	wp_die();
 		}
 
 		/*
@@ -1302,12 +1498,20 @@ if (!class_exists("s3bubble_audio")) {
 				    	</div>
 					</span> 
 					<span>
-						<a href="#"  id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
+						<div class="s3bubble-video-main-form-alerts">
+							<p>
+					    		LIVE STREAM DIRECTLY TO THIS POST! For more information on setting up a Live Stream directly from a mobile app to this post please open this link.
+					    		<a href="https://s3bubble.com/test-s3bubble-live-stream/" target="_blank">TEST LIVE STREAMING</a>
+					    	</p>
+				    	</div>
+					</span>
+					<span>
+						<a href="#" id="s3bubble-mce-submit" class="s3bubble-pull-right button media-button button-primary button-large media-button-gallery">Insert Shortcode</a>
 					</span>
 				</form>
 			</div>
         	<?php
-        	die();
+        	wp_die();
 		}
         
 		/*
@@ -1341,6 +1545,15 @@ if (!class_exists("s3bubble_audio")) {
 		    array_push( $buttons, 's3bubble_live_stream_shortcode', 's3bubble_audio_single_shortcode', 's3bubble_audio_playlist_shortcode', 's3bubble_video_single_shortcode', 's3bubble_video_playlist_shortcode' ); 
 		    return $buttons;
 		}
+
+		/*
+		* Cleans the options removing white space etc...
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_clean_options( $val ) {
+		    return trim(stripslashes(wp_filter_post_kses(addslashes($val))));
+		}
         
 		/*
 		* Add javascript to the footer connect to wp_footer()
@@ -1348,21 +1561,22 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_audio_admin(){	
+
 			if ( isset($_POST['submit']) ) {
 				$nonce = $_REQUEST['_wpnonce'];
 				if (! wp_verify_nonce($nonce, 's3bubble-media') ) die('Security check failed'); 
 				if (!current_user_can('manage_options')) die(__('You cannot edit the s3bubble media options.'));
 				check_admin_referer('s3bubble-media');	
 				// Get our new option values
-				$s3audible_username	= $_POST['s3audible_username'];
-				$s3audible_email	= $_POST['s3audible_email'];
-				$loggedin			= addslashes($_POST['loggedin']);
+				$s3audible_username	= $this->s3bubble_clean_options($_POST['s3audible_username']);
+				$s3audible_email	= $this->s3bubble_clean_options($_POST['s3audible_email']);
+				$loggedin			= $this->s3bubble_clean_options($_POST['loggedin']);
 
 				// new
-				$s3bubble_video_all_bar_colours	= $_POST['s3bubble_video_all_bar_colours'];
-				$s3bubble_video_all_bar_seeks	= $_POST['s3bubble_video_all_bar_seeks'];
-				$s3bubble_video_all_controls_bg	= $_POST['s3bubble_video_all_controls_bg'];
-				$s3bubble_video_all_icons	    = $_POST['s3bubble_video_all_icons'];
+				$s3bubble_video_all_bar_colours	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_colours']);
+				$s3bubble_video_all_bar_seeks	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_seeks']);
+				$s3bubble_video_all_controls_bg	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_controls_bg']);
+				$s3bubble_video_all_icons	    = $this->s3bubble_clean_options($_POST['s3bubble_video_all_icons']);
 
 			    // Update the DB with the new option values
 				update_option("s3-s3audible_username", $s3audible_username);
@@ -1397,7 +1611,19 @@ if (!class_exists("s3bubble_audio")) {
 					<div class="postbox">
 						<h3 class="hndle">PLEASE USE WYSIWYG EDITOR BUTTONS</h3>
 						<div class="inside">
-							<img style="width: 100%;" src="https://isdcloud.s3.amazonaws.com/wp_editor.png" />
+							<img style="width: 100%;" src="<?php echo plugins_url('/assets/images/wp_editor.png',__FILE__); ?>" />
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">Live Streaming</h3>
+						<div class="inside">
+							<ul class="s3bubble-adverts">
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/streaming.png',__FILE__); ?>" alt="S3Bubble wordpress plugin" /> 
+									<p>S3Bubble is excited to present to you its first live streaming setup. Download one of the apps from the link below insert the url in the S3Bubble plugin and live stream from your phone or use flash media encoder.</p>
+									<a href="https://s3bubble.com/test-s3bubble-live-stream/" target="_blank">Visit s3bubble.com</a>
+								</li>
+							</ul>        
 						</div> 
 					</div>
 					<div class="postbox">
@@ -1406,8 +1632,31 @@ if (!class_exists("s3bubble_audio")) {
 							<ul class="s3bubble-adverts">
 								<li>
 									<img src="<?php echo plugins_url('/assets/images/analytics.png',__FILE__); ?>" alt="S3Bubble wordpress plugin" /> 
-									<p>S3Bubble is excited to present to you its first consumer analytics page. All your videos that display on your WordPress site will now link to our management system. Find out where your target audience is so you can start strategically promoting your site and grow a global audience.</p>
+									<p>All your videos that display on your WordPress site will now link to our management system. Find out where your target audience is so you can start strategically promoting your site and grow a global audience.</p>
 									<a href="https://s3bubble.com/" target="_blank">Visit s3bubble.com</a>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">S3Bubble Apps - Monitor Analytics</h3>
+						<div class="inside">
+							<ul class="s3bubble-adverts">
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble Android" /> 
+									<h3>
+										Desktop App
+									</h3>
+									<p>Record Manage Watch Download Share. Manage all your video and audio analytics.</p>
+									<a class="button button-s3bubble" href="https://s3bubble.com/s3bubble-desktop-app-beta/" target="_blank">DOWNLOAD</a>
+								</li>
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
+									<h3>
+										iPhone Mobile App
+									</h3>
+									<p>Upload large file directly from your desktop. Manage all your video and audio.</p>
+									<a class="button button-s3bubble" href="https://itunes.apple.com/us/app/s3bubble/id720256052?ls=1&mt=8" target="_blank">GET THE APP</a>
 								</li>
 							</ul>        
 						</div> 
@@ -1427,34 +1676,11 @@ if (!class_exists("s3bubble_audio")) {
 							</ul>        
 						</div> 
 					</div>
-					<div class="postbox">
-						<h3 class="hndle">S3Bubble Mobile Apps - Monitor Analytics</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
-									<h3>
-										iPhone Mobile App
-									</h3>
-									<p>Record Manage Watch Download Share. Manage all your video and audio analytics.</p>
-									<a class="button button-s3bubble" href="https://itunes.apple.com/us/app/s3bubble/id720256052?ls=1&mt=8" target="_blank">GET THE APP</a>
-								</li>
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble Android" /> 
-									<h3>
-										Android Mobile App
-									</h3>
-									<p>Record Manage Watch Download Share. Manage all your video and audio analytics.</p>
-									<a class="button button-s3bubble" href="https://play.google.com/store/apps/details?id=com.s3bubble" target="_blank">GET THE APP</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
 				</div>
 				<div id="post-body">
 					<div id="post-body-content" style="margin-right: 41%;">
 						<div class="postbox">
-							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://www.youtube.com/watch?v=VFG3-nvV6F0" target="_blank">Watch Video</a></h3>
+							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></h3>
 							<div class="inside">
 								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
 								    <table class="form-table">
@@ -1516,7 +1742,7 @@ if (!class_exists("s3bubble_audio")) {
 								    </table>
 								    <br/>
 								    <span class="submit" style="border: 0;">
-								    <input type="submit" name="submit" class="button button-s3bubble button-hero" value="Save Settings" />
+								    	<input type="submit" name="submit" class="button button-s3bubble button-hero" value="Save Settings" />
 								    </span>
 								  </form>
 							</div><!-- .inside -->
@@ -1554,6 +1780,56 @@ if (!class_exists("s3bubble_audio")) {
 		                }
 		        }
 		        return false;
+		}
+
+		// -------------------------- IFRAME PLAYERS SETUPS BELOW ------------------------------ //
+
+		/*
+		* Run the s3bubble single player iframe code
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_video_single_player_iframe($atts){
+
+			extract( shortcode_atts( array(
+				'aspect'     => '16:9',
+				'autoplay'   => 'false',
+				'code'       => '',
+				'supplied'   => 'video'
+			), $atts, 's3bubbleVideoSingleIframe' ) );
+
+            $autoplay  = ((empty($autoplay) || $autoplay == 'false') ? 'no' : 'autoplay');
+			$code      = ((empty($code)) ? false : $code);
+			$aspect    = ((empty($aspect)) ? false : $aspect);
+			$supplied  = ((empty($supplied) || $supplied == 'progressive') ? 'video' : $supplied);
+
+			return '<iframe style="width:100%;min-height:300px;" onload="this.height=(this.offsetWidth/16)*9;" src="//media.s3bubble.com/' . $supplied . '/' . $code . ':' . $autoplay . '" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>';
+
+		}
+
+		/*
+		* Run the s3bubble single player iframe code
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_audio_single_player_iframe($atts){
+
+			extract( shortcode_atts( array(
+				'aspect'     => '16:9',
+				'autoplay'   => 'false',
+				'code'       => '',
+				'supplied'   => 'audio',
+				'style'      => 'bar'
+			), $atts, 's3bubbleAudioSingleIframe' ) );
+
+            $autoplay  = ((empty($autoplay) || $autoplay == 'false') ? 'no' : 'autoplay');
+			$code      = ((empty($code)) ? false : $code);
+			$aspect    = ((empty($aspect)) ? false : $aspect);
+			$supplied  = ((empty($supplied) || $supplied == 'progressive') ? 'audio' : $supplied);
+			$style     = ((empty($style) || $style == 'bar') ? 75 : 35);
+
+			return '<iframe style="width:100%;height:' . $style . 'px;" src="//media.s3bubble.com/' . $supplied . '/' . $code . ':' . $autoplay . '" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>';
+
 		}
 
 		// -------------------------- LIVE STREAM PLAYERS SETUPS BELOW ------------------------------ //
@@ -1626,7 +1902,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 				'stream'      => '',
 				'cloudfront' => ''
-			), $atts, 's3bubbleLiveStream' ) );
+			), $atts, 's3bubbleLiveStreamMedia' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
@@ -3059,9 +3335,9 @@ if (!class_exists("s3bubble_audio")) {
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
 								
-								if(response.error !== undefined){
-									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.error + ".</p></span>");
-									console.log(response.error);
+								if(response.error){
+									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
+									console.log(response.message);
 								}else{
 									audioPlaylistS3Bubble.setPlaylist(response);
 									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
@@ -3379,6 +3655,7 @@ if (!class_exists("s3bubble_audio")) {
 	                    enableRemoveControls: false
 	                },
 	                ready: function(event) {
+	                	//alert(ajaxurl);
 						var sendData = {
 							"action": "s3bubble_audio_single_internal_ajax",
 							"Timezone":"America/New_York",
@@ -3392,9 +3669,9 @@ if (!class_exists("s3bubble_audio")) {
 							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
 							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
 							
-							if(response.error !== undefined){
-								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.error + ".</p></span>");
-								console.log(response.error);
+							if(response.error){
+								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
+								console.log(response.message);
 							}else{
 								audioSingleS3Bubble.setPlaylist(response);
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");
@@ -3715,9 +3992,9 @@ if (!class_exists("s3bubble_audio")) {
 						    "Folder" : "' . $folder. '"
 						}
 						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-							if(response.error !== undefined){
-								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.error + ".</p></span>");
-								console.log(response.error);
+							if(response.error){
+								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
+								console.log(response.message);
 							}else{
 								videoPlaylistS3Bubble.setPlaylist(response);
 								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
@@ -3929,6 +4206,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_video_single_player($atts){
 			
+			//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+
 			// get option from database	
 			$loggedin            = get_option("s3-loggedin");
 			$search              = get_option("s3-search");
@@ -4055,12 +4335,13 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						ready : function(event) {
 							var sendData = {
-								"action": "s3bubble_video_single_internal_ajax",
-								"Timezone":"America/New_York",
-							    "Bucket" : "' . $bucket. '",
-							    "Key" : "' . $track. '",
-							    "Cloudfront" : "' . $cloudfront .'",
-							    "Server" : s3bubble_all_object.serveraddress
+								action : "s3bubble_video_single_internal_ajax",
+								security : "' . $ajax_nonce . '",
+								Timezone :"America/New_York",
+							    Bucket : "' . $bucket. '",
+							    Key : "' . $track. '",
+							    Cloudfront : "' . $cloudfront .'",
+							    Server : s3bubble_all_object.serveraddress
 							}
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 								if(response.error){
