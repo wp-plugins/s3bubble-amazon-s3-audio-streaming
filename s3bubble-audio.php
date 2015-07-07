@@ -363,7 +363,8 @@ if (!class_exists("s3bubble_audio")) {
 				wp_register_script( 's3player.all.s3bubble', plugins_url('assets/js/s3player.video.all.player.min.js',__FILE__ ), array('jquery'), $this->version, true  );
 				wp_localize_script('s3player.all.s3bubble', 's3bubble_all_object', array(
 					's3appid' => get_option("s3-s3audible_username"),
-					'serveraddress' => $_SERVER['REMOTE_ADDR']
+					'serveraddress' => $_SERVER['REMOTE_ADDR'],
+					'ajax_url' => admin_url( 'admin-ajax.php' )
 				));
 				wp_register_script( 's3bubble.mobile.browser.check', plugins_url('assets/js/mobile.browser.check.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 				wp_register_script( 's3bubble.analytics.min', plugins_url('assets/js/s3analytics.min.js',__FILE__ ), array('jquery'),  $this->version, true );
@@ -401,7 +402,7 @@ if (!class_exists("s3bubble_audio")) {
 			$url = $this->endpoint . 'rtmp/video';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
-				'sslverify' => true,
+				'sslverify' => false,
 				'timeout' => 10,
 				'redirection' => 5,
 				'httpversion' => '1.0',
@@ -453,7 +454,7 @@ if (!class_exists("s3bubble_audio")) {
 			$url = $this->endpoint . 'rtmp/audio';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
-				'sslverify' => true,
+				'sslverify' => false,
 				'timeout' => 10,
 				'redirection' => 5,
 				'httpversion' => '1.0',
@@ -516,7 +517,7 @@ if (!class_exists("s3bubble_audio")) {
 			$url = $this->endpoint . 'main_plugin/single_video_object';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
-				'sslverify' => true,
+				'sslverify' => false,
 				'timeout' => 10,
 				'redirection' => 5,
 				'httpversion' => '1.0',
@@ -568,7 +569,7 @@ if (!class_exists("s3bubble_audio")) {
 			$url = $this->endpoint . 'main_plugin/playlist_video_objects';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
-				'sslverify' => true,
+				'sslverify' => false,
 				'timeout' => 30,
 				'redirection' => 5,
 				'httpversion' => '1.0',
@@ -618,7 +619,7 @@ if (!class_exists("s3bubble_audio")) {
 			$url = $this->endpoint . 'main_plugin/single_audio_object';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
-				'sslverify' => true,
+				'sslverify' => false,
 				'timeout' => 10,
 				'redirection' => 5,
 				'httpversion' => '1.0',
@@ -670,7 +671,7 @@ if (!class_exists("s3bubble_audio")) {
 			$url = $this->endpoint . 'main_plugin/playlist_audio_objects';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
-				'sslverify' => true,
+				'sslverify' => false,
 				'timeout' => 30,
 				'redirection' => 5,
 				'httpversion' => '1.0',
