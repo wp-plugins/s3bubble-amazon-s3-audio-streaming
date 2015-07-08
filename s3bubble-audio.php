@@ -389,12 +389,29 @@ if (!class_exists("s3bubble_audio")) {
 		}
 
 		/*
+		* Outputs some memory information
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_convert_memory(){
+
+		    $mem_usage = memory_get_usage(true); 
+	        $unit=array('b','kb','mb','gb','tb','pb');
+	        $mem_out = @round($mem_usage/pow(1024,($i=floor(log($mem_usage,1024)))),2).' '.$unit[$i];
+            return "Memory usage: " . $mem_out . ". Max execution time: " . ini_get('max_execution_time');
+
+		}
+
+		/*
 		* Video playlist internal ajax call
 		* @author sameast
 		* @none
 		*/ 
 		function s3bubble_video_rtmp_internal_ajax(){
 			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
@@ -447,6 +464,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_audio_rtmp_internal_ajax(){
 			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
@@ -492,15 +512,6 @@ if (!class_exists("s3bubble_audio")) {
 			
 		}
 
-		function s3bubble_convert_memory(){
-
-		    $mem_usage = memory_get_usage(true); 
-	        $unit=array('b','kb','mb','gb','tb','pb');
-	        $mem_out = @round($mem_usage/pow(1024,($i=floor(log($mem_usage,1024)))),2).' '.$unit[$i];
-            return "Memory usage: " . $mem_out . ". Max execution time: " . ini_get('max_execution_time');
-
-		}
-
 		/*
 		* Video single internal ajax call
 		* @author sameast
@@ -508,6 +519,7 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_video_single_internal_ajax(){
 
+			// Run security check
 			check_ajax_referer( 's3bubble-nonce-security', 'security' );
 
 			$s3bubble_access_key = get_option("s3-s3audible_username");
@@ -562,6 +574,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_video_playlist_internal_ajax(){
 			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
@@ -612,6 +627,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_audio_single_internal_ajax(){
 			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
@@ -664,6 +682,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_audio_playlist_internal_ajax(){
 			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
 			$s3bubble_access_key = get_option("s3-s3audible_username");
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
@@ -2223,9 +2244,9 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 	   function s3bubble_rtmp_video_default($atts){
-	   	
-			$s3bubble_access_key = get_option("s3-s3audible_username");
-			$s3bubble_secret_key = get_option("s3-s3audible_email");	
+	   		
+	   		//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
 			
         	extract( shortcode_atts( array(
         		'skip'       => 'false',
@@ -2315,12 +2336,13 @@ if (!class_exists("s3bubble_audio")) {
 						},
 						ready : function(event) {
 							var sendData = {
-								"action": "s3bubble_video_rtmp_internal_ajax",
-								"Timezone":"America/New_York",
-							    "Bucket" : Bucket,
-							    "Key" : Key,
-							    "Cloudfront" : Cloudfront,
-							    "IsMobile" : IsMobile
+								action: "s3bubble_video_rtmp_internal_ajax",
+								security : "' . $ajax_nonce . '",
+								Timezone :"America/New_York",
+							    Bucket : Bucket,
+							    Key : Key,
+							    Cloudfront : Cloudfront,
+							    IsMobile : IsMobile
 							} 
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 								if(response.error){
@@ -2457,8 +2479,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 	   function s3bubble_rtmp_audio_default($atts){
 
-	   		$s3bubble_access_key = get_option("s3-s3audible_username");
-			$s3bubble_secret_key = get_option("s3-s3audible_email");		
+	   		//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+	
 			$loggedin            = get_option("s3-loggedin");
 			$search              = get_option("s3-search");
 
@@ -2564,12 +2587,13 @@ if (!class_exists("s3bubble_audio")) {
 		                },
 						ready : function(event) {
 							var sendData = {
-								"action": "s3bubble_audio_rtmp_internal_ajax",
-								"Timezone":"America/New_York",
-							    "Bucket" : Bucket,
-							    "Key" : Key,
-							    "Cloudfront" : Cloudfront,
-							    "IsMobile" : IsMobile
+								action : "s3bubble_audio_rtmp_internal_ajax",
+								security : "' . $ajax_nonce . '",
+								Timezone :"America/New_York",
+							    Bucket : Bucket,
+							    Key : Key,
+							    Cloudfront : Cloudfront,
+							    IsMobile : IsMobile
 							}
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 
@@ -3208,7 +3232,10 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 	   function s3bubble_audio_player($atts){
-	   	  
+	   	  	
+	   	  	//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+
 			/*
 			 * player options
 			 */ 		
@@ -3326,10 +3353,11 @@ if (!class_exists("s3bubble_audio")) {
 		                },
 		                ready: function(event) {
 							var sendData = {
-								"action": "s3bubble_audio_playlist_internal_ajax",
-								"Timezone":"America/New_York",
-							    "Bucket" : "' . $bucket. '",
-							    "Folder" : "' . $folder. '"
+								action : "s3bubble_audio_playlist_internal_ajax",
+								security : "' . $ajax_nonce . '",
+								Timezone :"America/New_York",
+							    Bucket : "' . $bucket. '",
+							    Folder : "' . $folder. '"
 							}
 							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 								
@@ -3550,12 +3578,15 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
 		function s3bubble_audio_single_player($atts){
 
-			 $s3bubble_access_key = get_option("s3-s3audible_username");
-			 $s3bubble_secret_key = get_option("s3-s3audible_email");		
-			 $loggedin            = get_option("s3-loggedin");
-			 $search              = get_option("s3-search");
+			//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
 
-			 extract( shortcode_atts( array(
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");		
+			$loggedin            = get_option("s3-loggedin");
+			$search              = get_option("s3-search");
+
+			extract( shortcode_atts( array(
 				'style'      => 'bar',
 				'download'   => 'false',
 				'autoplay'   => 'false',
@@ -3658,12 +3689,13 @@ if (!class_exists("s3bubble_audio")) {
 	                ready: function(event) {
 	                	//alert(ajaxurl);
 						var sendData = {
-							"action": "s3bubble_audio_single_internal_ajax",
-							"Timezone":"America/New_York",
-						    "Bucket" : "' . $bucket. '",
-						    "Key" : "' . $track . '",
-						    "Cloudfront" : "' . $cloudfront . '",
-						    "Server" : s3bubble_all_object.serveraddress
+							action: "s3bubble_audio_single_internal_ajax",
+							security : "' . $ajax_nonce . '",
+							Timezone :"America/New_York",
+						    Bucket : "' . $bucket. '",
+						    Key : "' . $track . '",
+						    Cloudfront : "' . $cloudfront . '",
+						    Server : s3bubble_all_object.serveraddress
 						}
 						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 							
@@ -3854,6 +3886,9 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
         function s3bubble_video_player($atts){
 	        
+	        //Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+
 			/*
 			 * Player options
 			 */ 
@@ -3987,10 +4022,11 @@ if (!class_exists("s3bubble_audio")) {
 					},
 					ready : function(event) {
 						var sendData = {
-							"action": "s3bubble_video_playlist_internal_ajax",
-							"Timezone":"America/New_York",
-						    "Bucket" : "' . $bucket. '",
-						    "Folder" : "' . $folder. '"
+							action: "s3bubble_video_playlist_internal_ajax",
+							security : "' . $ajax_nonce . '",
+							Timezone :"America/New_York",
+						    Bucket : "' . $bucket. '",
+						    Folder : "' . $folder. '"
 						}
 						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
 							if(response.error){
