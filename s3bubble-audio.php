@@ -342,6 +342,7 @@ if (!class_exists("s3bubble_audio")) {
 					.s3bubble-media-main-interface, .s3bubble-media-main-video-play, .s3bubble-media-main-video-skip {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep, .s3icon-cloud-download {color: '.stripcslashes($icons).' !important;text-decoration: none !important;font-style: normal !important;}
+					.s3bubble-media-main-video-skip h2 {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-playlist-current {color: '.stripcslashes($seek).' !important;}
 					.mejs-controls {background-color: '.stripcslashes($background).' !important;}
 					.mejs-overlay-button {background: '.stripcslashes($background).' url(' . plugins_url('assets/images/play48.png', __FILE__) . ')center no-repeat !important;}

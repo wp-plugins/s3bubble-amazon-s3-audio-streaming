@@ -272,7 +272,6 @@
 			swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
             supplied: "m4v",
             wmode: "window",
-            preload: "metadata",
 			useStateClassSkin: true,
 			autoBlur: false,
 			smoothPlayBar: false,
