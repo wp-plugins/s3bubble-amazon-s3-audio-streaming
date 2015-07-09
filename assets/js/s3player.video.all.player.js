@@ -3777,9 +3777,8 @@
 				});
 				listItem += ")</span>";
 			}
-
 			// The title is given next in the HTML otherwise the float:right on the free media corrupts in IE6/7
-			listItem += "<a href='javascript:;' class='" + this.options.playlistOptions.itemClass + "' tabindex='0'>" + media.title + (media.download && this.options.playlistOptions.downloadSet ? " <a href='" + media.download + "' class='s3bubble-media-main-artist'><i class='s3icon s3icon-cloud-download'></i></a>" : "") + "</a>";
+			listItem += '<a href="javascript:;" class="' + this.options.playlistOptions.itemClass + '" tabindex="0">' + media.title + (media.download && this.options.playlistOptions.downloadSet ? ' <a href="' + media.download + '" onclick="var win = window.open(\'' + media.download + '\');win.focus();return false;" target="_blank" class="s3bubble-media-main-artist"><i class="s3icon s3icon-cloud-download"></i></a>' : '') + '</a>';
 			listItem += "</div></li>";
 
 			return listItem;

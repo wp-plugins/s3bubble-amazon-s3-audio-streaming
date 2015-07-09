@@ -372,6 +372,10 @@ if (!class_exists("s3bubble_audio")) {
 				//Video js
 				wp_register_script( 's3bubble.video.js.include', plugins_url('assets/videojs/video.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 				wp_register_script( 'tweetAction', plugins_url('assets/js/jquery.tweetAction.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 'singleVideoDeploy', plugins_url('assets/js/s3bubble.single.video.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 'VideoPlaylistDeploy', plugins_url('assets/js/s3bubble.video.playlist.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 'singleAudioDeploy', plugins_url('assets/js/s3bubble.single.audio.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 'AudioPlaylistDeploy', plugins_url('assets/js/s3bubble.audio.playlist.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-migrate');
@@ -381,6 +385,10 @@ if (!class_exists("s3bubble_audio")) {
 				wp_enqueue_script('s3bubble.mobile.browser.check');
 				wp_enqueue_script('s3bubble.analytics.min');
 				wp_enqueue_script('tweetAction');
+				wp_enqueue_script('singleVideoDeploy');
+				wp_enqueue_script('VideoPlaylistDeploy');
+				wp_enqueue_script('singleAudioDeploy');
+				wp_enqueue_script('AudioPlaylistDeploy');
 
 				// remove jplayer if exists
 				wp_deregister_script( 'jplayer' );
@@ -3284,288 +3292,27 @@ if (!class_exists("s3bubble_audio")) {
 				}
 			}
             $player_id = uniqid();
-								
-            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-audio">
-            	<div class="s3bubble-media-main-video-playlist-wrap">
-				    <div id="jquery_jplayer_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
-				    <div class="s3bubble-media-main-gui">
-				        <div class="s3bubble-media-main-interface s3bubble-media-main-interface-audio-playlist">
-				        	<div class="s3bubble-media-main-audio-loading">
-						    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
-						    </div>
-				            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-					            <div class="s3bubble-media-main-left-controls">
-									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</div>
-								<div class="s3bubble-media-main-progress" dir="auto">
-								    <div class="s3bubble-media-main-seek-bar" dir="auto">
-								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
-								    </div>
-								</div>
-								<div class="s3bubble-media-main-right-controls">
-									<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
-									<div class="s3bubble-media-main-volume-bar" dir="auto">
-									    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-									</div>
-									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-									<div class="s3bubble-media-main-time-container">
-										<div class="s3bubble-media-main-duration"></div>
-									</div>
-								</div>
-				            </div>
-				        </div>
-				    </div>
-			    </div>
-			    <div class="s3search s3audible-search-' . $player_id .  '" style="display:none;">
-	                <input type="text" id="s3bubble-audio-playlist-tsearch-' . $player_id .  '" class="s3bubble-audio-playlist-tsearch" name="s3bubble-audio-playlist-tsearch" placeholder="Search">
-	            </div>
-	            <div class="s3bubble-media-main-playlist s3bubble-audio-playlist-tracksearch-' . $player_id .  '" style="display:'. (($playlist == 'hidden') ? 'none' : 'block' ) .';">
-					<ul class="s3bubble-audio-playlist-ul-' . $player_id .  '">
-						<li>&nbsp;</li>
-					</ul>
-				</div>
-			    <div class="s3bubble-media-main-no-solution" style="display:none;">
-			        <span>Update Required</span>
-			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
-			    </div>
-			</div>
-			<script type="text/javascript">
+
+			return '<div class="audio-playlist-' . $player_id . '"></div>
+            <script type="text/javascript">
 				jQuery(document).ready(function($) {
-					var S3Bucket = "' . $bucket. '";
-					var Current = -1;
-					var IsMobile = false;				
-					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-						IsMobile = true;
-					}
-					var audioPlaylistS3Bubble = new jPlayerPlaylist({
-		                jPlayer: "#jquery_jplayer_' . $player_id . '",
-						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
-		            }, audioPlaylistS3Bubble, {
-		                playlistOptions: {
-		                    autoPlay: '.$autoplay.',
-		                    displayTime: 0,
-		                    downloadSet: '.$download.',
-		                    playerWidth: $(this).width(),
-		                    enableRemoveControls: false
-		                },
-		                ready: function(event) {
-							var sendData = {
-								action : "s3bubble_audio_playlist_internal_ajax",
-								security : "' . $ajax_nonce . '",
-								Timezone :"America/New_York",
-							    Bucket : "' . $bucket. '",
-							    Folder : "' . $folder. '"
-							}
-							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-								
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
-								
-								if(response.error){
-									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
-									console.log(response.message);
-								}else{
-									audioPlaylistS3Bubble.setPlaylist(response);
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
-									if(IsMobile){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 150px 0 40px");	
-									}
-									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
-										if(IsMobile){
-											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 190px 0 40px");	
-										}
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
-									}
-									// hide playlist 
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-list").click(function() {
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist").slideToggle();
-										return false;
-									});
-									if ("'.$height.'" !== "") {
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist").css({
-											height : "'.$height.'px",
-											"overflow-y" : "scroll"
-										});
-									}
-									// Search tracks
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search").click(function() {
-										if ($("#s3bubble-media-main-container-' . $player_id . ' .s3audible-search-' . $player_id .  '").hasClass("searchOpen")) {
-											$("#s3bubble-media-main-container-' . $player_id . ' .s3audible-search-' . $player_id .  '").fadeOut().removeClass("searchOpen");
-										} else {
-											$("#s3bubble-media-main-container-' . $player_id . ' .s3audible-search-' . $player_id .  '").fadeIn().addClass("searchOpen");
-										}
-										return false;
-									});
-									$("#s3bubble-media-main-container-' . $player_id . ' #s3bubble-audio-playlist-tsearch-' . $player_id .  '").keyup(function() {
-										var searchText = $(this).val(),
-							            $allListElements = $("#s3bubble-media-main-container-' . $player_id . ' ul.s3bubble-audio-playlist-ul-' . $player_id .  ' > li"),
-							            $matchingListElements = $allListElements.filter(function(i, el){
-							                return $(el).text().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
-							            });
-										$allListElements.hide();
-		       							$matchingListElements.show();
-									});
-								}
-							},"json");
-						},
-						timeupdate : function(t) {
-							if (t.jPlayer.status.currentTime > 1) {
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-							}
-						},
-						resize: function (event) {
-							
-					    	
-					    },
-					    click: function (event) {
-	
-					    },
-					    error: function (event) {
-					    	console.log(event.jPlayer.error);
-	    					console.log(event.jPlayer.error.type);
-					    },
-						loadedmetadata: function() {
+
+					$(".audio-playlist-' . $player_id . '").audioPlaylist({
+						Ajax:       "' . admin_url('admin-ajax.php') . '",
+						Pid:		"' . $player_id . '",
+						Bucket:		"' . $bucket . '",
+						Folder:		"' . $folder . '",
+						Cloudfront:	"' . $cloudfront . '",
+						Security:	"' . $ajax_nonce . '",
+						AutoPlay:	' . $autoplay . ',
+						Download:	' . $download . ',
+						Preload:	"' . $preload . '",
+						Aspect:	    "' . $aspect . '",
+						Height:    "' . $height . '",
+						Playlist:  "' . (($playlist == 'hidden') ? 'none' : 'block' ) . '"
+					},function(){
 						
-						},
-						waiting: function() {
-							
-						},
-						canplay: function() {
-
-						},
-						pause: function() { 
-
-						},
-						playing: function() {
-
-						},
-						play: function() { 
-							var CurrentState = audioPlaylistS3Bubble.current;
-							var PlaylistKey  = audioPlaylistS3Bubble.playlist[CurrentState];
-							if(Current !== CurrentState){
-								addListener({
-									app_id: s3bubble_all_object.s3appid,
-									server: s3bubble_all_object.serveraddress,
-									bucket: S3Bucket,
-									key: PlaylistKey.key,
-									type: "audio",
-									advert: false
-								});
-								Current = CurrentState;
-							}
-						},
-						suspend: function() { 
-						    
-						},
-						stalled: function() { 
-						    
-						},
-						loadstart: function() { 
-						    
-						},
-						keyBindings: {
-					        play: {
-					            key: 32,
-					            fn: function(f) {
-					                if (f.status.paused) {
-					                    f.play();
-					                } else {
-					                    f.pause();
-					                }
-					            }
-					        },
-					        muted: {
-					            key: 77,
-					            fn: function(f) {
-					                f._muted(!f.options.muted);
-					            }
-					        },
-					        volumeUp: {
-					            key: 190,
-					            fn: function(f) {
-					                f.volume(f.options.volume + 0.1);
-					            }
-					        },
-					        volumeDown: {
-					            key: 188,
-					            fn: function(f) {
-					                f.volume(f.options.volume - 0.1);
-					            }
-					        },
-					        loop: {
-					            key: 76,
-					            fn: function(f) {
-					                f._loop(!f.options.loop);
-					            }
-					        },
-					        goForwardFive: {
-					            key: 72,
-					            fn: function(f) {
-					                f.playHead(f.status.currentPercentAbsolute + 5);
-					            }
-					        },
-					        goBackFive: {
-					            key: 66,
-					            fn: function(f) {
-					                f.playHead(f.status.currentPercentAbsolute - 5);
-					            }
-					        },
-					        loopOn: {
-					            key: 49,
-					            fn: function(f) {
-					                f.options.lon = f.status.currentPercentAbsolute;
-					            }
-					        },
-					        loopOff: {
-					            key: 50,
-					            fn: function(f) {
-					                f.options.loff = f.status.currentPercentAbsolute;
-					            }
-					        },
-					        loopfinish: {
-					            key: 51,
-					            fn: function(f) {
-					            	if (f.options.lfinish) {
-					                    f.options.lfinish = false;
-					                } else {
-					                    f.options.lfinish = true;
-					                }
-					            }
-					        },
-					        speedUp: {
-					            key: 83,
-					            fn: function(f) {
-					                f.playbackRate(f.status.playbackRate + 0.1);
-					            }
-					        },
-					        slowDown: {
-					            key: 65,
-					            fn: function(f) {
-					                f.playbackRate(f.status.playbackRate - 0.1);
-					            }
-					        },
-					        normalSpeed: {
-					            key: 68,
-					            fn: function(f) {
-					                f.playbackRate(1);
-					            }
-					        }
-					    },
-		                swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
-		                preload: "'.$preload.'",
-	                    supplied: "mp3,m4a",
-		                wmode: "window",
-						useStateClassSkin: true,
-						autoBlur: false,
-						smoothPlayBar: false,
-						keyEnabled: true,
-						audioFullScreen: true,
-						remainingDuration: true
-					});			
+					});
 				});
 			</script>';
 
@@ -3623,258 +3370,25 @@ if (!class_exists("s3bubble_audio")) {
 				}
 			}
             $player_id = uniqid();
-			
-            return '<div id="s3bubble-media-main-container-' . $player_id .  '" class="s3bubble-media-main-audio">
-			    <div id="jquery_jplayer_' . $player_id .  '" class="s3bubble-media-main-jplayer"></div>
-			    <div class="s3bubble-media-main-gui">
-			        <div class="s3bubble-media-main-interface s3bubble-media-main-interface-audio-playlist">
-			        	<div class="s3bubble-media-main-audio-loading">
-					    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
-					    </div>
-			            <div class="s3bubble-media-main-controls-holder" style="display:none;">
-				            <div class="s3bubble-media-main-left-controls">
-								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-							</div>
-							<div class="s3bubble-media-main-progress" dir="auto">
-							    <div class="s3bubble-media-main-seek-bar" dir="auto">
-							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
-							    </div>
-							</div>
-							<div class="s3bubble-media-main-right-controls">
-								<div class="s3bubble-media-main-volume-bar" dir="auto">
-								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-								</div>
-								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-								<div class="s3bubble-media-main-time-container">
-									<div class="s3bubble-media-main-duration"></div>
-								</div>
-							</div>
-			            </div>
-			        </div>
-			    </div>
-			    <div class="s3bubble-media-main-playlist">
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-			    <div class="s3bubble-media-main-no-solution" style="display:none;">
-			        <span>Update Required</span>
-			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
-			    </div>
-			</div>
-			<script type="text/javascript">
-			jQuery(document).ready(function($) {
-				
-				var S3Bucket = "' . $bucket. '";
-				var Current = -1;
-				var aspect = $("#s3bubble-media-main-container-1").width()/16*9;
-				var IsMobile = false;
-				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-					IsMobile = true;
-				}
-					
-				var audioSingleS3Bubble = new jPlayerPlaylist({
-	                jPlayer: "#jquery_jplayer_' . $player_id .  '",
-					cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id .  '"
-	            }, audioSingleS3Bubble, {
-	                playlistOptions: {
-	                    autoPlay: '.$autoplay.',
-	                    displayTime: 0,
-	                    downloadSet: '.$download.',
-	                    playerWidth: $(this).width(),
-	                    enableRemoveControls: false
-	                },
-	                ready: function(event) {
-	                	//alert(ajaxurl);
-						var sendData = {
-							action: "s3bubble_audio_single_internal_ajax",
-							security : "' . $ajax_nonce . '",
-							Timezone :"America/New_York",
-						    Bucket : "' . $bucket. '",
-						    Key : "' . $track . '",
-						    Cloudfront : "' . $cloudfront . '",
-						    Server : s3bubble_all_object.serveraddress
-						}
-						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-							
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-audio-loading").fadeOut();
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-controls-holder").fadeIn();
-							
-							if(response.error){
-								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
-								console.log(response.message);
-							}else{
-								audioSingleS3Bubble.setPlaylist(response);
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");
-								if(IsMobile){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
-								}
-								if(response.user === "s2member_level1" || response.user === "s2member_level2"){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");
-									if(IsMobile){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
-									}
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
-								}
-								//Make it plain
-								if ("' . $style . '" === "plain") {
-									$("#s3bubble-media-main-container-' . $player_id . '").css({
-										overflow : "hidden",
-										height : "35px"
-									})
-								}
-							}
-						},"json");
-	                },
-					resize: function (event) {
 
-				    },
-	                loadedmetadata: function() {
+            return '<div class="single-audio-' . $player_id . '"></div>
+            <script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$(".single-audio-' . $player_id . '").singleAudio({
+						Ajax:       "' . admin_url('admin-ajax.php') . '",
+						Pid:		"' . $player_id . '",
+						Bucket:		"' . $bucket . '",
+						Key:		"' . $track . '",
+						Cloudfront:	"' . $cloudfront . '",
+						Security:	"' . $ajax_nonce . '",
+						AutoPlay:	' . $autoplay . ',
+						Download:	' . $download . ',
+						Aspect:	    "' . $aspect . '",
+						Styles:      "' . $style . '"
+					},function(){
 						
-					},
-					waiting: function() {
-		
-					},
-					canplay: function() {
-
-					},
-					pause: function() {
-
-					},
-					playing: function() {
-
-					},
-					play: function() { 
-						var CurrentState = audioSingleS3Bubble.current;
-						var PlaylistKey  = audioSingleS3Bubble.playlist[CurrentState];
-						if(Current !== CurrentState){
-							addListener({
-								app_id: s3bubble_all_object.s3appid,
-								server: s3bubble_all_object.serveraddress,
-								bucket: S3Bucket,
-								key: PlaylistKey.key,
-								type: "audio",
-								advert: false
-							});
-							Current = CurrentState;
-						}
-					},
-					timeupdate: function(event) { 
-	
-					},
-					suspend: function() { 
-					    
-					},
-					stalled: function() { 
-					    
-					},
-					loadstart: function() { 
-					    
-					},
-					keyBindings: {
-				        play: {
-				            key: 32,
-				            fn: function(f) {
-				                if (f.status.paused) {
-				                    f.play();
-				                } else {
-				                    f.pause();
-				                }
-				            }
-				        },
-				        muted: { 
-				            key: 77,
-				            fn: function(f) {
-				                f._muted(!f.options.muted);
-				            }
-				        },
-				        volumeUp: {
-				            key: 190,
-				            fn: function(f) {
-				                f.volume(f.options.volume + 0.1);
-								$(".single-audio-volume-' . $player_id .  '").val(f.options.volume + 0.1);
-				            }
-				        },
-				        volumeDown: {
-				            key: 188,
-				            fn: function(f) {
-				                f.volume(f.options.volume - 0.1);
-								$(".single-audio-volume-' . $player_id .  '").val(f.options.volume - 0.1);
-				            }
-				        },
-				        loop: {
-				            key: 76,
-				            fn: function(f) {
-				                f._loop(!f.options.loop);
-				            }
-				        },
-				        goForwardFive: {
-				            key: 72,
-				            fn: function(f) {
-				                f.playHead(f.status.currentPercentAbsolute + 5);
-				            }
-				        },
-				        goBackFive: {
-				            key: 66,
-				            fn: function(f) {
-				                f.playHead(f.status.currentPercentAbsolute - 5);
-				            }
-				        },
-				        loopOn: {
-				            key: 49,
-				            fn: function(f) {
-				                f.options.lon = f.status.currentPercentAbsolute;
-				            }
-				        },
-				        loopOff: {
-				            key: 50,
-				            fn: function(f) {
-				                f.options.loff = f.status.currentPercentAbsolute;
-				            }
-				        },
-				        loopfinish: {
-				            key: 51,
-				            fn: function(f) {
-				            	if (f.options.lfinish) {
-				                    f.options.lfinish = false;
-				                } else {
-				                    f.options.lfinish = true;
-				                }
-				            }
-				        },
-				        speedUp: {
-				            key: 83,
-				            fn: function(f) {
-				                f.playbackRate(f.status.playbackRate + 0.1);
-				            }
-				        },
-				        slowDown: {
-				            key: 65,
-				            fn: function(f) {
-				                f.playbackRate(f.status.playbackRate - 0.1);
-				            }
-				        },
-				        normalSpeed: {
-				            key: 68,
-				            fn: function(f) {
-				                f.playbackRate(1);
-				            }
-				        }
-				    },
-	                swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
-                    supplied: "mp3,m4a,wav",
-	                wmode: "window",
-	                preload: "metadata",
-					useStateClassSkin: true,
-					autoBlur: false,
-					smoothPlayBar: false,
-					keyEnabled: true,
-					audioFullScreen: false,
-					remainingDuration: true
-	            });
-			});
+					});
+				});
 			</script>';
 
 		}
@@ -3941,297 +3455,26 @@ if (!class_exists("s3bubble_audio")) {
 				}
 			}
             $player_id = uniqid();
-            
-            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-video">
-            	<div class="s3bubble-media-main-video-playlist-wrap">
-				    <div id="jquery_jplayer_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
-				    <div class="s3bubble-media-main-video-skip">
-						<h2>Skip Ad</h2>
-						<i class="s3icon s3icon-step-forward"></i>
-					</div>
-					<div class="s3bubble-media-main-video-search">
-						<input type="text" id="s3bubble-video-playlist-tsearch-' . $player_id .  '" class="s3bubble-video-playlist-tsearch" name="s3bubble-video-playlist-tsearch" placeholder="Search">
-					</div>
-				    <div class="s3bubble-media-main-video-loading">
-				    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
-				    </div>
-				    <div class="s3bubble-media-main-video-play">
-						<i class="s3icon s3icon-play"></i>
-					</div>
-				    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
-				        <div class="s3bubble-media-main-interface">
-				            <div class="s3bubble-media-main-controls-holder">
-					            <div class="s3bubble-media-main-left-controls">
-									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</div>
-								<div class="s3bubble-media-main-progress" dir="auto">
-								    <div class="s3bubble-media-main-seek-bar" dir="auto">
-								        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
-								    </div>
-								</div>
-								<div class="s3bubble-media-main-right-controls">
-									<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-playlist-list" tabindex="3" title="Playlist List"><i class="s3icon s3icon-list-ul"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-playlist-search" tabindex="3" title="Search List"><i class="s3icon s3icon-search"></i></a>
-									<div class="s3bubble-media-main-volume-bar" dir="auto">
-									    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-									</div>
-									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-									<div class="s3bubble-media-main-time-container">
-										<div class="s3bubble-media-main-duration"></div>
-									</div>
-								</div>
-				            </div>
-				        </div>
-				    </div>
-			    </div>
-			    <div class="s3bubble-media-main-playlist" style="' . (($playlist == 'show') ? "" : "display:none;" ) . '">
-					<ul class="s3bubble-video-playlist-ul-' . $player_id .  '">
-						<li></li>
-					</ul>
-				</div>
-			    <div class="s3bubble-media-main-no-solution" style="display:none;">
-			        <span>Update Required</span>
-			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
-			    </div>
-			</div>
+
+            return '<div class="video-playlist-' . $player_id . '"></div>
             <script type="text/javascript">
-			jQuery(document).ready(function($) {
-				
-				var S3Bucket = "' . $bucket. '";
-				var Current = -1;
-				var aspects  = "' . $aspect . '";
-				var aspects = aspects.split(":");
-				var aspect = $("#s3bubble-media-main-container-' . $player_id . '").width()/aspects[0]*aspects[1];
-				var IsMobile = false;
-				if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-					IsMobile = true;
-				}
-				$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-playlist-wrap").height(aspect);
-
-				var videoPlaylistS3Bubble = new jPlayerPlaylist({
-					jPlayer: "#jquery_jplayer_' . $player_id . '",
-					cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
-				}, videoPlaylistS3Bubble, {
-					playlistOptions : {
-						autoPlay : '.$autoplay.',
-						downloadSet: '.$download.'
-					},
-					ready : function(event) {
-						var sendData = {
-							action: "s3bubble_video_playlist_internal_ajax",
-							security : "' . $ajax_nonce . '",
-							Timezone :"America/New_York",
-						    Bucket : "' . $bucket. '",
-						    Folder : "' . $folder. '"
-						}
-						$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-							if(response.error){
-								$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
-								console.log(response.message);
-							}else{
-								videoPlaylistS3Bubble.setPlaylist(response);
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 320px 0 40px");
-								if(IsMobile){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 160px 0 40px");	
-								}
-								if(response.user === "s2member_level1" || response.user === "s2member_level2"){
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 360px 0 40px");
-									if(IsMobile){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 200px 0 40px");	
-									}
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
-								}
-								$("video").bind("contextmenu", function(e) {
-									return false
-								});
-								//hide playlist
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-list").click(function() {
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist").slideToggle();
-									return false;
-								});
-								//Search tracks
-								$( "#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-playlist-search" ).click(function() {
-									videoPlaylistS3Bubble.pause();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-play").fadeOut();
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-search").fadeIn();
-									return false;
-								});
-								$("#s3bubble-video-playlist-tsearch-' . $player_id .  '").keyup(function() {
-									var searchText = $(this).val(),
-						            $allListElements = $("#s3bubble-media-main-container-' . $player_id . ' ul.s3bubble-video-playlist-ul-' . $player_id .  ' > li"),
-						            $matchingListElements = $allListElements.filter(function(i, el){
-						                return $(el).text().toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
-						            });
-									$allListElements.hide();
-	       							$matchingListElements.show();
-								});
-								setTimeout(function(){
-									if ("'.$height.'" !== "") {
-										$(".s3bubble-video-playlist-ul-' . $player_id .  '").css({
-											height : "'.$height.'px",
-											"overflow-y" : "scroll"
-										});
-									}
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-									$(".s3bubble-media-main-gui").css("visibility", "visible");
-								},2000);
-							}
-						},"json");
-
-					},
-					timeupdate : function(t) {
-						if (t.jPlayer.status.currentTime > 1) {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-						}
-					},
-					resize: function (event) {
-
-				    },
-				    click: function (event) {
-				    	if(event.jPlayer.status.paused){
-				    		videoPlaylistS3Bubble.play();
-				    	}else{
-				    		videoPlaylistS3Bubble.pause();
-				    	}
-				    },
-				    error: function (event) {
-				    	console.log(event.jPlayer.error);
-    					console.log(event.jPlayer.error.type);
-				    }, 
-					loadedmetadata : function(t) {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-					},
-					loadeddata : function(t) {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-					},
-					emptied : function(t) {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn()
-					},
-					ended : function(t) {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn()
-					},
-					stalled : function(t) {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn()
-					},
-					waiting: function() {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn(); 
-					},
-					canplay: function() {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-					},
-					pause: function() { 
-
-					},
-					playing: function() {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-search").fadeOut();
-						// Reset search
-						$("#s3bubble-video-playlist-tsearch-' . $player_id . '").removeAttr("value");
-						$("#s3bubble-media-main-container-' . $player_id . ' ul.s3bubble-video-playlist-ul-' . $player_id .  ' > li").show(); 
-					},
-					play: function() {
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-search").fadeOut();
-						$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-						var CurrentState = videoPlaylistS3Bubble.current;
-						var PlaylistKey  = videoPlaylistS3Bubble.playlist[CurrentState];
-						if(IsMobile === false){
-							if(PlaylistKey.advert){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-								    left: "0"
-								}, 50, function() {
-								    // Animation complete.
-								});
-							}
-						}
-						if(Current !== CurrentState && PlaylistKey.advert !== true){
-							addListener({
-								app_id: s3bubble_all_object.s3appid,
-								server: s3bubble_all_object.serveraddress,
-								bucket: S3Bucket,
-								key: PlaylistKey.key,
-								type: "video",
-								advert: false
-							});
-							Current = CurrentState;
-						}
-					},
-					suspend: function() { 
-					    
-					},
-					stalled: function() { 
-					    
-					},
-					loadstart: function() { 
-					    
-					},
-					keyBindings: {
-					  play: {
-					    key: 32,
-					    fn: function(f) {
-					      if(f.status.paused) {
-					        f.play();
-					      } else {
-					        f.pause();
-					      }
-					    }
-					  },
-					  fullScreen: {
-					    key: 70,
-					    fn: function(f) {
-					      if(f.status.video || f.options.audioFullScreen) {
-					        f._setOption("fullScreen", !f.options.fullScreen);
-					      }
-					    }
-					  },
-					  muted: {
-					    key: 77,
-					    fn: function(f) {
-					      f._muted(!f.options.muted);
-					    }
-					  },
-					  volumeUp: {
-					    key: 190,
-					    fn: function(f) {
-					      f.volume(f.options.volume + 0.1);
-					    }
-					  },
-					  volumeDown: {
-					    key: 188,
-					    fn: function(f) {
-					      f.volume(f.options.volume - 0.1);
-					    }
-					  },
-					  loop: {
-					    key: 76,
-					    fn: function(f) {
-					      f._loop(!f.options.loop);
-					    }
-					  }
-					},
-					swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
-                    supplied: "m4v",
-	                wmode: "window",
-	                preload: "metadata",
-					useStateClassSkin: true,
-					autoBlur: false,
-					smoothPlayBar: false,
-					keyEnabled: true,
-					remainingDuration: true,
-					size: {
-			            width: "100%",
-			            height: aspect
-			        },
-			        autohide : {
-						full : true,
-						restored : true,
-						hold : 3000
-					}
+				jQuery(document).ready(function($) {
+					$(".video-playlist-' . $player_id . '").videoPlaylist({
+						Ajax:       "' . admin_url('admin-ajax.php') . '",
+						Pid:		"' . $player_id . '",
+						Bucket:		"' . $bucket . '",
+						Folder:		"' . $folder . '",
+						Cloudfront:	"' . $cloudfront . '",
+						Security:	"' . $ajax_nonce . '",
+						AutoPlay:	' . $autoplay . ',
+						Download:	' . $download . ',
+						Aspect:	    "' . $aspect . '",
+						Height:    "' . $height . '",
+						Playlist:  "' . (($playlist == 'show') ? "" : "display:none;" ) . '"
+					},function(){
+						
+					});
 				});
-			});
 			</script>';
 
 		}
@@ -4300,289 +3543,24 @@ if (!class_exists("s3bubble_audio")) {
 			}
             $player_id = uniqid();
 		
-            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-video">
-			    <div id="jquery_jplayer_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
-			    <div class="s3bubble-media-main-video-skip">
-					<h2>Skip Ad</h2>
-					<i class="s3icon s3icon-step-forward"></i>
-				</div>
-			    <div class="s3bubble-media-main-video-loading">
-			    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
-			    </div>
-			    <div class="s3bubble-media-main-video-play">
-					<i class="s3icon s3icon-play"></i>
-				</div>
-			    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
-			        <div class="s3bubble-media-main-interface">
-			            <div class="s3bubble-media-main-controls-holder">
-			            	<div class="s3bubble-media-main-left-controls">
-								<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-							</div>
-							<div class="s3bubble-media-main-progress" dir="auto">
-							    <div class="s3bubble-media-main-seek-bar" dir="auto">
-							        <div class="s3bubble-media-main-play-bar" dir="auto"></div>
-							    </div>
-							</div>
-							<div class="s3bubble-media-main-right-controls">
-								<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-								<div class="s3bubble-media-main-volume-bar" dir="auto">
-								    <div class="s3bubble-media-main-volume-bar-value" dir="auto"></div>
-								</div>
-								<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-								<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-								<div class="s3bubble-media-main-time-container">
-									<div class="s3bubble-media-main-duration"></div>
-								</div>
-							</div>
-			            </div>
-			        </div>
-			    </div>
-			    <div class="s3bubble-media-main-playlist" style="display:none !important;">
-					<ul>
-						<li></li>
-					</ul>
-				</div>
-			    <div class="s3bubble-media-main-no-solution" style="display:none;">
-			        <span>Update Required</span>
-			        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
-			    </div>
-			</div>
+            return '<div class="single-video-' . $player_id . '"></div>
             <script type="text/javascript">
 				jQuery(document).ready(function($) {
-					
-					var S3Bucket = "' . $bucket. '";
-					var Current = -1;
-					var aspects  = "' . $aspect . '";
-					var aspects = aspects.split(":");
-					var aspect = $("#s3bubble-media-main-container-' . $player_id . '").width()/aspects[0]*aspects[1];
-					var IsMobile = false;
-					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-						IsMobile = true;
-					}
-
-					var videoSingleS3Bubble = new jPlayerPlaylist({
-						jPlayer: "#jquery_jplayer_' . $player_id . '",
-						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
-					}, videoSingleS3Bubble, {
-						playlistOptions : {
-							autoPlay : '.$autoplay.',
-							downloadSet: '.$download.'
-						},
-						ready : function(event) {
-							var sendData = {
-								action : "s3bubble_video_single_internal_ajax",
-								security : "' . $ajax_nonce . '",
-								Timezone :"America/New_York",
-							    Bucket : "' . $bucket. '",
-							    Key : "' . $track. '",
-							    Cloudfront : "' . $cloudfront .'",
-							    Server : s3bubble_all_object.serveraddress
-							}
-							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-								if(response.error){
-									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ".</p></span>");
-									console.log(response.message);   
-								}else{
-									videoSingleS3Bubble.setPlaylist(response.results);	
-
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");	
-									if(IsMobile){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
-									}
-									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
-										if(IsMobile){
-											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
-										}
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
-									}
-									if(' . $download . '){
-										if(' . $twitter . '){
-											$("#s3bubble-media-main-container-' . $player_id . '").prepend("<a href=\"#\" class=\"s3bubble-cloud-download\" title=\"Free Download\"><i class=\"s3icon s3icon-cloud-download\"></i></a>");
-											$(".s3bubble-cloud-download").tweetAction({
-												text:		"' . $twitter_text . '",
-												url:		window.href,
-												via:		"' . $twitter_handler . '",
-												related:	"' . $twitter_handler . '"
-											},function(){
-												window.open(response.results[0].download);
-											});
-										}else{
-											$("#s3bubble-media-main-container-' . $player_id . '").prepend("<a href=\"" + response.results[0].download + "\" class=\"s3bubble-cloud-download\" title=\"Free Download\"><i class=\"s3icon s3icon-cloud-download\"></i></a>");
-										}	
-									}
-									$("video").bind("contextmenu", function(e) {
-										return false;
-									}); 
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").on( "click", function() {
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn();
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-										    left: "-120"
-										}, 50, function() {
-										    videoSingleS3Bubble.next();
-										});
-									});
-									setTimeout(function(){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-										$(".s3bubble-media-main-gui").css("visibility", "visible");
-									},2000);
-									
-								}
-							},"json");
-						},
-						timeupdate : function(t) {
-							if (t.jPlayer.status.currentTime > 1) {
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-							}
-						},
-						resize: function (event) {
-
-					    },
-					    click: function (event) {
-					    	if(event.jPlayer.status.paused){
-					    		videoSingleS3Bubble.play();
-					    	}else{
-					    		videoSingleS3Bubble.pause();
-					    	}
-					    },
-					    error: function (event) {
-					    	console.log(event.jPlayer.error);
-        					console.log(event.jPlayer.error.type);
-					    },
-						loadedmetadata : function(t) {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-						},
-						loadeddata : function(t) {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-						},
-						emptied : function(t) {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn()
-						},
-						ended : function(t) {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn();
-							var CurrentState = videoSingleS3Bubble.current;
-							var PlaylistKey  = videoSingleS3Bubble.playlist[CurrentState];
-							if(PlaylistKey.advert && IsMobile === false){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-								    left: "0"
-								}, 50, function() {
-								    // Animation complete.
-								});
-							}else{
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-								    left: "-120"
-								}, 50, function() {
-								    
-								});
-							}
-						},
-						stalled : function(t) {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn()
-						},
-						waiting: function() {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeIn(); 
-						},
-						canplay: function() {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-						},
-						pause: function() { 
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-cloud-download").fadeIn();
-						},
-						playing: function() {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-						},
-						play: function() {
-							$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-cloud-download").fadeOut(); 
-						    $("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut(); 
-							var CurrentState = videoSingleS3Bubble.current;
-							var PlaylistKey  = videoSingleS3Bubble.playlist[CurrentState];
-							if(PlaylistKey.advert && IsMobile === false){
-								$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-skip").animate({
-								    left: "0"
-								}, 50, function() {
-								    // Animation complete.
-								});
-							}
-							if(Current !== CurrentState && PlaylistKey.advert !== true){
-								addListener({
-									app_id: s3bubble_all_object.s3appid,
-									server: s3bubble_all_object.serveraddress,
-									bucket: "' . $bucket. '",
-									key: PlaylistKey.key,
-									type: "video",
-									advert: false
-								});
-								Current = CurrentState;
-							}
-
-						},
-						suspend: function() { 
-						    
-						},
-						keyBindings: {
-						  play: {
-						    key: 32,
-						    fn: function(f) {
-						      if(f.status.paused) {
-						        f.play();
-						      } else {
-						        f.pause();
-						      }
-						    }
-						  },
-						  fullScreen: {
-						    key: 70,
-						    fn: function(f) {
-						      if(f.status.video || f.options.audioFullScreen) {
-						        f._setOption("fullScreen", !f.options.fullScreen);
-						      }
-						    }
-						  },
-						  muted: {
-						    key: 77,
-						    fn: function(f) {
-						      f._muted(!f.options.muted);
-						    }
-						  },
-						  volumeUp: {
-						    key: 190,
-						    fn: function(f) {
-						      f.volume(f.options.volume + 0.1);
-						    }
-						  },
-						  volumeDown: {
-						    key: 188,
-						    fn: function(f) {
-						      f.volume(f.options.volume - 0.1);
-						    }
-						  },
-						  loop: {
-						    key: 76, 
-						    fn: function(f) {
-						      f._loop(!f.options.loop);
-						    }
-						  }
-						},
-						swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
-	                    supplied: "m4v",
-		                wmode: "window",
-		                preload: "metadata",
-						useStateClassSkin: true,
-						autoBlur: false,
-						smoothPlayBar: false,
-						keyEnabled: true,
-						remainingDuration: true,
-						size: {
-				            width: "100%",
-				            height: aspect
-				        },
-				        autohide : {
-							full : true,
-							restored : true,
-							hold : 3000
-						}
+					$(".single-video-' . $player_id . '").singleVideo({
+						Ajax:       "' . admin_url('admin-ajax.php') . '",
+						Pid:		"' . $player_id . '",
+						Bucket:		"' . $bucket . '",
+						Key:		"' . $track . '",
+						Cloudfront:	"' . $cloudfront . '",
+						Security:	"' . $ajax_nonce . '",
+						AutoPlay:	' . $autoplay . ',
+						Download:	' . $download . ',
+						Aspect:	    "' . $aspect . '",
+						Twitter:    "' . $twitter . '",
+						TwitterText:    "' . $twitter_text . '",
+						TwitterHandler:	"' . $twitter_handler . '"
+					},function(){
+						
 					});
 				});
 			</script>';

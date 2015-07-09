@@ -507,7 +507,7 @@ a.s3bubble-media-main-pause {
     background: #fff !important;
     color: #000 !important;
     float: left;
-    margin: 0px;
+    margin: 0px !important;
 }
 .s3bubble-media-main-artist {
     float: right
