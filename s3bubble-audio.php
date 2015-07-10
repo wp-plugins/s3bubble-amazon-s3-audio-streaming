@@ -861,9 +861,7 @@ if (!class_exists("s3bubble_audio")) {
 				'blocking' => true,
 				'headers' => array(),
 				'body' => array(
-					'AccessKey' => $s3bubble_access_key,
-				    'SecretKey' => $s3bubble_secret_key,
-				    'ID' => 89723
+					'AccessKey' => $s3bubble_access_key
 				),
 				'cookies' => array()
 			    )
@@ -915,7 +913,7 @@ if (!class_exists("s3bubble_audio")) {
 					'AccessKey' => $s3bubble_access_key,
 				    'SecretKey' => $s3bubble_secret_key,
 				    'Timezone' => 'America/New_York',
-				    'ID' => $_POST['Bucket'],
+				    'Bucket' => $_POST['Bucket'],
 				    'Key' => $_POST['Key'],
 				    'Cloudfront' => $_POST['Cloudfront'],
 				    'IsMobile' => $_POST['IsMobile']
