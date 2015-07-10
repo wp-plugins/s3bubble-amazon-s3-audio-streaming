@@ -217,6 +217,11 @@ if (!class_exists("s3bubble_audio")) {
 			add_action( 'wp_ajax_nopriv_s3bubble_audio_rtmp_internal_ajax', array( $this, 's3bubble_audio_rtmp_internal_ajax' ) ); 
 
 			/*
+			 * Internal Ajax
+			 */
+			add_action( 'wp_ajax_s3bubble_analytics_internal_ajax', array( $this, 's3bubble_analytics_internal_ajax' ) );
+
+			/*
 			 * Admin dismiss message
 			 */
 			add_action('admin_notices', array( $this, 's3bubble_admin_notice' ) );
@@ -277,8 +282,429 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
         function s3bubble_audio_admin_menu(){	
+
 			add_menu_page( 's3bubble_audio', 'S3Bubble Media', 'manage_options', 's3bubble_audio', array($this, 's3bubble_audio_admin'), plugins_url('assets/images/s3bubblelogo.png',__FILE__ ) );
+			add_submenu_page( 's3bubble_audio', 'Analytics', 'Analytics', 'manage_options', 's3bubble-analytics-page', array($this, 's3bubble_analytics_page_callback') );
+			add_submenu_page( 's3bubble_audio', 'Desktop App', 'Desktop App', 'manage_options', 's3bubble-desktop-app-page', array($this, 's3bubble_desktop_app_page_callback') );
+			add_submenu_page( 's3bubble_audio', 'Live Streaming', 'Live Streaming', 'manage_options', 's3bubble-live-streaming-page', array($this, 's3bubble_live_streaming_page_callback') );
+			add_submenu_page( 's3bubble_audio', 'Debug', 'Debug', 'manage_options', 's3bubble-debug-page', array($this, 's3bubble_debug_page_callback') );
+
     	}
+
+    	/*
+		* Add javascript to the footer connect to wp_footer()
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_audio_admin(){	
+
+			if ( isset($_POST['submit']) ) {
+				$nonce = $_REQUEST['_wpnonce'];
+				if (! wp_verify_nonce($nonce, 's3bubble-media') ) die('Security check failed'); 
+				if (!current_user_can('manage_options')) die(__('You cannot edit the s3bubble media options.'));
+				check_admin_referer('s3bubble-media');	
+				// Get our new option values
+				$s3audible_username	= $this->s3bubble_clean_options($_POST['s3audible_username']);
+				$s3audible_email	= $this->s3bubble_clean_options($_POST['s3audible_email']);
+				$loggedin			= $this->s3bubble_clean_options($_POST['loggedin']);
+
+				// new
+				$s3bubble_video_all_bar_colours	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_colours']);
+				$s3bubble_video_all_bar_seeks	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_seeks']);
+				$s3bubble_video_all_controls_bg	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_controls_bg']);
+				$s3bubble_video_all_icons	    = $this->s3bubble_clean_options($_POST['s3bubble_video_all_icons']);
+
+			    // Update the DB with the new option values
+				update_option("s3-s3audible_username", $s3audible_username);
+				update_option("s3-s3audible_email", $s3audible_email);
+				update_option("s3-loggedin", $loggedin);
+				
+				// new
+				update_option("s3bubble_video_all_bar_colours", $s3bubble_video_all_bar_colours);
+				update_option("s3bubble_video_all_bar_seeks", $s3bubble_video_all_bar_seeks);
+				update_option("s3bubble_video_all_controls_bg", $s3bubble_video_all_controls_bg);
+				update_option("s3bubble_video_all_icons", $s3bubble_video_all_icons);
+
+			}
+			
+			$s3audible_username	= get_option("s3-s3audible_username");
+			$s3audible_email	= get_option("s3-s3audible_email");
+			$loggedin			= get_option("s3-loggedin");			
+			
+			// new
+			$s3bubble_video_all_bar_colours	= get_option("s3bubble_video_all_bar_colours");
+			$s3bubble_video_all_bar_seeks	= get_option("s3bubble_video_all_bar_seeks");
+			$s3bubble_video_all_controls_bg	= get_option("s3bubble_video_all_controls_bg");
+			$s3bubble_video_all_icons	    = get_option("s3bubble_video_all_icons");
+
+		?>
+		<div class="wrap">
+			<div id="icon-options-general" class="icon32"></div>
+			<h2>S3Bubble Amazon S3 Media Cloud Media Streaming</h2>
+			<div id="message" class="updated fade"><p>Please sign up for a S3Bubble account at <a href="https://s3bubble.com" target="_blank">https://s3bubble.com</a></p></div>
+			<div class="metabox-holder has-right-sidebar">
+				<div class="inner-sidebar" style="width:40%">
+					<div class="postbox">
+						<h3 class="hndle">PLEASE USE WYSIWYG EDITOR BUTTONS</h3>
+						<div class="inside">
+							<img style="width: 100%;" src="<?php echo plugins_url('/assets/images/wp_editor.png',__FILE__); ?>" />
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">Track Analytics</h3>
+						<div class="inside">
+							<ul class="s3bubble-adverts">
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/analytics.png',__FILE__); ?>" alt="S3Bubble wordpress plugin" /> 
+									<p>All your videos that display on your WordPress site will now link to our management system. Find out where your target audience is so you can start strategically promoting your site and grow a global audience.</p>
+									<a href="https://s3bubble.com/" target="_blank">Visit s3bubble.com</a>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">S3Bubble Apps - Monitor Analytics</h3>
+						<div class="inside">
+							<ul class="s3bubble-adverts">
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble Android" /> 
+									<h3>
+										Desktop App
+									</h3>
+									<p>Record Manage Watch Download Share. Manage all your video and audio analytics.</p>
+									<a class="button button-s3bubble" href="https://s3bubble.com/s3bubble-desktop-app-beta/" target="_blank">DOWNLOAD</a>
+								</li>
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
+									<h3>
+										iPhone Mobile App
+									</h3>
+									<p>Upload large file directly from your desktop. Manage all your video and audio.</p>
+									<a class="button button-s3bubble" href="https://itunes.apple.com/us/app/s3bubble/id720256052?ls=1&mt=8" target="_blank">GET THE APP</a>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">S3Bubble Support</h3>
+						<div class="inside">
+							<ul class="s3bubble-adverts">
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/support.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
+									<h3>
+										Are you stuck upgraded and not happy?
+									</h3>
+									<p>If you are stuck at any point or preferred the old version please just click the download below and delete this version and re upload the plugin.</p>
+									<a class="button button-s3bubble" href="https://s3.amazonaws.com/s3bubble.assets/main.plugin/s3bubble-amazon-s3-audio-streaming.zip" target="_blank">DOWNLOAD OLD VERISON</a>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+				</div>
+				<div id="post-body">
+					<div id="post-body-content" style="margin-right: 41%;">
+						<div class="postbox">
+							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></h3>
+							<div class="inside">
+								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
+								    <table class="form-table">
+								      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('s3bubble-media'); } ?>
+								       <tr style="position: relative;">
+								        <th scope="row" valign="top"><label for="S3Bubble_username">App Access Key:</label></th>
+								        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo empty($s3audible_username) ? 'Enter App Key' : $s3audible_username; ?>"/>
+								        	<br />
+								       <span class="description">App Access Key can be found at S3Bubble.com <a href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></span>	
+								        </td>
+								      </tr> 
+								       <tr>
+								        <th scope="row" valign="top"><label for="s3audible_email">App Secret Key:</label></th>
+								        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo empty($s3audible_email) ? 'Enter App Secret Key' : $s3audible_email; ?>"/>
+								        	<br />
+								        	<span class="description">App Secret Key can be found at S3Bubble.com <a href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></span>
+								        </td>
+								      </tr> 
+								       <tr>
+								        <th scope="row" valign="top"><label for="loggedin">Download option logged in:</label></th>
+								        <td><select name="loggedin" id="loggedin">
+								            <option value="<?php echo $loggedin; ?>"><?php echo $loggedin; ?></option>
+								            <option value="true">true</option>
+								            <option value="false">false</option>
+								          </select>
+								          <br />
+								          <span class="description">Only allow download link for logged in users.</p></td>
+								      </tr>
+								      <!-- new -->
+								      <tr>
+								        <th scope="row" valign="top"><label for="s3bubble_video_all_bar_colours">Player Bar Colours:</label></th>
+								        <td> <input type="text" name="s3bubble_video_all_bar_colours" id="s3bubble_video_all_bar_colours" value="<?php echo $s3bubble_video_all_bar_colours; ?>" class="cpa-color-picker" >
+								        	<br />
+								        	<span class="description">Change the progress bar and volume bar colour</span>
+								        </td>
+								      </tr>
+								      <tr>
+								        <th scope="row" valign="top"><label for="s3bubble_video_all_bar_seeks">Seek Bar Colours:</label></th>
+								        <td> <input type="text" name="s3bubble_video_all_bar_seeks" id="s3bubble_video_all_bar_seeks" value="<?php echo $s3bubble_video_all_bar_seeks; ?>" class="cpa-color-picker" >
+								        	<br />
+								        	<span class="description">Change the progress bar and volume bar seek bar colours</span>
+								        </td>
+								      </tr>
+								      <tr>
+								        <th scope="row" valign="top"><label for="s3bubble_video_all_controls_bg">Player Controls Colour:</label></th>
+								        <td> <input type="text" name="s3bubble_video_all_controls_bg" id="s3bubble_video_all_controls_bg" value="<?php echo $s3bubble_video_all_controls_bg; ?>" class="cpa-color-picker" >
+								        	<br />
+								        	<span class="description">Change the controls background colour</span>
+								        </td>
+								      </tr> 
+								      <tr>
+								        <th scope="row" valign="top"><label for="s3bubble_video_all_icons">Player Icon Colours:</label></th>
+								        <td> <input type="text" name="s3bubble_video_all_icons" id="s3bubble_video_all_icons" value="<?php echo $s3bubble_video_all_icons; ?>" class="cpa-color-picker" >
+								        	<br />
+								        	<span class="description">Change the player icons colours</span>
+								        </td>
+								      </tr>  
+								      <!-- end new -->
+								    </table>
+								    <br/>
+								    <span class="submit" style="border: 0;">
+								    	<input type="submit" name="submit" class="button button-s3bubble button-hero" value="Save Settings" />
+								    </span>
+								  </form>
+							</div><!-- .inside -->
+						</div>
+					</div> <!-- #post-body-content -->
+				</div> <!-- #post-body -->
+			</div> <!-- .metabox-holder -->
+		</div> <!-- .wrap -->
+		<?php	
+       }
+
+        /*
+		* S3Bubble desktop page run route
+		* @author sameast
+		* @none
+		*/ 
+    	function s3bubble_desktop_app_page_callback() {
+    		//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+    		?>
+			<div class="wrap"><div id="icon-tools" class="icon32"></div>
+				<h2>Did you know we have a desktop app?</h2>
+				<div class="s3bubble-video-main-form-alerts"><p>The S3Bubble desktop app is in development and we are looking for testers, we are hoping to keep developing this and make it as awesome as we can.</p></div>
+				<div class="metabox-holder has-right-sidebar">
+				<div class="inner-sidebar" style="width:40%">
+					<div class="postbox">
+						<h3 class="hndle">Important heads up</h3>
+						<div class="inside">
+							Heads up! If the dmg does not open please make sure you have the latest version of java jdk Mac OS X x64 link here. <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank">http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a>
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">Desktop app downloads</h3>
+						<div class="inside">
+							<ul>
+								<li>
+									<a class="button button-s3bubble button-hero" href="https://s3.amazonaws.com/s3bubble.business.template/s3bubble-sharing-functionality.dmg.zip?Signature=oMHH0q1A4I3%2FbgsVODqTjV3eC5w%3D&AWSAccessKeyId=AKIAIDVCDVR32H7DCSNA&Expires=1696263845" target="_blank">DOWNLOAD IOS APP</a>
+									<a class="button button-s3bubble button-hero" href="https://s3.amazonaws.com/s3bubble.assets/desktop/S3Bubble-Setup.zip" target="_blank">DOWNLOAD WINDOWS APP</a>
+									<p>If you have any suggestions we would love to here them please drop us an email at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a></p>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+				</div>
+				<div id="post-body">
+					<div id="post-body-content" style="margin-right: 41%;">
+						<div class="postbox">
+							<h3 class="hndle">Watch this quick overview video</h3>
+							<div class="inside">
+								<iframe style="width:100%;min-height:300px;" onload="this.height=(this.offsetWidth/16)*9;" src="//media.s3bubble.com/video/ECPfysyCB" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true" ></iframe>
+							</div><!-- .inside -->
+						</div>
+					</div> <!-- #post-body-content -->
+				</div> <!-- #post-body -->
+			</div> <!-- .metabox-holder -->
+		</div> <!-- .wrap -->
+			<?php
+
+		}
+
+		/*
+		* S3Bubble generates a randow string for stream
+		* @author sameast
+		* @none
+		*/ 
+		function s3BubbleGenerateRandomString($length = 5) {
+		    $characters = 'abcdefghijklmnopqrstuvwxyz';
+		    $charactersLength = strlen($characters);
+		    $randomString = '';
+		    for ($i = 0; $i < $length; $i++) {
+		        $randomString .= $characters[rand(0, $charactersLength - 1)];
+		    }
+		    return $randomString;
+		}
+
+    	/*
+		* S3Bubble desktop page run route
+		* @author sameast
+		* @none
+		*/ 
+    	function s3bubble_live_streaming_page_callback() {
+    		//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+			$stream = $this->s3BubbleGenerateRandomString();
+    		?>
+			<div class="wrap"><div id="icon-tools" class="icon32"></div>
+				<h2>Live Streaming coming soon, interested?</h2>
+
+				
+				<div class="s3bubble-video-main-form-alerts"><p>If you are insterested in being one of our live streaming beta testers or want your own personal live stream url please contact us. <a href="mailto:support@s3bubble.com">support@s3bubble.com</a></p></div>
+				<div class="metabox-holder has-right-sidebar">
+				<div class="inner-sidebar" style="width:40%">
+					<div class="postbox">
+						<h3 class="hndle">It really simple just download one of the apps below.</h3>
+						<div class="inside">
+							<p>Open the app replicate the image below and enter <strong><?php echo $stream; ?></strong> for the stream name, start streaming click broadcast and then your stream will play on the player.</p>
+							<img style="width:100%" src="<?php echo plugins_url('/assets/images/stream.png',__FILE__); ?>">
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">Broadcasting app downloads</h3>
+						<div class="inside">
+							<ul>
+								<li>
+									<a class="button button-s3bubble button-hero" href="https://itunes.apple.com/us/app/os-broadcaster/id632458541?mt=8" target="_blank">DOWNLOAD IOS APP</a>
+									<a class="button button-s3bubble button-hero" href="https://play.google.com/store/apps/details?id=air.OS.Broadcaster&hl=en" target="_blank">DOWNLOAD ANDRIOD APP</a>
+									<p>If you are insterested in a Live Streaming setup please drop us an email at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a></p>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+				</div>
+				<div id="post-body">
+					<div id="post-body-content" style="margin-right: 41%;">
+						<div class="postbox">
+							<h3 class="hndle">Live Stream Preview - Your Preview Stream Is <?php echo $stream; ?></h3>
+							<div class="inside">
+								<iframe style="width:100%;min-height:300px;" onload="this.height=(this.offsetWidth/16)*9;" src="//media.s3bubble.com/live/<?php echo $stream; ?>" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true" ></iframe>
+							</div><!-- .inside -->
+						</div>
+					</div> <!-- #post-body-content -->
+				</div> <!-- #post-body -->
+			</div> <!-- .metabox-holder -->
+		</div> <!-- .wrap -->
+			<?php
+
+		}
+
+    	/*
+		* S3Bubble debug page run route
+		* @author sameast
+		* @none
+		*/ 
+    	function s3bubble_analytics_page_callback() {
+    		//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+    		?>
+			<div class="wrap"><div id="icon-tools" class="icon32"></div>
+				<h2>S3Bubble video analytics - <span class="s3bubble-analytics-loading"><small>loading...</small></span></h2>
+				<div class="s3bubble-video-main-form-alerts"><p>All user Analytics can be monitored directly through the S3Bubble app with push notifications. <a href="https://itunes.apple.com/gb/app/s3bubble-sharing-storing-streaming/id720256052?mt=8" target="_blank">Download App</a></p></div>
+				<table id="s3AnalyticsTable" class="widefat tablesorter"> 
+					<thead>
+						<tr>
+							<th scope="col">Source</th>
+							<th>Key</th>
+							<th>Country</th>
+							<th>City/Location</th>
+							<th>Ip Address</th>
+							<th>Browser</th>
+							<th>Type</th>
+							<th>Created</th>
+							<th>Map</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th scope="col">Source</th>
+							<th>Key</th>
+							<th>Country</th>
+							<th>City/Location</th>
+							<th>Ip Address</th>
+							<th>Browser</th>
+							<th>Type</th>
+							<th>Created</th>
+							<th>Map</th>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<script type="text/javascript">
+				function timeNow(UNIX_timestamp){
+					 var a = new Date(UNIX_timestamp * 1000);
+					  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+					  var year = a.getFullYear();
+					  var month = months[a.getMonth()];
+					  var date = a.getDate();
+					  var hour = a.getHours();
+					  var min = a.getMinutes();
+					  var sec = a.getSeconds();
+					  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
+					  return time;
+				}
+				jQuery(document).ready(function($) {
+					var sendData = {
+						action: 's3bubble_analytics_internal_ajax',
+						security: '<?php echo $ajax_nonce; ?>'
+					}
+					$.post("<?php echo admin_url('admin-ajax.php'); ?>", sendData, function(response) {
+						var html = "";
+						$.each( response.data, function( key, value ) {
+							var country = 'zz';
+							if(value.user_country){
+								country = value.user_country.toLowerCase();
+							}
+							html += '<tr>' +
+										'<td><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
+						                '<td>' + value.key + '</td>' +
+						                '<td><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
+						                '<td>' + value.user_city + '</td>' +
+						                '<td>' + value.user_ip + '</td>' +
+						                '<td>' + value.browser + '</td>' +
+						                '<td>' + value.type + '</td>' +
+						                '<td>' + timeNow(value.created) + '</td>' +
+						                '<td><a href="http://maps.google.com/maps?z=12&t=m&q=loc:' + value.user_loc_lat.replace(',', '+') + '" target="_blank">Open</a></td>' +
+						            '</tr>';
+						});
+						$("#s3AnalyticsTable").append(html);
+						$(".s3bubble-analytics-loading").html("<small>" + response.message + "</small>");
+					},'json');
+				});
+			</script>
+			<?php
+
+		}
+
+    	/*
+		* S3Bubble debug page run route
+		* @author sameast
+		* @none
+		*/ 
+    	function s3bubble_debug_page_callback() {
+			
+			function isEnabled($func) {
+			    return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+			}
+
+			echo '<div class="wrap"><div id="icon-tools" class="icon32"></div>';
+				echo '<h2>Running Debug - Checking the route to the S3Bubble api</h2>';
+				if (isEnabled('shell_exec')) {
+					echo "Trying to run a traceroute this may not work on certain hosts.";
+					$output = shell_exec('traceroute api.s3bubble.com');
+					echo "<pre class='s3bubble-debug'>$output</pre>";
+				}else{
+					echo "Trying to run a traceroute this may not work on certain hosts.";
+				}
+			echo '</div>';
+
+		}
         
 		/*
 		* Add css to wordpress admin to run colourpicker
@@ -412,6 +838,57 @@ if (!class_exists("s3bubble_audio")) {
 		}
 
 		/*
+		* Analytics get all
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_analytics_internal_ajax(){
+			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
+			$s3bubble_access_key = get_option("s3-s3audible_username");
+			$s3bubble_secret_key = get_option("s3-s3audible_email");
+
+			//set POST variables
+			$url = $this->endpoint . 'analytics/all';
+			$response = wp_remote_post( $url, array(
+				'method' => 'POST',
+				'sslverify' => false,
+				'timeout' => 10,
+				'redirection' => 5,
+				'httpversion' => '1.0',
+				'blocking' => true,
+				'headers' => array(),
+				'body' => array(
+					'AccessKey' => $s3bubble_access_key,
+				    'SecretKey' => $s3bubble_secret_key,
+				    'ID' => 89723
+				),
+				'cookies' => array()
+			    )
+			);
+
+			if ( is_wp_error( $response ) ) {
+
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
+
+			wp_die();	
+			
+		}
+
+		/*
 		* Video playlist internal ajax call
 		* @author sameast
 		* @none
@@ -438,7 +915,7 @@ if (!class_exists("s3bubble_audio")) {
 					'AccessKey' => $s3bubble_access_key,
 				    'SecretKey' => $s3bubble_secret_key,
 				    'Timezone' => 'America/New_York',
-				    'Bucket' => $_POST['Bucket'],
+				    'ID' => $_POST['Bucket'],
 				    'Key' => $_POST['Key'],
 				    'Cloudfront' => $_POST['Cloudfront'],
 				    'IsMobile' => $_POST['IsMobile']
@@ -1585,207 +2062,24 @@ if (!class_exists("s3bubble_audio")) {
 		function s3bubble_clean_options( $val ) {
 		    return trim(stripslashes(wp_filter_post_kses(addslashes($val))));
 		}
-        
+
 		/*
-		* Add javascript to the footer connect to wp_footer()
+		* Gets the domain name without ip
 		* @author sameast
 		* @none
 		*/ 
-		function s3bubble_audio_admin(){	
+		function get_domain($url){
 
-			if ( isset($_POST['submit']) ) {
-				$nonce = $_REQUEST['_wpnonce'];
-				if (! wp_verify_nonce($nonce, 's3bubble-media') ) die('Security check failed'); 
-				if (!current_user_can('manage_options')) die(__('You cannot edit the s3bubble media options.'));
-				check_admin_referer('s3bubble-media');	
-				// Get our new option values
-				$s3audible_username	= $this->s3bubble_clean_options($_POST['s3audible_username']);
-				$s3audible_email	= $this->s3bubble_clean_options($_POST['s3audible_email']);
-				$loggedin			= $this->s3bubble_clean_options($_POST['loggedin']);
+		  $pieces = parse_url($url);
+		  $domain = isset($pieces['host']) ? $pieces['host'] : '';
+		  if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
+		    return $regs['domain'];
+		  }
+		  return false;
 
-				// new
-				$s3bubble_video_all_bar_colours	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_colours']);
-				$s3bubble_video_all_bar_seeks	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_seeks']);
-				$s3bubble_video_all_controls_bg	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_controls_bg']);
-				$s3bubble_video_all_icons	    = $this->s3bubble_clean_options($_POST['s3bubble_video_all_icons']);
+		}
 
-			    // Update the DB with the new option values
-				update_option("s3-s3audible_username", $s3audible_username);
-				update_option("s3-s3audible_email", $s3audible_email);
-				update_option("s3-loggedin", $loggedin);
-				
-				// new
-				update_option("s3bubble_video_all_bar_colours", $s3bubble_video_all_bar_colours);
-				update_option("s3bubble_video_all_bar_seeks", $s3bubble_video_all_bar_seeks);
-				update_option("s3bubble_video_all_controls_bg", $s3bubble_video_all_controls_bg);
-				update_option("s3bubble_video_all_icons", $s3bubble_video_all_icons);
-
-			}
-			
-			$s3audible_username	= get_option("s3-s3audible_username");
-			$s3audible_email	= get_option("s3-s3audible_email");
-			$loggedin			= get_option("s3-loggedin");			
-			
-			// new
-			$s3bubble_video_all_bar_colours	= get_option("s3bubble_video_all_bar_colours");
-			$s3bubble_video_all_bar_seeks	= get_option("s3bubble_video_all_bar_seeks");
-			$s3bubble_video_all_controls_bg	= get_option("s3bubble_video_all_controls_bg");
-			$s3bubble_video_all_icons	    = get_option("s3bubble_video_all_icons");
-
-		?>
-		<div class="wrap">
-			<div id="icon-options-general" class="icon32"></div>
-			<h2>S3Bubble Amazon S3 Media Cloud Media Streaming</h2>
-			<div id="message" class="updated fade"><p>Please sign up for a S3Bubble account at <a href="https://s3bubble.com" target="_blank">https://s3bubble.com</a></p></div>
-			<div class="metabox-holder has-right-sidebar">
-				<div class="inner-sidebar" style="width:40%">
-					<div class="postbox">
-						<h3 class="hndle">PLEASE USE WYSIWYG EDITOR BUTTONS</h3>
-						<div class="inside">
-							<img style="width: 100%;" src="<?php echo plugins_url('/assets/images/wp_editor.png',__FILE__); ?>" />
-						</div> 
-					</div>
-					<div class="postbox">
-						<h3 class="hndle">Live Streaming</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/streaming.png',__FILE__); ?>" alt="S3Bubble wordpress plugin" /> 
-									<p>S3Bubble is excited to present to you its first live streaming setup. Download one of the apps from the link below insert the url in the S3Bubble plugin and live stream from your phone or use flash media encoder.</p>
-									<a href="https://s3bubble.com/test-s3bubble-live-stream/" target="_blank">Visit s3bubble.com</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
-					<div class="postbox">
-						<h3 class="hndle">Track Analytics</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/analytics.png',__FILE__); ?>" alt="S3Bubble wordpress plugin" /> 
-									<p>All your videos that display on your WordPress site will now link to our management system. Find out where your target audience is so you can start strategically promoting your site and grow a global audience.</p>
-									<a href="https://s3bubble.com/" target="_blank">Visit s3bubble.com</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
-					<div class="postbox">
-						<h3 class="hndle">S3Bubble Apps - Monitor Analytics</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble Android" /> 
-									<h3>
-										Desktop App
-									</h3>
-									<p>Record Manage Watch Download Share. Manage all your video and audio analytics.</p>
-									<a class="button button-s3bubble" href="https://s3bubble.com/s3bubble-desktop-app-beta/" target="_blank">DOWNLOAD</a>
-								</li>
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/plugin-mobile-icon.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
-									<h3>
-										iPhone Mobile App
-									</h3>
-									<p>Upload large file directly from your desktop. Manage all your video and audio.</p>
-									<a class="button button-s3bubble" href="https://itunes.apple.com/us/app/s3bubble/id720256052?ls=1&mt=8" target="_blank">GET THE APP</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
-					<div class="postbox">
-						<h3 class="hndle">S3Bubble Support</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/support.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
-									<h3>
-										Are you stuck upgraded and not happy?
-									</h3>
-									<p>If you are stuck at any point or preferred the old version please just click the download below and delete this version and re upload the plugin.</p>
-									<a class="button button-s3bubble" href="https://s3.amazonaws.com/s3bubble.assets/main.plugin/s3bubble-amazon-s3-audio-streaming.zip" target="_blank">DOWNLOAD OLD VERISON</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
-				</div>
-				<div id="post-body">
-					<div id="post-body-content" style="margin-right: 41%;">
-						<div class="postbox">
-							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></h3>
-							<div class="inside">
-								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
-								    <table class="form-table">
-								      <?php if (function_exists('wp_nonce_field')) { wp_nonce_field('s3bubble-media'); } ?>
-								       <tr style="position: relative;">
-								        <th scope="row" valign="top"><label for="S3Bubble_username">App Access Key:</label></th>
-								        <td><input type="text" name="s3audible_username" id="s3audible_username" class="regular-text" value="<?php echo empty($s3audible_username) ? 'Enter App Key' : $s3audible_username; ?>"/>
-								        	<br />
-								       <span class="description">App Access Key can be found at S3Bubble.com <a href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></span>	
-								        </td>
-								      </tr> 
-								       <tr>
-								        <th scope="row" valign="top"><label for="s3audible_email">App Secret Key:</label></th>
-								        <td><input type="password" name="s3audible_email" id="s3audible_email" class="regular-text" value="<?php echo empty($s3audible_email) ? 'Enter App Secret Key' : $s3audible_email; ?>"/>
-								        	<br />
-								        	<span class="description">App Secret Key can be found at S3Bubble.com <a href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></span>
-								        </td>
-								      </tr> 
-								       <tr>
-								        <th scope="row" valign="top"><label for="loggedin">Download option logged in:</label></th>
-								        <td><select name="loggedin" id="loggedin">
-								            <option value="<?php echo $loggedin; ?>"><?php echo $loggedin; ?></option>
-								            <option value="true">true</option>
-								            <option value="false">false</option>
-								          </select>
-								          <br />
-								          <span class="description">Only allow download link for logged in users.</p></td>
-								      </tr>
-								      <!-- new -->
-								      <tr>
-								        <th scope="row" valign="top"><label for="s3bubble_video_all_bar_colours">Player Bar Colours:</label></th>
-								        <td> <input type="text" name="s3bubble_video_all_bar_colours" id="s3bubble_video_all_bar_colours" value="<?php echo $s3bubble_video_all_bar_colours; ?>" class="cpa-color-picker" >
-								        	<br />
-								        	<span class="description">Change the progress bar and volume bar colour</span>
-								        </td>
-								      </tr>
-								      <tr>
-								        <th scope="row" valign="top"><label for="s3bubble_video_all_bar_seeks">Seek Bar Colours:</label></th>
-								        <td> <input type="text" name="s3bubble_video_all_bar_seeks" id="s3bubble_video_all_bar_seeks" value="<?php echo $s3bubble_video_all_bar_seeks; ?>" class="cpa-color-picker" >
-								        	<br />
-								        	<span class="description">Change the progress bar and volume bar seek bar colours</span>
-								        </td>
-								      </tr>
-								      <tr>
-								        <th scope="row" valign="top"><label for="s3bubble_video_all_controls_bg">Player Controls Colour:</label></th>
-								        <td> <input type="text" name="s3bubble_video_all_controls_bg" id="s3bubble_video_all_controls_bg" value="<?php echo $s3bubble_video_all_controls_bg; ?>" class="cpa-color-picker" >
-								        	<br />
-								        	<span class="description">Change the controls background colour</span>
-								        </td>
-								      </tr> 
-								      <tr>
-								        <th scope="row" valign="top"><label for="s3bubble_video_all_icons">Player Icon Colours:</label></th>
-								        <td> <input type="text" name="s3bubble_video_all_icons" id="s3bubble_video_all_icons" value="<?php echo $s3bubble_video_all_icons; ?>" class="cpa-color-picker" >
-								        	<br />
-								        	<span class="description">Change the player icons colours</span>
-								        </td>
-								      </tr>  
-								      <!-- end new -->
-								    </table>
-								    <br/>
-								    <span class="submit" style="border: 0;">
-								    	<input type="submit" name="submit" class="button button-s3bubble button-hero" value="Save Settings" />
-								    </span>
-								  </form>
-							</div><!-- .inside -->
-						</div>
-					</div> <!-- #post-body-content -->
-				</div> <!-- #post-body -->
-			</div> <!-- .metabox-holder -->
-		</div> <!-- .wrap -->
-		<?php	
-       }
-
-       function check_user_agent ( $type = NULL ) {
+        function check_user_agent ( $type = NULL ) {
 		        $user_agent = strtolower ( $_SERVER['HTTP_USER_AGENT'] );
 		        if ( $type == 'bot' ) {
 		                // matches popular bots
@@ -3338,6 +3632,8 @@ if (!class_exists("s3bubble_audio")) {
 				'style'      => 'bar',
 				'download'   => 'false',
 				'autoplay'   => 'false',
+				'start'      => 'false',
+				'finish'     => 'false',
 				'preload'    => 'auto',
 				'bucket'     => '',
 				'track'      => '',
@@ -3347,6 +3643,8 @@ if (!class_exists("s3bubble_audio")) {
 				'style'      => 'bar',
 				'download'   => 'false',
 				'autoplay'   => 'false',
+				'start'      => 'false',
+				'finish'     => 'false',
 				'preload'    => 'auto',
 				'bucket'     => '',
 				'track'      => '',
@@ -3357,6 +3655,8 @@ if (!class_exists("s3bubble_audio")) {
 			$download = ((empty($download)) ? 'false' : $download);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			$preload  = ((empty($preload)) ? 'auto' : $preload);
+			$start = ((empty($start)) ? 'false' : $start);
+			$finish = ((empty($finish)) ? 'false' : $finish);
 			
 			// Check download
 			if($loggedin == 'true'){
@@ -3385,7 +3685,9 @@ if (!class_exists("s3bubble_audio")) {
 						AutoPlay:	' . $autoplay . ',
 						Download:	' . $download . ',
 						Aspect:	    "' . $aspect . '",
-						Styles:      "' . $style . '"
+						Styles:      "' . $style . '",
+						Start:      "' . $start . '",
+						Finish:	    "' . $finish . '"
 					},function(){
 						
 					});
@@ -3503,6 +3805,8 @@ if (!class_exists("s3bubble_audio")) {
 				'aspect'     => '16:9',
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
+				'start'      => 'false',
+				'finish'     => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
@@ -3518,6 +3822,8 @@ if (!class_exists("s3bubble_audio")) {
 				'aspect'     => '16:9',
 				'responsive' => $responsive,
 				'autoplay'   => 'false',
+				'start'      => 'false',
+				'finish'     => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
@@ -3529,6 +3835,8 @@ if (!class_exists("s3bubble_audio")) {
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
 			$download = ((empty($download)) ? 'false' : $download);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
+			$start = ((empty($start)) ? 'false' : $start);
+			$finish = ((empty($finish)) ? 'false' : $finish);
 			
 			// Check download
 			if($loggedin == 'true'){
@@ -3559,7 +3867,9 @@ if (!class_exists("s3bubble_audio")) {
 						Aspect:	    "' . $aspect . '",
 						Twitter:    "' . $twitter . '",
 						TwitterText:    "' . $twitter_text . '",
-						TwitterHandler:	"' . $twitter_handler . '"
+						TwitterHandler:	"' . $twitter_handler . '",
+						Start:      "' . $start . '",
+						Finish:	    "' . $finish . '"
 					},function(){
 						
 					});

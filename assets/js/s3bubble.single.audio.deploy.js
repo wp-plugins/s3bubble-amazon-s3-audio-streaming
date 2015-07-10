@@ -105,6 +105,9 @@
 								height : "35px"
 							})
 						}
+						if(options.Start){
+		            		$("#jquery_jplayer_" + options.Pid).jPlayer("playHead", options.Start);
+		            	}
 					}
 				},"json");
             },
@@ -142,7 +145,13 @@
 				}
 			},
 			timeupdate: function(event) { 
-
+				if(options.Finish){
+            		var perc = event.jPlayer.status.currentPercentAbsolute;
+            		if(Math.round(perc) > options.Finish){
+            			$("#jquery_jplayer_" + options.Pid).jPlayer("stop");
+            			$("#jquery_jplayer_" + options.Pid).jPlayer("playHead", options.Start);
+            		}
+            	}
 			},
 			suspend: function() { 
 			    

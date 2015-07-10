@@ -1,3 +1,9 @@
+pre.s3bubble-debug {
+	overflow: auto;
+  	color: white;
+  	background: #1d1f21;
+  	padding: 10px;
+}
 #toplevel_page_s3bubble_audio .wp-menu-image img {
 	padding-top: 6px
 }
