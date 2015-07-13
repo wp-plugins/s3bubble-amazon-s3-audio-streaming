@@ -325,6 +325,39 @@ if (!class_exists("s3bubble_audio")) {
 				update_option("s3bubble_video_all_controls_bg", $s3bubble_video_all_controls_bg);
 				update_option("s3bubble_video_all_icons", $s3bubble_video_all_icons);
 
+				//set POST variables
+				$alert = '';
+				$url = $this->endpoint . 'main_plugin/auth';
+				$response = wp_remote_post( $url, array(
+					'method' => 'POST',
+					'sslverify' => false,
+					'timeout' => 10,
+					'redirection' => 5,
+					'httpversion' => '1.0',
+					'blocking' => true,
+					'headers' => array(),
+					'body' => array(
+						'AccessKey' => $s3audible_username
+					),
+					'cookies' => array()
+				    )
+				);
+
+				if ( is_wp_error( $response ) ) {
+
+				   $error_message = $response->get_error_message();
+				   $alert = '<div class="error"><p>' . $error_message . '</p></div>';
+
+				} else {
+
+					$data = json_decode($response['body']);
+					if($data->error){
+						$alert = '<div class="updated"><p>' . $data->message . '</p></div>';
+					}else{
+						$alert = '<div class="error"><p>' . $data->message . '</p></div>';
+					}
+				}
+
 			}
 			
 			$s3audible_username	= get_option("s3-s3audible_username");
@@ -342,6 +375,7 @@ if (!class_exists("s3bubble_audio")) {
 			<div id="icon-options-general" class="icon32"></div>
 			<h2>S3Bubble Amazon S3 Media Cloud Media Streaming</h2>
 			<div id="message" class="updated fade"><p>Please sign up for a S3Bubble account at <a href="https://s3bubble.com" target="_blank">https://s3bubble.com</a></p></div>
+			<?php echo $alert; ?>
 			<div class="metabox-holder has-right-sidebar">
 				<div class="inner-sidebar" style="width:40%">
 					<div class="postbox">
@@ -655,26 +689,30 @@ if (!class_exists("s3bubble_audio")) {
 						security: '<?php echo $ajax_nonce; ?>'
 					}
 					$.post("<?php echo admin_url('admin-ajax.php'); ?>", sendData, function(response) {
-						var html = "";
-						$.each( response.data, function( key, value ) {
-							var country = 'zz';
-							if(value.user_country){
-								country = value.user_country.toLowerCase();
-							}
-							html += '<tr>' +
-										'<td><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
-						                '<td>' + value.key + '</td>' +
-						                '<td><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
-						                '<td>' + value.user_city + '</td>' +
-						                '<td>' + value.user_ip + '</td>' +
-						                '<td>' + value.browser + '</td>' +
-						                '<td>' + value.type + '</td>' +
-						                '<td>' + timeNow(value.created) + '</td>' +
-						                '<td><a href="http://maps.google.com/maps?z=12&t=m&q=loc:' + value.user_loc_lat.replace(',', '+') + '" target="_blank">Open</a></td>' +
-						            '</tr>';
-						});
-						$("#s3AnalyticsTable").append(html);
-						$(".s3bubble-analytics-loading").html("<small>" + response.message + "</small>");
+						if(response.error){
+							$(".s3bubble-analytics-loading").html("<small>" + response.message + "</small>");
+						}else{
+							var html = "";
+							$.each( response.data, function( key, value ) {
+								var country = 'zz';
+								if(value.user_country){
+									country = value.user_country.toLowerCase();
+								}
+								html += '<tr>' +
+											'<td><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
+							                '<td>' + value.key + '</td>' +
+							                '<td><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
+							                '<td>' + value.user_city + '</td>' +
+							                '<td>' + value.user_ip + '</td>' +
+							                '<td>' + value.browser + '</td>' +
+							                '<td>' + value.type + '</td>' +
+							                '<td>' + timeNow(value.created) + '</td>' +
+							                '<td><a href="http://maps.google.com/maps?z=12&t=m&q=loc:' + value.user_loc_lat.replace(',', '+') + '" target="_blank">Open</a></td>' +
+							            '</tr>';
+							});
+							$("#s3AnalyticsTable").append(html);
+							$(".s3bubble-analytics-loading").html("<small>" + response.message + "</small>");
+						}
 					},'json');
 				});
 			</script>
