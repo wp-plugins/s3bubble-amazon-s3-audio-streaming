@@ -352,9 +352,9 @@ if (!class_exists("s3bubble_audio")) {
 
 					$data = json_decode($response['body']);
 					if($data->error){
-						$alert = '<div class="updated"><p>' . $data->message . '</p></div>';
-					}else{
 						$alert = '<div class="error"><p>' . $data->message . '</p></div>';
+					}else{
+						$alert = '<div class="updated"><p>' . $data->message . '</p></div>';
 					}
 				}
 
@@ -363,7 +363,7 @@ if (!class_exists("s3bubble_audio")) {
 			$s3audible_username	= get_option("s3-s3audible_username");
 			$s3audible_email	= get_option("s3-s3audible_email");
 			$loggedin			= get_option("s3-loggedin");			
-			
+
 			// new
 			$s3bubble_video_all_bar_colours	= get_option("s3bubble_video_all_bar_colours");
 			$s3bubble_video_all_bar_seeks	= get_option("s3bubble_video_all_bar_seeks");
