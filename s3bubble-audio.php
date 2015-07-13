@@ -351,18 +351,6 @@ if (!class_exists("s3bubble_audio")) {
 						</div> 
 					</div>
 					<div class="postbox">
-						<h3 class="hndle">Track Analytics</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/analytics.png',__FILE__); ?>" alt="S3Bubble wordpress plugin" /> 
-									<p>All your videos that display on your WordPress site will now link to our management system. Find out where your target audience is so you can start strategically promoting your site and grow a global audience.</p>
-									<a href="https://s3bubble.com/" target="_blank">Visit s3bubble.com</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
-					<div class="postbox">
 						<h3 class="hndle">S3Bubble Apps - Monitor Analytics</h3>
 						<div class="inside">
 							<ul class="s3bubble-adverts">
@@ -573,6 +561,18 @@ if (!class_exists("s3bubble_audio")) {
 								<li>
 									<a class="button button-s3bubble button-hero" href="https://itunes.apple.com/us/app/os-broadcaster/id632458541?mt=8" target="_blank">DOWNLOAD IOS APP</a>
 									<a class="button button-s3bubble button-hero" href="https://play.google.com/store/apps/details?id=air.OS.Broadcaster&hl=en" target="_blank">DOWNLOAD ANDRIOD APP</a>
+									<p>If you are insterested in a Live Streaming setup please drop us an email at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a></p>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+					<div class="postbox">
+						<h3 class="hndle">Free Flash Media Live Encoder download</h3>
+						<div class="inside">
+							<a href="<?php echo plugins_url('/assets/images/flash.png',__FILE__); ?>" target="_blank"><img style="width:100%" src="<?php echo plugins_url('/assets/images/flash.png',__FILE__); ?>"></a>
+							<ul>
+								<li>
+									<a class="button button-s3bubble button-hero" href="http://offers.adobe.com/en/na/leap/offers/fmle3.html?faas_unique_submission_id=%7bA9666D59-341F-8683-8F08-E49687CFD3B0%7d&s_cid=null" target="_blank">DOWNLOAD</a>
 									<p>If you are insterested in a Live Streaming setup please drop us an email at <a href="mailto:support@s3bubble.com">support@s3bubble.com</a></p>
 								</li>
 							</ul>        
