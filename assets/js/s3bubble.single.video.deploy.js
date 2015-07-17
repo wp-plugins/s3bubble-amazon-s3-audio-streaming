@@ -14,6 +14,11 @@
 					'<h2>Skip Ad</h2>' +
 					'<i class="s3icon s3icon-step-forward"></i>' +
 				'</div>' +
+                '<div class="s3bubble-media-main-preview-over-container">' +
+                    '<div class="s3bubble-media-main-preview-over">' +
+                    '</div>' +
+                    '<h2>Preview Over</h2>' +
+                '</div>' +
 			    '<div class="s3bubble-media-main-video-loading">' +
 			    	'<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>' +
 			    '</div>' +
@@ -140,13 +145,19 @@
                 }, "json");
             },
             timeupdate: function(event) {
-            	if(options.Finish){
-            		var perc = event.jPlayer.status.currentPercentAbsolute;
-            		if(Math.round(perc) > options.Finish){
-            			$("#jquery_jplayer_" + options.Pid).jPlayer("stop");
-            			$("#jquery_jplayer_" + options.Pid).jPlayer("playHead", options.Start);
-            		}
-            	}
+                var CurrentState = videoSingleS3Bubble.current;
+                var PlaylistKey = videoSingleS3Bubble.playlist[CurrentState];
+                if (PlaylistKey.advert && IsMobile === false) {
+
+                }else{
+                	if(options.Finish){
+                		var perc = event.jPlayer.status.currentPercentAbsolute;
+                		if(Math.round(perc) > options.Finish){
+                			$("#jquery_jplayer_" + options.Pid).jPlayer("pause");
+                            $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-preview-over-container").fadeIn();
+                		}
+                	}
+                }
                 if (event.jPlayer.status.currentTime > 1) {
                     $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
                 }

@@ -184,6 +184,13 @@ if (!class_exists("s3bubble_audio")) {
 			add_shortcode( 's3bubbleVideoSingleIframe', array( $this, 's3bubble_video_single_player_iframe' ) );
 			add_shortcode( 's3bubbleAudioSingleIframe', array( $this, 's3bubble_audio_single_player_iframe' ) );
 			
+			/*
+			 * Outputs the s3bubble analytics
+			 * @author sameast
+			 * @params none
+			 */ 
+			add_shortcode( 's3bubbleAnalytics', array( $this, 's3bubble_output_analytics' ) );
+
 			
 			/*
 			 * Tiny mce button for the plugin
@@ -599,6 +606,12 @@ if (!class_exists("s3bubble_audio")) {
 				<div class="metabox-holder has-right-sidebar">
 				<div class="inner-sidebar" style="width:40%">
 					<div class="postbox">
+						<h3 class="hndle">Watch a quick how to video below.</h3>
+						<div class="inside">
+							<iframe style="width:100%;min-height:300px;" onload="this.height=(this.offsetWidth/16)*9;" src="//media.s3bubble.com/video/HyFPEdsdk" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true" ></iframe>
+						</div> 
+					</div>
+					<div class="postbox">
 						<h3 class="hndle">It really simple just download one of the apps below.</h3>
 						<div class="inside">
 							<p>Open the app replicate the image below and enter <strong><?php echo $stream; ?></strong> for the stream name, start streaming click broadcast and then your stream will play on the player.</p>
@@ -921,10 +934,10 @@ if (!class_exists("s3bubble_audio")) {
 			echo '<style type="text/css">
 					.s3bubble-media-main-progress, .s3bubble-media-main-volume-bar {background-color: '.stripcslashes($progress).' !important;}
 					.s3bubble-media-main-play-bar, .s3bubble-media-main-volume-bar-value {background-color: '.stripcslashes($seek).' !important;}
-					.s3bubble-media-main-interface, .s3bubble-media-main-video-play, .s3bubble-media-main-video-skip {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
+					.s3bubble-media-main-interface, .s3bubble-media-main-video-play, .s3bubble-media-main-video-skip, .s3bubble-media-main-preview-over {background-color: '.stripcslashes($background).' !important;color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-video-loading {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-interface  > * a, .s3bubble-media-main-interface  > * a:hover, .s3bubble-media-main-interface  > * i, .s3bubble-media-main-interface  > * i:hover, .s3bubble-media-main-current-time, .s3bubble-media-main-duration, .time-sep, .s3icon-cloud-download {color: '.stripcslashes($icons).' !important;text-decoration: none !important;font-style: normal !important;}
-					.s3bubble-media-main-video-skip h2 {color: '.stripcslashes($icons).' !important;}
+					.s3bubble-media-main-video-skip h2, .s3bubble-media-main-preview-over-container h2 {color: '.stripcslashes($icons).' !important;}
 					.s3bubble-media-main-playlist-current {color: '.stripcslashes($seek).' !important;}
 					.mejs-controls {background-color: '.stripcslashes($background).' !important;}
 					.mejs-overlay-button {background: '.stripcslashes($background).' url(' . plugins_url('assets/images/play48.png', __FILE__) . ')center no-repeat !important;}
@@ -2329,6 +2342,29 @@ if (!class_exists("s3bubble_audio")) {
 		                }
 		        }
 		        return false;
+		}
+
+		/*
+		* Outputs the s3bubble analytics
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_output_analytics($atts){
+
+			extract( shortcode_atts( array(
+				'aspect'     => '16:9',
+				'autoplay'   => 'false',
+				'code'       => '',
+				'supplied'   => 'video'
+			), $atts, 's3bubbleVideoSingleIframe' ) );
+
+            $autoplay  = ((empty($autoplay) || $autoplay == 'false') ? 'no' : 'autoplay');
+			$code      = ((empty($code)) ? false : $code);
+			$aspect    = ((empty($aspect)) ? false : $aspect);
+			$supplied  = ((empty($supplied) || $supplied == 'progressive') ? 'video' : $supplied);
+
+			return '<div class="s3bubble-output-analytics"></div>';
+
 		}
 
 		// -------------------------- IFRAME PLAYERS SETUPS BELOW ------------------------------ //
