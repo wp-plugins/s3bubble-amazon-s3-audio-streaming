@@ -43,14 +43,15 @@ if (!class_exists("s3bubble_audio")) {
 		public  $autoplay        = 'yes';
 		public  $jtoggle		 = 'true';
 		public  $loggedin        = 'false';
+		public  $s3bubble_force_download = 'false';
 		public  $search          = 'false';
 		public  $responsive      = 'responsive';
 		public  $theme           = 's3bubble_clean';
 		public  $stream          = 'm4v';
 		public  $version         =  40;
 		public  $s3bubble_video_all_bar_colours = '#adadad';
-		public  $s3bubble_video_all_bar_seeks   = '#dd0000';
-		public  $s3bubble_video_all_controls_bg = '#010101';
+		public  $s3bubble_video_all_bar_seeks   = '#53bbb4';
+		public  $s3bubble_video_all_controls_bg = '#384049';
 		public  $s3bubble_video_all_icons       = '#FFFFFF';
 		private $endpoint       = 'https://api.s3bubble.com/v1/';
 		
@@ -75,6 +76,7 @@ if (!class_exists("s3bubble_audio")) {
 			add_option("s3-autoplay", $this->autoplay);
 			add_option("s3-jtoggle", $this->jtoggle);
 			add_option("s3-loggedin", $this->loggedin);
+			add_option("s3bubble_force_download", $this->s3bubble_force_download);
 			add_option("s3-search", $this->search);
 			add_option("s3-responsive", $this->responsive);
 			add_option("s3-theme", $this->theme);
@@ -220,6 +222,8 @@ if (!class_exists("s3bubble_audio")) {
 			 * Internal Ajax
 			 */
 			add_action( 'wp_ajax_s3bubble_analytics_internal_ajax', array( $this, 's3bubble_analytics_internal_ajax' ) );
+			add_action( 'wp_ajax_s3bubble_wpremotepost_internal_ajax', array( $this, 's3bubble_wpremotepost_internal_ajax' ) );
+			add_action( 'wp_ajax_s3bubble_traceroute_internal_ajax', array( $this, 's3bubble_traceroute_internal_ajax' ) );
 
 			/*
 			 * Admin dismiss message
@@ -304,9 +308,10 @@ if (!class_exists("s3bubble_audio")) {
 				if (!current_user_can('manage_options')) die(__('You cannot edit the s3bubble media options.'));
 				check_admin_referer('s3bubble-media');	
 				// Get our new option values
-				$s3audible_username	= $this->s3bubble_clean_options($_POST['s3audible_username']);
-				$s3audible_email	= $this->s3bubble_clean_options($_POST['s3audible_email']);
-				$loggedin			= $this->s3bubble_clean_options($_POST['loggedin']);
+				$s3audible_username	     = $this->s3bubble_clean_options($_POST['s3audible_username']);
+				$s3audible_email	     = $this->s3bubble_clean_options($_POST['s3audible_email']);
+				$loggedin			     = $this->s3bubble_clean_options($_POST['loggedin']);
+				$s3bubble_force_download = $this->s3bubble_clean_options($_POST['s3bubble_force_download']);
 
 				// new
 				$s3bubble_video_all_bar_colours	= $this->s3bubble_clean_options($_POST['s3bubble_video_all_bar_colours']);
@@ -318,6 +323,7 @@ if (!class_exists("s3bubble_audio")) {
 				update_option("s3-s3audible_username", $s3audible_username);
 				update_option("s3-s3audible_email", $s3audible_email);
 				update_option("s3-loggedin", $loggedin);
+				update_option("s3bubble_force_download", $s3bubble_force_download);
 				
 				// new
 				update_option("s3bubble_video_all_bar_colours", $s3bubble_video_all_bar_colours);
@@ -360,9 +366,10 @@ if (!class_exists("s3bubble_audio")) {
 
 			}
 			
-			$s3audible_username	= get_option("s3-s3audible_username");
-			$s3audible_email	= get_option("s3-s3audible_email");
-			$loggedin			= get_option("s3-loggedin");			
+			$s3audible_username	     = get_option("s3-s3audible_username");
+			$s3audible_email	     = get_option("s3-s3audible_email");
+			$loggedin			     = get_option("s3-loggedin");
+			$s3bubble_force_download = get_option("s3bubble_force_download");			
 
 			// new
 			$s3bubble_video_all_bar_colours	= get_option("s3bubble_video_all_bar_colours");
@@ -454,6 +461,16 @@ if (!class_exists("s3bubble_audio")) {
 								          </select>
 								          <br />
 								          <span class="description">Only allow download link for logged in users.</p></td>
+								      </tr>
+								      <tr>
+								        <th scope="row" valign="top"><label for="s3bubble_force_download">Force download option for all players:</label></th>
+								        <td><select name="s3bubble_force_download" id="s3bubble_force_download">
+								            <option value="<?php echo $s3bubble_force_download; ?>"><?php echo $s3bubble_force_download; ?></option>
+								            <option value="true">true</option>
+								            <option value="false">false</option>
+								          </select>
+								          <br />
+								          <span class="description">!important this will force the download to show on (All) players.</p></td>
 								      </tr>
 								      <!-- new -->
 								      <tr>
@@ -683,6 +700,12 @@ if (!class_exists("s3bubble_audio")) {
 					  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min;
 					  return time;
 				}
+				function baseName(str){
+				   var base = new String(str).substring(str.lastIndexOf('/') + 1); 
+				    if(base.lastIndexOf(".") != -1)       
+				        base = base.substring(0, base.lastIndexOf("."));
+				   return decodeURIComponent(base);
+				}
 				jQuery(document).ready(function($) {
 					var sendData = {
 						action: 's3bubble_analytics_internal_ajax',
@@ -700,7 +723,7 @@ if (!class_exists("s3bubble_audio")) {
 								}
 								html += '<tr>' +
 											'<td><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
-							                '<td>' + value.key + '</td>' +
+							                '<td class="s3bubble-key-ellipse">' + baseName(value.key) + '</td>' +
 							                '<td><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
 							                '<td>' + value.user_city + '</td>' +
 							                '<td>' + value.user_ip + '</td>' +
@@ -727,20 +750,115 @@ if (!class_exists("s3bubble_audio")) {
 		*/ 
     	function s3bubble_debug_page_callback() {
 			
-			function isEnabled($func) {
-			    return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
-			}
+			//Run a S3Bubble security check
+			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+			$url = $this->endpoint . 'main_plugin/debug';
+			$ip = gethostbyname($this->get_domain(get_site_url()));
+			
+			?>
+			<div class="wrap"><div id="icon-tools" class="icon32"></div>
+				<h2>Running Debug - Checking the route to the S3Bubble api</h2>
+				<div class="metabox-holder has-right-sidebar">
+					<div id="post-body">
+						<div id="post-body-content">
+							<div class="postbox">
+								<h3 class="hndle">Run some debugging tests - Current IP:<?php echo $ip; ?></h3>
+								<div class="inside">
+									<pre class='s3bubble-debug'></pre>
+									<form action="" method="post" id="debug_remote_form" class="s3bubble-video-popup-form" autocomplete="off">
+									    <table class="form-table">
+									    	<tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_url">Url:</label></th>
+										        <td><input type="text" name="debug_url" id="debug_url" class="regular-text" value="<?php echo $url; ?>"/>
+										        </td>
+										    </tr>
+									    	<tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_method">Method:</label></th>
+										        <td><input type="text" name="debug_method" id="debug_method" class="regular-text" value="POST"/>
+										        </td>
+										    </tr>
+									    	<tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_sslverify">Sslverify:</label></th>
+										        <td><input type="text" name="debug_sslverify" id="debug_sslverify" class="regular-text" value="false"/>
+										        </td>
+										    </tr>
+										    <tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_timeout">Timeout:</label></th>
+										        <td><input type="text" name="debug_timeout" id="debug_timeout" class="regular-text" value="10"/>
+										        </td>
+										    </tr>
+										    <tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_redirection">Redirection:</label></th>
+										        <td><input type="text" name="debug_redirection" id="debug_redirection" class="regular-text" value="5"/>
+										        </td>
+										    </tr>
+										    <tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_httpversion">Httpversion:</label></th>
+										        <td><input type="text" name="debug_httpversion" id="debug_httpversion" class="regular-text" value="1.0"/>
+										        </td>
+										    </tr>   
+									      	<tr style="position: relative;">
+										        <th scope="row" valign="top"><label for="debug_blocking">Blocking:</label></th>
+										        <td><input type="text" name="debug_blocking" id="debug_blocking" class="regular-text" value="true"/>
+										        </td>
+										    </tr> 
+									    <!-- end new -->
+									    </table>
+									    <br/>
+									    <span class="submit" style="border: 0;">
+									    	<input type="submit" name="submit" class="button button-s3bubble button-hero" value="Run Remote Post" />
+									    </span>
+									</form>
+									<form action="" method="post" id="debug_traceroute_form" class="s3bubble-video-popup-form" autocomplete="off">
+									    <span class="submit" style="border: 0;">
+									    	<input type="submit" name="submit" class="button button-s3bubble button-hero" value="Run Traceroute" />
+									    </span>
+									</form>
+								</div> 
+							</div>
+						</div> 
+					</div> 
+				</div>
+			</div>
+			<script type="text/javascript">
+				jQuery(document).ready(function($) {
 
-			echo '<div class="wrap"><div id="icon-tools" class="icon32"></div>';
-				echo '<h2>Running Debug - Checking the route to the S3Bubble api</h2>';
-				if (isEnabled('shell_exec')) {
-					echo "Trying to run a traceroute this may not work on certain hosts.";
-					$output = shell_exec('traceroute api.s3bubble.com');
-					echo "<pre class='s3bubble-debug'>$output</pre>";
-				}else{
-					echo "Trying to run a traceroute this may not work on certain hosts.";
-				}
-			echo '</div>';
+					// Run debug form
+					$( "#debug_remote_form" ).submit(function( event ) {
+						$(".s3bubble-debug").html("Running...");
+						var sendData = {
+							action: 's3bubble_wpremotepost_internal_ajax',
+							security: '<?php echo $ajax_nonce; ?>',
+							url: $("#debug_url").val(),
+							method: $("#debug_method").val(),
+							sslverify: $("#debug_sslverify").val(),
+							timeout: parseInt($("#debug_timeout").val()),
+							redirection: parseInt($("#debug_redirection").val()),
+							httpversion: $("#debug_httpversion").val(),
+							blocking: $("#debug_blocking").val()
+						}	
+						$.post("<?php echo admin_url('admin-ajax.php'); ?>", sendData, function(response) {
+							$(".s3bubble-debug").html(JSON.stringify(response));
+						},'json');
+					  	event.preventDefault();
+					});
+
+					// Run trace route
+					$( "#debug_traceroute_form" ).submit(function( event ) {
+						$(".s3bubble-debug").html("Running traceroute please wait...");
+						var sendData = {
+							action: 's3bubble_traceroute_internal_ajax',
+							security: '<?php echo $ajax_nonce; ?>'
+						}		
+						$.post("<?php echo admin_url('admin-ajax.php'); ?>", sendData, function(response) {
+							$(".s3bubble-debug").html(response);
+						});
+					  	event.preventDefault();
+					});
+
+				});
+			</script>
+			<?php
 
 		}
         
@@ -873,6 +991,76 @@ if (!class_exists("s3bubble_audio")) {
 	        $mem_out = @round($mem_usage/pow(1024,($i=floor(log($mem_usage,1024)))),2).' '.$unit[$i];
             return "Memory usage: " . $mem_out . ". Max execution time: " . ini_get('max_execution_time');
 
+		}
+
+		/*
+		* S3Bubble trace route debug tests
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_traceroute_internal_ajax(){
+			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
+			function isEnabled($func) {
+			    return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+			}
+
+			if (isEnabled('shell_exec')) {
+				$output = shell_exec('traceroute api.s3bubble.com');
+				echo $output;
+			}else{
+				echo "Trying to run a traceroute this may not work on certain hosts.";
+			} 
+
+			wp_die();	
+			
+		}
+
+		/*
+		* S3Bubble wp remote debug tests
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_wpremotepost_internal_ajax(){
+			
+			// Run security check
+			check_ajax_referer( 's3bubble-nonce-security', 'security' );
+
+			//set POST variables
+			$response = wp_remote_post( (($_POST['url'] == '') ? $this->endpoint . 'main_plugin/debug' : $_POST['url']), array(
+				'method' => (($_POST['method'] == 'POST') ? 'POST' : 'GET'),
+				'sslverify' => (($_POST['sslverify'] == 'true') ? true : false),
+				'timeout' => $_POST['timeout'],
+				'redirection' => $_POST['redirection'],
+				'httpversion' => $_POST['httpversion'],
+				'blocking' => (($_POST['blocking'] == 'true') ? true : false),
+				'headers' => array(),
+				'body' => array(
+					'Test' => "Hello World"
+				),
+				'cookies' => array()
+			    )
+			);
+
+			if ( is_wp_error( $response ) ) {
+
+			   $error_message = $response->get_error_message();
+			   echo json_encode(
+			   					array(
+			   						"error" => true, 
+			   						"message" => $error_message . ". Stats " . $this->s3bubble_convert_memory() .". Please contact support@s3bubble.com this error is normally related to a hosting issue."
+			   						)
+			   					);
+			} else {
+
+			   echo $response['body'];
+
+			}
+
+			wp_die();	
+			
 		}
 
 		/*
@@ -3580,6 +3768,8 @@ if (!class_exists("s3bubble_audio")) {
 			 */ 		
 			$loggedin            = get_option("s3-loggedin");
 			$search              = get_option("s3-search");
+			$s3bubble_force_download = get_option("s3bubble_force_download");
+
 	        extract( shortcode_atts( array(
 				'playlist'   => 'show',
 				'order'      => 'asc',
@@ -3622,6 +3812,12 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				}
 			}
+
+			// Force download
+			if($s3bubble_force_download == 'true'){
+				$download = 1;
+			}
+
             $player_id = uniqid();
 
 			return '<div class="audio-playlist-' . $player_id . '"></div>
@@ -3638,7 +3834,6 @@ if (!class_exists("s3bubble_audio")) {
 						AutoPlay:	' . $autoplay . ',
 						Download:	' . $download . ',
 						Preload:	"' . $preload . '",
-						Aspect:	    "' . $aspect . '",
 						Height:    "' . $height . '",
 						Playlist:  "' . (($playlist == 'hidden') ? 'none' : 'block' ) . '"
 					},function(){
@@ -3663,6 +3858,7 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");		
 			$loggedin            = get_option("s3-loggedin");
 			$search              = get_option("s3-search");
+			$s3bubble_force_download = get_option("s3bubble_force_download");
 
 			extract( shortcode_atts( array(
 				'style'      => 'bar',
@@ -3706,6 +3902,12 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				}
 			}
+
+			// Force download
+			if($s3bubble_force_download == 'true'){
+				$download = 1;
+			}
+
             $player_id = uniqid();
 
             return '<div class="single-audio-' . $player_id . '"></div>
@@ -3720,7 +3922,6 @@ if (!class_exists("s3bubble_audio")) {
 						Security:	"' . $ajax_nonce . '",
 						AutoPlay:	' . $autoplay . ',
 						Download:	' . $download . ',
-						Aspect:	    "' . $aspect . '",
 						Styles:      "' . $style . '",
 						Start:      "' . $start . '",
 						Finish:	    "' . $finish . '"
@@ -3749,7 +3950,9 @@ if (!class_exists("s3bubble_audio")) {
 			$search             = get_option("s3-search");
 			$responsive         = get_option("s3-responsive");
 			$stream             = get_option("s3-stream");
-        	 extract( shortcode_atts( array(
+			$s3bubble_force_download = get_option("s3bubble_force_download");
+
+        	extract( shortcode_atts( array(
 				'playlist'   => 'show',
 				'download'   => 'false',
 				'aspect'     => '16:9',
@@ -3793,6 +3996,12 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				}
 			}
+
+			// Force download
+			if($s3bubble_force_download == 'true'){
+				$download = 1;
+			}
+
             $player_id = uniqid();
 
             return '<div class="video-playlist-' . $player_id . '"></div>
@@ -3833,6 +4042,8 @@ if (!class_exists("s3bubble_audio")) {
 			$search              = get_option("s3-search");
 			$responsive          = get_option("s3-responsive");
 			$stream              = get_option("s3-stream");
+			$s3bubble_force_download = get_option("s3bubble_force_download");
+
 	        extract( shortcode_atts( array(
 	        	'download'   => 'false',
 	        	'twitter' => 'false',
@@ -3886,6 +4097,12 @@ if (!class_exists("s3bubble_audio")) {
 					}
 				}
 			}
+
+			// Force download
+			if($s3bubble_force_download == 'true'){
+				$download = 1;
+			}
+			
             $player_id = uniqid();
 		
             return '<div class="single-video-' . $player_id . '"></div>

@@ -4,6 +4,13 @@ pre.s3bubble-debug {
   	background: #1d1f21;
   	padding: 10px;
 }
+.s3bubble-key-ellipse {
+	max-width:  280px;
+  	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
+  	display: block;
+}
 #toplevel_page_s3bubble_audio .wp-menu-image img {
 	padding-top: 6px
 }
