@@ -578,7 +578,7 @@ if (!class_exists("s3bubble_audio")) {
 		* @author sameast
 		* @none
 		*/ 
-		function s3BubbleGenerateRandomString($length = 5) {
+		function s3BubbleGenerateRandomString($length = 3) {
 		    $characters = 'abcdefghijklmnopqrstuvwxyz';
 		    $charactersLength = strlen($characters);
 		    $randomString = '';
@@ -612,10 +612,11 @@ if (!class_exists("s3bubble_audio")) {
 						</div> 
 					</div>
 					<div class="postbox">
-						<h3 class="hndle">It really simple just download one of the apps below.</h3>
+						<h3 class="hndle">It really simple urls below.</h3>
 						<div class="inside">
-							<p>Open the app replicate the image below and enter <strong><?php echo $stream; ?></strong> for the stream name, start streaming click broadcast and then your stream will play on the player.</p>
-							<img style="width:100%" src="<?php echo plugins_url('/assets/images/stream.png',__FILE__); ?>">
+							<p>Rtmp Url: <strong>rtmp://54.152.190.21/live</strong></p>
+							<p>Mobile Url: <strong>http://54.152.190.21/hls/<?php echo $stream; ?>.m3u8</strong> (Email Someone your stream)</p>
+							<p>S3Bubble Player Url: <strong>rtmp://54.152.190.21/live/<?php echo $stream; ?></strong> (Paste into the S3Bubble player)</p>
 						</div> 
 					</div>
 					<div class="postbox">
