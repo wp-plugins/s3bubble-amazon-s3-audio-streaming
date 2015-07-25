@@ -53,7 +53,7 @@ if (!class_exists("s3bubble_audio")) {
 		public  $s3bubble_video_all_bar_seeks   = '#53bbb4';
 		public  $s3bubble_video_all_controls_bg = '#384049';
 		public  $s3bubble_video_all_icons       = '#FFFFFF';
-		private $endpoint       = 'https://api.s3bubble.com/v1/';
+		private $endpoint       = 'https://s3api.com/v1/';
 		
 		/*
 		 * Constructor method to intiat the class
@@ -298,7 +298,7 @@ if (!class_exists("s3bubble_audio")) {
 			add_submenu_page( 's3bubble_audio', 'Analytics', 'Analytics', 'manage_options', 's3bubble-analytics-page', array($this, 's3bubble_analytics_page_callback') );
 			add_submenu_page( 's3bubble_audio', 'Desktop App', 'Desktop App', 'manage_options', 's3bubble-desktop-app-page', array($this, 's3bubble_desktop_app_page_callback') );
 			add_submenu_page( 's3bubble_audio', 'Live Streaming', 'Live Streaming', 'manage_options', 's3bubble-live-streaming-page', array($this, 's3bubble_live_streaming_page_callback') );
-			add_submenu_page( 's3bubble_audio', 'Debug', 'Debug', 'manage_options', 's3bubble-debug-page', array($this, 's3bubble_debug_page_callback') );
+			//add_submenu_page( 's3bubble_audio', 'Debug', 'Debug', 'manage_options', 's3bubble-debug-page', array($this, 's3bubble_debug_page_callback') );
 
     	}
 

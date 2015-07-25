@@ -1,5 +1,7 @@
 .mejs-container * {
     height: 100%;
+    max-width: none !important;
+    box-shadow: none !important;
 }
 .mejs-controls {
     background-color: #222222;
@@ -35,10 +37,14 @@
 .mejs-overlay-button:before {
   content: "" !important;
 }
-.mejs-overlay-button
 .mejs-controls a.mejs-horizontal-volume-slider {
     text-decoration: none !important;
     border: none !important;
+}
+.mejs-controls .mejs-button button { {
+  box-shadow: none !important;
+  text-decoration: none !important;
+  border: none !important;
 }
 .mejs-controls .mejs-time-rail .mejs-time-total, .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
 	border-radius: 2px !important;
