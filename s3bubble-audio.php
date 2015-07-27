@@ -606,12 +606,6 @@ if (!class_exists("s3bubble_audio")) {
 				<div class="metabox-holder has-right-sidebar">
 				<div class="inner-sidebar" style="width:40%">
 					<div class="postbox">
-						<h3 class="hndle">Watch a quick how to video below.</h3>
-						<div class="inside">
-							<iframe style="width:100%;min-height:300px;" onload="this.height=(this.offsetWidth/16)*9;" src="//media.s3bubble.com/video/HyFPEdsdk" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true" ></iframe>
-						</div> 
-					</div>
-					<div class="postbox">
 						<h3 class="hndle">It really simple urls below.</h3>
 						<div class="inside">
 							<p>Rtmp Url: <strong>rtmp://54.152.190.21/live</strong></p>
@@ -647,9 +641,9 @@ if (!class_exists("s3bubble_audio")) {
 				<div id="post-body">
 					<div id="post-body-content" style="margin-right: 41%;">
 						<div class="postbox">
-							<h3 class="hndle">Live Stream Preview - Your Preview Stream Is <?php echo $stream; ?></h3>
+							<h3 class="hndle">Setting up a live webcam/streaming service - watch video below</h3>
 							<div class="inside">
-								<iframe style="width:100%;min-height:300px;" onload="this.height=(this.offsetWidth/16)*9;" src="//media.s3bubble.com/live/<?php echo $stream; ?>" frameborder="0" marginheight="0" marginwidth="0" frameborder="0" allowtransparency="true" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true" ></iframe>
+								<iframe width="100%" height="315" onload="this.height=(this.offsetWidth/16)*9;" src="https://www.youtube.com/embed/L7TWlGkJUUM" frameborder="0" allowfullscreen></iframe>
 							</div><!-- .inside -->
 						</div>
 					</div> <!-- #post-body-content -->
