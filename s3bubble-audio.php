@@ -142,6 +142,12 @@ if (!class_exists("s3bubble_audio")) {
 			add_shortcode( 's3bubbleHlsAudio', array( $this, 's3bubble_hls_audio' ) );
 			add_shortcode( 's3bubbleHlsVideoJs', array( $this, 's3bubble_hls_video_js' ) );
 
+			/*
+			 * Popup shortcodes for the plugin
+			 * @author sameast
+			 * @params none
+			 */ 
+			add_shortcode( 's3bubbleLightboxVideoSingle', array( $this, 's3bubble_lightbox_video' ) );
 
 			/*
 			 * Live Stream Video JS shortcodes for the plugin
@@ -922,6 +928,10 @@ if (!class_exists("s3bubble_audio")) {
 			wp_register_style('s3bubble.video.js.css.include', plugins_url('assets/videojs/video-js.min.css', __FILE__), array(), $this->version  );
 			wp_enqueue_style('s3bubble.video.js.css.include');
 
+			// Popup styles
+			wp_register_style('magnific-popup.min', plugins_url('assets/css/magnific-popup.min.css', __FILE__), array(), $this->version  );
+			wp_enqueue_style('magnific-popup.min');
+
 			// Important CDN fixes
 			wp_register_style('s3bubble.helpers', ("//s3.amazonaws.com/s3bubble.assets/plugin.css/style.css"), array(),  $this->version );
 			wp_enqueue_style('s3bubble.helpers');
@@ -967,6 +977,7 @@ if (!class_exists("s3bubble_audio")) {
 				wp_register_script( 'VideoPlaylistDeploy', plugins_url('assets/js/s3bubble.video.playlist.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 				wp_register_script( 'singleAudioDeploy', plugins_url('assets/js/s3bubble.single.audio.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 				wp_register_script( 'AudioPlaylistDeploy', plugins_url('assets/js/s3bubble.audio.playlist.deploy.min.js',__FILE__ ), array('jquery'),  $this->version, true );
+				wp_register_script( 'jquery.magnific-popup', plugins_url('assets/js/jquery.magnific-popup.min.js',__FILE__ ), array('jquery'),  $this->version, true );
 
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('jquery-migrate');
@@ -980,6 +991,7 @@ if (!class_exists("s3bubble_audio")) {
 				wp_enqueue_script('VideoPlaylistDeploy');
 				wp_enqueue_script('singleAudioDeploy');
 				wp_enqueue_script('AudioPlaylistDeploy');
+				wp_enqueue_script('jquery.magnific-popup');
 
 				// remove jplayer if exists
 				wp_deregister_script( 'jplayer' );
@@ -1852,6 +1864,7 @@ if (!class_exists("s3bubble_audio")) {
 			        	var folder       = $('#s3folder').val();
 			        	var cloudfrontid = $('#s3bubble-cloudfrontid').val();
 			        	var extension    = $('#s3folder').find(':selected').data('ext');
+			        	var lightboxtext = $("#lightbox-text").val();
 
 			        	//Set extra options
 			        	if($("#s3autoplay").is(':checked')){
@@ -1884,6 +1897,8 @@ if (!class_exists("s3bubble_audio")) {
 							    shortcode = '[s3bubbleMediaElementVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 							}else if($("#s3videojs").is(':checked')){
 								shortcode = '[s3bubbleVideoSingleJs  bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+							}else if(lightboxtext !== ""){
+								shortcode = '[s3bubbleLightboxVideoSingle text="' + lightboxtext + '" bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 							}
 							tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    	tb_remove();
@@ -1948,6 +1963,10 @@ if (!class_exists("s3bubble_audio")) {
 						<div class="s3bubble-pull-left s3bubble-width-left">
 				    		<label for="fname">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label>
 				    		<input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
+				    	</div>
+				    	<div class="s3bubble-pull-right s3bubble-width-right">
+				    		<label for="fname">Lightbox link text:</label>
+				    		<input type="text" class="s3bubble-form-input" name="lightbox-text" id="lightbox-text">
 				    	</div>
 					</span>
 					<span>
@@ -4161,8 +4180,128 @@ if (!class_exists("s3bubble_audio")) {
 			</script>';
 
 		}
-	}
 
+		/*
+		* Run the s3bubble jplayer single video function
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_lightbox_video($atts){
+				
+				//Run a S3Bubble security check
+				$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
+
+				// get option from database	
+				$loggedin            = get_option("s3-loggedin");
+				$search              = get_option("s3-search");
+				$responsive          = get_option("s3-responsive");
+				$stream              = get_option("s3-stream");
+				$s3bubble_force_download = get_option("s3bubble_force_download");
+
+		        extract( shortcode_atts( array(
+		        	'download'   => 'false',
+		        	'twitter' => 'false',
+		        	'twitter_handler' => '@s3bubble',
+		        	'twitter_text' => 'Shared via s3bubble.com media streaming',
+					'aspect'     => '16:9',
+					'text'     => 'S3Bubble Video',
+					'responsive' => $responsive,
+					'autoplay'   => 'false',
+					'start'      => 'false',
+					'finish'     => 'false',
+					'playlist'   => '',
+					'height'     => '',
+					'track'      => '',
+					'bucket'     => '',
+					'folder'     => '',
+					'cloudfront' => ''
+				), $atts, 's3bubbleVideoSingle' ) );
+				extract( shortcode_atts( array(
+					'download'   => 'false',
+					'twitter' => 'false',
+					'twitter_handler' => 's3bubble',
+		        	'twitter_text' => 'Shared via s3bubble.com media streaming',
+					'aspect'     => '16:9',
+					'text'     => 'S3Bubble Video',
+					'responsive' => $responsive,
+					'autoplay'   => 'false',
+					'start'      => 'false',
+					'finish'     => 'false',
+					'playlist'   => '',
+					'height'     => '',
+					'track'      => '',
+					'bucket'     => '',
+					'folder'     => '',
+					'cloudfront' => ''
+				), $atts, 's3videoSingle' ) );
+
+				$aspect    = ((empty($aspect)) ? '16:9' : $aspect);
+				$link_text = ((empty($text)) ? 'S3Bubble Video' : $text);
+				$download  = ((empty($download)) ? 'false' : $download);
+				$autoplay  = ((empty($autoplay)) ? 'false' : $autoplay);
+				$start     = ((empty($start)) ? 'false' : $start);
+				$finish    = ((empty($finish)) ? 'false' : $finish);
+				
+				// Check download
+				if($loggedin == 'true'){
+					if ( is_user_logged_in() ) {
+						$download = 1;
+					}else{
+						if($download == 'true'){
+							$download = 1;
+						}else{
+							$download = 0;
+						}
+					}
+				}
+
+				// Force download
+				if($s3bubble_force_download == 'true'){
+					$download = 1;
+				}
+				
+	            $player_id = uniqid();
+			
+	            return '<a class="s3bubble-popup-link-' . $player_id . '" href="#s3bubble-popup-' . $player_id . '">' . $link_text . '</a>
+	            <script type="text/javascript">
+					jQuery(document).ready(function($) {
+						var fireOnce = true;
+						$("body").append("<div id=\"s3bubble-popup-' . $player_id . '\" class=\"s3bubble-popup-styles\"><div class=\"single-video-' . $player_id . '\"></div></div>");
+						$(".s3bubble-popup-link-' . $player_id . '").magnificPopup({
+						  type:"inline",
+						  callbacks: {
+					            elementParse: function(item){
+						            if(fireOnce){
+						                $(".single-video-' . $player_id . '").singleVideo({
+											Ajax:       "' . admin_url('admin-ajax.php') . '",
+											Pid:		"' . $player_id . '",
+											Bucket:		"' . $bucket . '",
+											Key:		"' . $track . '",
+											Cloudfront:	"' . $cloudfront . '",
+											Security:	"' . $ajax_nonce . '",
+											AutoPlay:	' . $autoplay . ',
+											Download:	' . $download . ',
+											Aspect:	    "' . $aspect . '",
+											Twitter:    "' . $twitter . '",
+											TwitterText:    "' . $twitter_text . '",
+											TwitterHandler:	"' . $twitter_handler . '",
+											Start:      "' . $start . '",
+											Finish:	    "' . $finish . '"
+										},function(){
+											
+										});
+										fireOnce = false;
+									}
+					            }
+					        }
+						});
+					});
+				</script>';
+
+			}
+
+
+		}
 	/*
 	* Initiate the class
 	* @author sameast

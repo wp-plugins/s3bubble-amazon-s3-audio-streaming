@@ -1,3 +1,13 @@
+.s3bubble-popup-styles {
+  position: relative;
+  padding: 30px;
+  width: auto;
+  max-width: 800px;
+  margin: 20px auto;
+}
+.mfp-close-btn-in .mfp-close {
+    color: #fff !important;
+}
 *:focus {
     outline: 0;
 }

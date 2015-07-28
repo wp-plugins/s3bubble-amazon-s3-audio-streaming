@@ -17,6 +17,8 @@ S3Bubble offers secure, Media Streaming from Amazon S3 to WordPress.
 * Video RTMP Streaming: (with cloudfront) - [View Example](https://s3bubble.com/rtmp-streaming-example-s3bubble-wordpress-plugin/ "View Example")
 * Video HLS Streaming: (.ts segments .m3u8) - [View Example](https://s3bubble.com/hls-adaptive-bitrate-streaming-example/ "View Example")
 * Video Preview Example: (.mp4 h.264 encode) - [View Example](https://s3bubble.com/s3bubble-video-preview-example/ "View Example")
+* Video Lightbox Example: (.mp4 h.264 encode) - [View Example](https://s3bubble.com/s3bubble-video-lightbox/ "View Example")
+* Lightbox plugin used is awesome Magnific Popup - [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/ "Magnific Popup")
 * Video Advertising: (.mp4 h.264 encode) - [View Example](https://s3bubble.com/s3bubble-with-advertisement-streaming-example-wordpress-plugin/ "View Example")
 * Audio Playlist: (.mp3/.m4a/.wav) - [View Example](https://s3bubble.com/s3bubble-audio-playlist-example-wordpress-plugin/ "View Example")
 * Audio Single: (.mp3/.m4a/.wav) - [View Example](https://s3bubble.com/s3bubble-audio-single-example-wordpress-plugin/ "View Example")
