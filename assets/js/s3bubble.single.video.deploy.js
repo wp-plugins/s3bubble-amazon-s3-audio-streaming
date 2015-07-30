@@ -82,12 +82,13 @@
             },
             ready: function(event) {
                 var sendData = {
-                    action: "s3bubble_video_single_internal_ajax",
+                    action: options.ApiCall,
                     security: options.Security,
                     Timezone: "America/New_York",
                     Bucket: options.Bucket,
                     Key: options.Key,
                     Cloudfront: options.Cloudfront,
+                    IsMobile : IsMobile,
                     Server: s3bubble_all_object.serveraddress
                 }
                 $.post(options.Ajax, sendData, function(response) {
@@ -308,11 +309,8 @@
                     }
                 }
             },
-            swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
-            supplied: "m4v",
-            useStateClassSkin: true,
-            autoBlur: false,
-            smoothPlayBar: false,
+            swfPath: options.Flash,
+            supplied: ((IsMobile) ? "m4v" : options.Supplied),
             keyEnabled: true,
             remainingDuration: true,
             size: {

@@ -47,7 +47,7 @@ function addListener(a) {
             key: a.key,
             type: a.type
         };
-    jQuery.post("https://api.s3bubble.com/v1/analytics/add", t, function(response) {
+    jQuery.post("https://s3api.com/v1/analytics/add", t, function(response) {
         //console.log(response);
         var country = response.analytics.user_country.toLowerCase();
         var Map = '<iframe style="width:100%;" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=' + response.analytics.user_loc_lat + '&hl=' + country + ';z=14&amp;output=embed"></iframe>';

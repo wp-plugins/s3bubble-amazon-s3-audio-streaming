@@ -48,7 +48,7 @@ if (!class_exists("s3bubble_audio")) {
 		public  $responsive      = 'responsive';
 		public  $theme           = 's3bubble_clean';
 		public  $stream          = 'm4v';
-		public  $version         =  41;
+		public  $version         =  43;
 		public  $s3bubble_video_all_bar_colours = '#adadad';
 		public  $s3bubble_video_all_bar_seeks   = '#53bbb4';
 		public  $s3bubble_video_all_controls_bg = '#384049';
@@ -1146,7 +1146,7 @@ if (!class_exists("s3bubble_audio")) {
 			$s3bubble_secret_key = get_option("s3-s3audible_email");
 
 			//set POST variables
-			$url = $this->endpoint . 'rtmp/video';
+			$url = $this->endpoint . 'main_plugin/single_video_rtmp_live';
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
 				'sslverify' => false,
@@ -1162,6 +1162,7 @@ if (!class_exists("s3bubble_audio")) {
 				    'Bucket' => $_POST['Bucket'],
 				    'Key' => $_POST['Key'],
 				    'Cloudfront' => $_POST['Cloudfront'],
+				    'Server' => $_POST['Server'],
 				    'IsMobile' => $_POST['IsMobile']
 				),
 				'cookies' => array()
@@ -1965,7 +1966,7 @@ if (!class_exists("s3bubble_audio")) {
 				    		<input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
 				    	</div>
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
-				    		<label for="fname">Lightbox link text:</label>
+				    		<label for="fname">Lightbox link text: <a class="s3bubble-pull-right" href="https://s3bubble.com/s3bubble-video-lightbox/" target="_blank">Watch Video</a></label>
 				    		<input type="text" class="s3bubble-form-input" name="lightbox-text" id="lightbox-text">
 				    	</div>
 					</span>
@@ -2824,228 +2825,62 @@ if (!class_exists("s3bubble_audio")) {
 	   		
 	   		//Run a S3Bubble security check
 			$ajax_nonce = wp_create_nonce( "s3bubble-nonce-security" );
-			
-        	extract( shortcode_atts( array(
-        		'skip'       => 'false',
-				'autoplay'   => 'false',
+
+			// get option from database	
+			$responsive          = get_option("s3-responsive");
+
+	        extract( shortcode_atts( array(
+	        	'download'   => 'false',
+	        	'twitter' => 'false',
+	        	'twitter_handler' => '@s3bubble',
+	        	'twitter_text' => 'Shared via s3bubble.com media streaming',
 				'aspect'     => '16:9',
-				'bucket'     => '',
+				'responsive' => $responsive,
+				'autoplay'   => 'false',
+				'start'      => 'false',
+				'finish'     => 'false',
+				'playlist'   => '',
+				'height'     => '',
 				'track'      => '',
-				'time'       => '',
-				'cloudfront' => '',
-				'advert'     => ''
+				'bucket'     => '',
+				'folder'     => '',
+				'cloudfront' => ''
 			), $atts, 's3bubbleRtmpVideoDefault' ) );
 
-        	$skip     = ((empty($skip)) ? 'false' : $skip);
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$download = ((empty($download)) ? 'false' : $download);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
+			$start = ((empty($start)) ? 'false' : $start);
+			$finish = ((empty($finish)) ? 'false' : $finish);
 
             $player_id = uniqid();
 
-            return '<div id="s3bubble-media-main-container-' . $player_id . '" class="s3bubble-media-main-video">
-				    <div id="jquery_jplayer_RTMP_' . $player_id . '" class="s3bubble-media-main-jplayer"></div>
-				    <div class="s3bubble-media-main-video-skip">
-						<h2>Skip Ad</h2>
-						<i class="s3icon s3icon-step-forward"></i>
-					</div>
-				    <div class="s3bubble-media-main-video-loading">
-				    	<i class="s3icon s3icon-circle-o-notch s3icon-spin"></i>
-				    </div>
-				    <div class="s3bubble-media-main-video-play">
-						<i class="s3icon s3icon-play"></i>
-					</div>
-				    <div class="s3bubble-media-main-gui" style="visibility: hidden;">
-				        <div class="s3bubble-media-main-interface">
-				            <div class="s3bubble-media-main-controls-holder">
-					            <div class="s3bubble-media-main-left-controls">
-									<a href="javascript:;" class="s3bubble-media-main-play" tabindex="1"><i class="s3icon s3icon-play"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-pause" tabindex="1"><i class="s3icon s3icon-pause"></i></a>
-								</div>
-								<div class="s3bubble-media-main-progress">
-								    <div class="s3bubble-media-main-seek-bar">
-								        <div class="s3bubble-media-main-play-bar"></div>
-								    </div>
-								</div>
-								<div class="s3bubble-media-main-right-controls">
-									<a href="javascript:;" class="s3bubble-media-main-full-screen" tabindex="3" title="full screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-restore-screen" tabindex="3" title="restore screen"><i class="s3icon s3icon-arrows-alt"></i></a>
-									<div class="s3bubble-media-main-volume-bar">
-									    <div class="s3bubble-media-main-volume-bar-value"></div>
-									</div>
-									<a href="javascript:;" class="s3bubble-media-main-mute" tabindex="2" title="mute"><i class="s3icon s3icon-volume-up"></i></a>
-									<a href="javascript:;" class="s3bubble-media-main-unmute" tabindex="2" title="unmute"><i class="s3icon s3icon-volume-off"></i></a>
-									<div class="s3bubble-media-main-time-container">
-										<div class="s3bubble-media-main-duration"></div>
-									</div>
-								</div>
-				            </div>
-				        </div>
-				    </div>
-				    <div class="s3bubble-media-main-playlist" style="display:none;">
-						<ul>
-							<li></li>
-						</ul>
-					</div>
-				    <div class="s3bubble-media-main-no-solution">
-				        <span>Update Required</span>
-				        Flash player is needed to use this player please download here. <a href="https://get2.adobe.com/flashplayer/" target="_blank">Download</a>
-				    </div>
-				</div>
-				<script type="text/javascript">
-				jQuery(document).ready(function( $ ) {
-					
-					// Set aspect ratio
-					var Bucket     = "' . $bucket . '";
-					var Key        = "' . $track . '";
-					var Cloudfront = "' . $cloudfront . '";
-					var Current    = -1;
-					var aspect     = $("#s3bubble-media-main-container-' . $player_id . '").width()/16*9;
-					var IsMobile   = false;
-					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-						IsMobile = true;
-					}
-					var s3bubbleRtmpPlaylist = new jPlayerPlaylist({
-						jPlayer: "#jquery_jplayer_RTMP_' . $player_id . '",
-						cssSelectorAncestor: "#s3bubble-media-main-container-' . $player_id . '"
-					}, s3bubbleRtmpPlaylist, {
-						playlistOptions: {
-							enableRemoveControls: true
-						},
-						ready : function(event) {
-							var sendData = {
-								action: "s3bubble_video_rtmp_internal_ajax",
-								security : "' . $ajax_nonce . '",
-								Timezone :"America/New_York",
-							    Bucket : Bucket,
-							    Key : Key,
-							    Cloudfront : Cloudfront,
-							    IsMobile : IsMobile
-							} 
-							$.post("' . admin_url('admin-ajax.php') . '", sendData, function(response) {
-								if(response.error){
-									$("#s3bubble-media-main-container-' . $player_id . '").append("<span class=\"s3bubble-alert\"><p>" + response.message + ". <a href=\"https://s3bubble.com/video_tutorials/starter-setting-up-rtmp-streaming/\" target=\"_blank\">Watch Video</a></p></span>");
-									console.log(response.message);
-								}else{
-
-									s3bubbleRtmpPlaylist.setPlaylist(response.results);
-
-									$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 240px 0 40px");	
-									if(IsMobile){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 60px 0 40px");	
-									}
-									if(response.user === "s2member_level1" || response.user === "s2member_level2"){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 280px 0 40px");
-										if(IsMobile){
-											$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-progress").css("margin","12px 100px 0 40px");	
-										}
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
-									}
-									setTimeout(function(){
-										$("#s3bubble-media-main-container-' . $player_id . ' .s3bubble-media-main-video-loading").fadeOut();
-										$(".s3bubble-media-main-gui").css("visibility", "visible");
-									},2000);
-								}
-							},"json");
-							// Remove right click
-							$("video").bind("contextmenu",function(){
-					        	return false;
-					        });
-							$(".s3bubble-media-main-video-skip").on( "click", function() {
-								$(".s3bubble-media-main-video-loading").fadeIn();
-								$(".s3bubble-media-main-video-skip").animate({
-								    left: "-120"
-								}, 50, function() {
-								    s3bubbleRtmpPlaylist.next();
-								});
-								
-							});
-						},
-						loadedmetadata: function (event) {
-							
-					    },
-					    resize: function (event) {
-
-					    },
-					    click: function (event) {
-
-					    },
-					    error: function (event) {
-					    	console.log(event.jPlayer.error);
-        					console.log(event.jPlayer.error.type);
-					    },
-					    warning: function (event) {
-
-					    },
-					    loadstart: function (event) {
-
-					    },
-					    progress: function (event) {
-
-					    },
-					    play: function (event) {
-					    	$(".s3bubble-media-main-video-loading").fadeIn();
-							var CurrentState = s3bubbleRtmpPlaylist.current;
-							var PlaylistKey  = s3bubbleRtmpPlaylist.playlist[CurrentState];
-							if(IsMobile === false){
-								if(PlaylistKey.advert){
-									$(".s3bubble-media-main-video-skip").animate({
-									    left: "0"
-									}, 50, function() {
-									    // Animation complete.
-									});
-								}else{
-									$(".s3bubble-media-main-video-skip").animate({
-									    left: "-120"
-									}, 50, function() {
-									    s3bubbleRtmpPlaylist.next();
-									});
-								}
-							}
-							if(Current !== CurrentState && PlaylistKey.advert !== true){
-								addListener({
-									app_id: s3bubble_all_object.s3appid,
-									server: s3bubble_all_object.serveraddress,
-									bucket: Bucket,
-									key: Key,
-									type: "video",
-									advert: false
-								});
-								Current = CurrentState;
-							}
-							
-					    },
-					    ended : function(event) {
-							console.log("ended");
-						},
-					    timeupdate : function(event) {
-							if (event.jPlayer.status.currentTime > 1) {
-								$(".s3bubble-media-main-video-loading").fadeOut()
-							}
-							if (event.jPlayer.status.currentPercentAbsolute > 99) {
-                                s3bubbleRtmpPlaylist.next();
-                            }
-						},
-						swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/s3bubble.rtmp.swf",
-				        supplied: ((IsMobile) ? "m4v" : "rtmpv"),
-				        preload: "metadata",
-						useStateClassSkin: true,
-						autoBlur: false,
-						smoothPlayBar: false,
-						keyEnabled: true,
-						audioFullScreen: true,
-						remainingDuration: true,
-						size: {
-				            width: "100%",
-				            height: aspect
-				        },
-				        autohide : {
-							full : true,
-							restored : true,
-							hold : 3000
-						}
+            return '<div class="single-video-' . $player_id . '"></div>
+            <script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$(".single-video-' . $player_id . '").singleVideo({
+						Ajax:       "' . admin_url('admin-ajax.php') . '",
+						ApiCall:    "s3bubble_video_rtmp_internal_ajax",
+						Flash:      "https://s3.amazonaws.com/s3bubble.assets/flash/s3bubble.rtmp.swf",
+						Pid:		"' . $player_id . '",
+						Bucket:		"' . $bucket . '",
+						Key:		"' . $track . '",
+						Cloudfront:	"' . $cloudfront . '",
+						Supplied:   "rtmpv",
+						Security:	"' . $ajax_nonce . '",
+						AutoPlay:	' . $autoplay . ',
+						Download:	' . $download . ',
+						Aspect:	    "' . $aspect . '",
+						Twitter:    "' . $twitter . '",
+						TwitterText:    "' . $twitter_text . '",
+						TwitterHandler:	"' . $twitter_handler . '",
+						Start:      "' . $start . '",
+						Finish:	    "' . $finish . '"
+					},function(){
+						
 					});
 				});
-				</script>';
+			</script>';
 
        }
 
@@ -4154,12 +3989,15 @@ if (!class_exists("s3bubble_audio")) {
 			}
 			
             $player_id = uniqid();
-		
+
             return '<div class="single-video-' . $player_id . '"></div>
             <script type="text/javascript">
 				jQuery(document).ready(function($) {
 					$(".single-video-' . $player_id . '").singleVideo({
 						Ajax:       "' . admin_url('admin-ajax.php') . '",
+						ApiCall:    "s3bubble_video_single_internal_ajax",
+						Flash:      "https://s3.amazonaws.com/s3bubble.assets/flash/s3bubble.rtmp.swf",
+						Supplied:   "m4v",
 						Pid:		"' . $player_id . '",
 						Bucket:		"' . $bucket . '",
 						Key:		"' . $track . '",
@@ -4274,6 +4112,9 @@ if (!class_exists("s3bubble_audio")) {
 						            if(fireOnce){
 						                $(".single-video-' . $player_id . '").singleVideo({
 											Ajax:       "' . admin_url('admin-ajax.php') . '",
+											ApiCall:    "s3bubble_video_single_internal_ajax",
+											Flash:      "https://s3.amazonaws.com/s3bubble.assets/flash/s3bubble.rtmp.swf",
+											Supplied:   "m4v",
 											Pid:		"' . $player_id . '",
 											Bucket:		"' . $bucket . '",
 											Key:		"' . $track . '",
