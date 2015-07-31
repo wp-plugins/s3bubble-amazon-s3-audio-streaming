@@ -92,6 +92,13 @@ if (!class_exists("s3bubble_audio")) {
 			 * @params none
 			 */ 
 			add_action( 'admin_menu', array( $this, 's3bubble_audio_admin_menu' ));
+
+			/*
+			 * Add some extras to run after theme support add image sizes etc...
+			 * @author sameast
+			 * @params none
+			 */ 
+			add_action( 'after_setup_theme', array( $this, 's3bubble_wordpress_theme_setup' ) );
 			
 			/*
 			 * Add css to the header of the document
@@ -256,9 +263,20 @@ if (!class_exists("s3bubble_audio")) {
 		* @none
 		*/ 
 		function s3bubble_stop_heartbeat() {
-		  global $pagenow;
-		  if ( $pagenow != 'edit.php' )
-		  wp_deregister_script('heartbeat');
+		  	global $pagenow;
+		  	if ( $pagenow != 'edit.php' )
+		  	wp_deregister_script('heartbeat');
+		}
+
+		/*
+		* Run after theme support image sizes etc...
+		* @author sameast
+		* @none
+		*/ 
+		function s3bubble_wordpress_theme_setup() {
+		  	/* Configure WP 2.9+ Thumbnails ---------------------------------------------*/
+    		add_theme_support('post-thumbnails');
+        	add_image_size( 'single-video-poster', 960, 540, true ); // (cropped)
 		}
 
 		/*
@@ -2236,8 +2254,13 @@ if (!class_exists("s3bubble_audio")) {
 						if($('#s3aspect').val() != ''){
 						    aspect = $('#s3aspect').val();
 						}
+						if($("#s3autoplay").is(':checked')){
+						    var autoplay = true;
+						}else{
+						    var autoplay = false;
+						}
 			        	
-						var shortcode = '[s3bubbleLiveStreamMedia stream="' + stream + '" aspect="' + aspect + '"/]';
+						var shortcode = '[s3bubbleLiveStreamMedia stream="' + stream + '" aspect="' + aspect + '" autoplay="' + autoplay + '"/]';
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
 			        });
@@ -2247,8 +2270,8 @@ if (!class_exists("s3bubble_audio")) {
 			    <form class="s3bubble-form-general">
 			    	<span>
 				    	<div>
-				    		<label for="s3bubble-live-stream-url">Your Live Stream Url:</label>
-				    		<input type="text" class="s3bubble-form-input" name="s3bubble-live-stream-url" id="s3bubble-live-stream-url">
+				    		<label for="s3bubble-live-stream-url">Your Live Stream Url: <a class="s3bubble-pull-right" href="https://s3bubble.com/s3bubble-live-broadcasting-app/" target="_blank">Watch Tutorial</a></label>
+				    		<input type="text" class="s3bubble-form-input" placeholder="rtmp://52.7.131.192/live/( your s3bubble username )" name="s3bubble-live-stream-url" id="s3bubble-live-stream-url">
 				    	</div>
 					</span>
 					<span>
@@ -2256,12 +2279,15 @@ if (!class_exists("s3bubble_audio")) {
 				    		<label for="aspect">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label>
 				    		<input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
 				    	</div>
+					</span>
+					<span>
+						<input type="checkbox" name="autoplay" id="s3autoplay">Autoplay: <i>(Start Stream On Page Load)</i><br />
 					</span> 
 					<span>
 						<div class="s3bubble-video-main-form-alerts">
 							<p>
 					    		LIVE STREAM DIRECTLY TO THIS POST! For more information on setting up a Live Stream directly from a mobile app to this post please open this link.
-					    		<a href="https://s3bubble.com/test-s3bubble-live-stream/" target="_blank">TEST LIVE STREAMING</a>
+					    		<a href="https://s3bubble.com/s3bubble-live-broadcasting-app/" target="_blank">LIVE STREAMING TUTORIAL</a>
 					    	</p>
 				    	</div>
 					</span>
@@ -2488,7 +2514,7 @@ if (!class_exists("s3bubble_audio")) {
         }
 
         /*
-		* Main HLS and RTMP Live Streaming
+		* WORKING HERE LIVE STREAM - Main HLS and RTMP Live Streaming
 		* @author sameast
 		* @none
 		*/ 
@@ -2529,6 +2555,13 @@ if (!class_exists("s3bubble_audio")) {
 
 			}
 
+			$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
+			$large_image_url = wp_get_attachment_image_src( $post_thumbnail_id, 'single-video-poster' );
+			$poster = "https://s3.amazonaws.com/s3bubble.assets/video.player/placeholder.png";
+			if(is_array($large_image_url)){
+				$poster = $large_image_url[0];
+			}
+			
 			if(empty($stream)){
 				echo "No live steam url has been set";
 			}else{
@@ -2549,22 +2582,22 @@ if (!class_exists("s3bubble_audio")) {
 								video.height = Math.round(aspect);
 								video.width = video_width;
 								$("#video-' . $player_id . '").mediaelementplayer({
-					    			poster: "https://s3.amazonaws.com/s3bubble.assets/video.player/placeholder.png",
+					    			poster: "' . $poster . '",
 					    			videoWidth: "100%",
 									videoHeight: "100%",
 									enableAutosize: true,
 									plugins: ["flash"],
 									features: ["playpause","volume","fullscreen"],
-									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
+									pluginPath: _wpmejsSettings.pluginPath,
 									flashName: "flashmediaelement.swf",
 					    			success: function(mediaElement, node, player) {
-					    				$(".video-wrap-' . $player_id . ' .mejs-controls").append("<span class=\'s3bubble-live-media-element\'></span>");
 					    				$(".video-wrap-' . $player_id . ' .mejs-fullscreen-button").css("float","right");
 								        mediaElement.addEventListener("timeupdate", function(e) {
 								            if(e.currentTime){
-								            	$(".video-wrap-' . $player_id . ' .s3bubble-live-media-element").text("LIVE");
+								            	
 								            }
 								        }, false);
+										'. (($autoplay == 'true') ? 'mediaElement.play();' : '') . '
 							     	}
 				    			});
 							});
