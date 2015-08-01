@@ -112,6 +112,7 @@
 						$("video").bind("contextmenu", function(e) {
 							return false
 						});
+						$('video').attr('title', '');
 						//hide playlist
 						$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-playlist-list").click(function() {
 							$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-playlist").slideToggle();

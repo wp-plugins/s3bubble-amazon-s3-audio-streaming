@@ -127,6 +127,7 @@
                         $("video").bind("contextmenu", function(e) {
                             return false;
                         });
+                        $('video').attr('title', '');
                         $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-skip").on("click", function() {
                             $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeIn();
                             $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-skip").animate({
@@ -190,7 +191,7 @@
                 $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeIn();
                 var CurrentState = videoSingleS3Bubble.current;
                 var PlaylistKey = videoSingleS3Bubble.playlist[CurrentState];
-                if (PlaylistKey.advert && IsMobile === false) {
+                if (PlaylistKey.advert && IsMobile === false && options.DisableSkip !== 'true') {
                     $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-skip").animate({
                         left: "0"
                     }, 50, function() {
@@ -224,7 +225,7 @@
                 $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
                 var CurrentState = videoSingleS3Bubble.current;
                 var PlaylistKey = videoSingleS3Bubble.playlist[CurrentState];
-                if (PlaylistKey.advert && IsMobile === false) {
+                if (PlaylistKey.advert && IsMobile === false && options.DisableSkip !== 'true') {
                     $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-skip").animate({
                         left: "0"
                     }, 50, function() {

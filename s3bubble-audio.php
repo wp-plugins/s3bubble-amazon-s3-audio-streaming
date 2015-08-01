@@ -1334,7 +1334,7 @@ if (!class_exists("s3bubble_audio")) {
 			$response = wp_remote_post( $url, array(
 				'method' => 'POST',
 				'sslverify' => false,
-				'timeout' => 30,
+				'timeout' => 60,
 				'redirection' => 5,
 				'httpversion' => '1.0',
 				'blocking' => true,
@@ -1542,6 +1542,9 @@ if (!class_exists("s3bubble_audio")) {
 						   },'json');
 						});				
 					},'json');
+					setTimeout(function(){
+						$(".s3bubble-lightbox-wrap").height($("#TB_window").height());
+					},500);
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket     = $('#s3bucket').val();
 			        	var folder     = $('#s3folder').val();
@@ -1681,6 +1684,9 @@ if (!class_exists("s3bubble_audio")) {
 						   },'json');
 						});				
 					},'json');
+					setTimeout(function(){
+						$(".s3bubble-lightbox-wrap").height($("#TB_window").height());
+					},500);
 			        $('#s3bubble-mce-submit').click(function(){
 			        	var bucket     = $('#s3bucket').val();
 			        	var folder     = $('#s3folder').val();
@@ -1795,6 +1801,28 @@ if (!class_exists("s3bubble_audio")) {
 							html += '</select>';
 							$('#s3bubble-buckets-shortcode').html(html);
 						}
+						// Get Cloudfront ids if they are present
+						var data = {
+							AccessKey: '<?php echo $s3bubble_access_key; ?>'
+						};
+						$.post("<?php echo $this->endpoint; ?>main_plugin/list_cloudfront_distributions/", data, function(response) {
+							console.log(response);
+							var html = '<select class="form-control input-lg" tabindex="1" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">';	
+							if(response.error){
+								html += '<option value="">-- No Cloudfront Distributions --</option>';
+							}else{
+								html += '<option value="">-- Cloudfront ID --</option>';
+							    $.each(response.data.Items, function (i, item) {
+							    	var Cloudfront = item;
+							    	console.log(Cloudfront);
+							    	html += '<option value="' + Cloudfront.Id + '">' + Cloudfront.Id + ' - ' + Cloudfront.S3Origin.DomainName + ' - Enabled: ' + Cloudfront.Enabled + '</option>';
+								});
+							}
+							html += '</select>';
+							$('#s3bubble-cloudfrontid-container').html(html);
+					   	},'json');
+
+						// Runs when a bucket is selected
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading videos files');
 						   var bucket = $(this).val();
@@ -1826,6 +1854,9 @@ if (!class_exists("s3bubble_audio")) {
 					$( "#s3bubble-streaming-type" ).change(function() {
 						StreamingType = $(this).val();
 					});
+					setTimeout(function(){
+						$(".s3bubble-lightbox-wrap").height($("#TB_window").height());
+					},500);
 
 					$('#s3bubble-mce-submit-iframe').click(function(){
 
@@ -1885,68 +1916,85 @@ if (!class_exists("s3bubble_audio")) {
 			        	var extension    = $('#s3folder').find(':selected').data('ext');
 			        	var lightboxtext = $("#lightbox-text").val();
 
-			        	//Set extra options
-			        	if($("#s3autoplay").is(':checked')){
-						    var autoplay = true;
-						}else{
-						    var autoplay = false;
-						}
-						if($("#s3download").is(':checked')){
-						    var download = true;
-						}else{
-						    var download = false;
-						}
-						var aspect = '16:9';
-						if($('#s3aspect').val() != ''){
-						    aspect = $('#s3aspect').val();
-						}
+			        	if(bucket === '' || folder === ''){
 
-						var data = {
-							AccessKey: '<?php echo $s3bubble_access_key; ?>',
-							bucket: bucket,
-							key: folder,
-							Distribution : cloudfrontid
-						};
-						console.log(data);
+			        		alert("You must set a bucket and video to insert shortcode.");
+			        	
+			        	}else{
 
-						var shortcode = '';
-						if(StreamingType === 'progressive'){
-							shortcode = '[s3bubbleVideoSingle bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
-							if($("#s3mediaelement").is(':checked')){
-							    shortcode = '[s3bubbleMediaElementVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
-							}else if($("#s3videojs").is(':checked')){
-								shortcode = '[s3bubbleVideoSingleJs  bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
-							}else if(lightboxtext !== ""){
-								shortcode = '[s3bubbleLightboxVideoSingle text="' + lightboxtext + '" bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
-							}
-							tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-	                    	tb_remove();
-						}
-						if(StreamingType === 'hls'){
-							if(extension !== 'm3u8'){
-								alert('To use HLS streaming your file extension needs to be .m3u8');
+				        	//Set extra options
+				        	if($("#s3autoplay").is(':checked')){
+							    var autoplay = true;
 							}else{
-								shortcode = '[s3bubbleHlsVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
-								if($("#s3videojs").is(':checked')){
-									shortcode = '[s3bubbleHlsVideoJs bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
-								}
-								tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-	                    		tb_remove();
+							    var autoplay = false;
 							}
-						}
-						if(StreamingType === 'rtmp'){
-							if(cloudfrontid === ''){
-								alert('To use RTMP streaming you need to specify a Cloudfront Distribution ID');
+							if($("#s3download").is(':checked')){
+							    var download = true;
 							}else{
-								shortcode = '[s3bubbleRtmpVideoDefault bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+							    var download = false;
+							}
+							var aspect = '16:9';
+							if($('#s3aspect').val() != ''){
+							    aspect = $('#s3aspect').val();
+							}
+
+							var start = false;
+							if($('#s3bubble-preview-starttime').val() != ''){
+							    start = $('#s3bubble-preview-starttime').val();
+							}
+
+							var finish = false;
+							if($('#s3bubble-preview-finishtime').val() != ''){
+							    finish = $('#s3bubble-preview-finishtime').val();
+							}
+
+							var data = {
+								AccessKey: '<?php echo $s3bubble_access_key; ?>',
+								bucket: bucket,
+								key: folder,
+								Distribution : cloudfrontid
+							};
+							console.log(data);
+
+							var shortcode = '';
+							if(StreamingType === 'progressive'){
+								shortcode = '[s3bubbleVideoSingle bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '" start="' + start + '" finish="' + finish + '" /]';
 								if($("#s3mediaelement").is(':checked')){
-									shortcode = '[s3bubbleRtmpVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+								    shortcode = '[s3bubbleMediaElementVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 								}else if($("#s3videojs").is(':checked')){
-									shortcode = '[s3bubbleRtmpVideoJs bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+									shortcode = '[s3bubbleVideoSingleJs  bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+								}else if(lightboxtext !== ""){
+									shortcode = '[s3bubbleLightboxVideoSingle text="' + lightboxtext + '" bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 								}
 								tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
-		                   	 	tb_remove();
-		                   	}
+		                    	tb_remove();
+							}
+							if(StreamingType === 'hls'){
+								if(extension !== 'm3u8'){
+									alert('To use HLS streaming your file extension needs to be .m3u8');
+								}else{
+									shortcode = '[s3bubbleHlsVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
+									if($("#s3videojs").is(':checked')){
+										shortcode = '[s3bubbleHlsVideoJs bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '"/]';
+									}
+									tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
+		                    		tb_remove();
+								}
+							}
+							if(StreamingType === 'rtmp'){
+								if(cloudfrontid === ''){
+									alert('To use RTMP streaming you need to specify a Cloudfront Distribution ID');
+								}else{
+									shortcode = '[s3bubbleRtmpVideoDefault bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '" start="' + start + '" finish="' + finish + '" /]';
+									if($("#s3mediaelement").is(':checked')){
+										shortcode = '[s3bubbleRtmpVideo bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+									}else if($("#s3videojs").is(':checked')){
+										shortcode = '[s3bubbleRtmpVideoJs bucket="' + bucket + '" track="' + folder + '" aspect="' + aspect + '" autoplay="' + autoplay + '" download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
+									}
+									tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
+			                   	 	tb_remove();
+			                   	}
+							}
 						}
 			        });
 		        })
@@ -1975,17 +2023,27 @@ if (!class_exists("s3bubble_audio")) {
 				    	</div>
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
 				    		<label for="fname">Set Cloudfront Distribution Id:</label>
-				    		<input type="text" class="s3bubble-form-input" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">
+				    		<span id="s3bubble-cloudfrontid-container">Select Cloudfront...</span>
 				    	</div>
 					</span>
 					<span>
 						<div class="s3bubble-pull-left s3bubble-width-left">
-				    		<label for="fname">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label>
+				    		<label for="aspect">Aspect Ratio: (Example: 16:9 / 4:3 Default: 16:9)</label>
 				    		<input type="text" class="s3bubble-form-input" name="aspect" id="s3aspect">
 				    	</div>
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
-				    		<label for="fname">Lightbox link text: <a class="s3bubble-pull-right" href="https://s3bubble.com/s3bubble-video-lightbox/" target="_blank">Watch Video</a></label>
+				    		<label for="lightbox-text">Lightbox link text: <a class="s3bubble-pull-right" href="https://s3bubble.com/s3bubble-video-lightbox/" target="_blank">Watch Video</a></label>
 				    		<input type="text" class="s3bubble-form-input" name="lightbox-text" id="lightbox-text">
+				    	</div>
+					</span>
+					<span>
+						<div class="s3bubble-pull-left s3bubble-width-left">
+				    		<label for="s3bubble-preview-starttime">Start time percent for preview: (leave blank to ignore)</label>
+				    		<input type="text" class="s3bubble-form-input" name="s3bubble-preview-starttime" id="s3bubble-preview-starttime">
+				    	</div>
+				    	<div class="s3bubble-pull-right s3bubble-width-right">
+				    		<label for="s3bubble-preview-finishtime">End time percent for preview: (leave blank to ignore)<a class="s3bubble-pull-right" href="https://s3bubble.com/s3bubble-video-preview-example/" target="_blank">Watch Video</a></label>
+				    		<input type="text" class="s3bubble-form-input" name="s3bubble-preview-finishtime" id="s3bubble-preview-finishtime">
 				    	</div>
 					</span>
 					<span>
@@ -2082,7 +2140,9 @@ if (!class_exists("s3bubble_audio")) {
 					$( "#s3bubble-streaming-type" ).change(function() {
 						StreamingType = $(this).val();
 					});	
-
+					setTimeout(function(){
+						$(".s3bubble-lightbox-wrap").height($("#TB_window").height());
+					},500);
 					$('#s3bubble-mce-submit-iframe').click(function(){
 
 						// Setup vars
@@ -2246,7 +2306,10 @@ if (!class_exists("s3bubble_audio")) {
                     	'width' : 'auto',
                     	'height' : 'auto',
                     	'padding' : '0'
-                    }); 
+                    });
+                    setTimeout(function(){
+						$(".s3bubble-lightbox-wrap").height($("#TB_window").height());
+					},500); 
 			        $('#s3bubble-mce-submit').click(function(){
 
 			        	var stream = $('#s3bubble-live-stream-url').val();
@@ -2872,6 +2935,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 				'start'      => 'false',
 				'finish'     => 'false',
+				'disable_skip' => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
@@ -2881,6 +2945,7 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3bubbleRtmpVideoDefault' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$disable_skip = ((empty($disable_skip)) ? 'false' : $disable_skip);
 			$download = ((empty($download)) ? 'false' : $download);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			$start = ((empty($start)) ? 'false' : $start);
@@ -2904,6 +2969,7 @@ if (!class_exists("s3bubble_audio")) {
 						AutoPlay:	' . $autoplay . ',
 						Download:	' . $download . ',
 						Aspect:	    "' . $aspect . '",
+						DisableSkip:"' . $disable_skip . '",
 						Twitter:    "' . $twitter . '",
 						TwitterText:    "' . $twitter_text . '",
 						TwitterHandler:	"' . $twitter_handler . '",
@@ -3972,6 +4038,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 				'start'      => 'false',
 				'finish'     => 'false',
+				'disable_skip'     => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
@@ -3989,6 +4056,7 @@ if (!class_exists("s3bubble_audio")) {
 				'autoplay'   => 'false',
 				'start'      => 'false',
 				'finish'     => 'false',
+				'disable_skip'     => 'false',
 				'playlist'   => '',
 				'height'     => '',
 				'track'      => '',
@@ -3998,6 +4066,7 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3videoSingle' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$disable_skip = ((empty($disable_skip)) ? 'false' : $disable_skip);
 			$download = ((empty($download)) ? 'false' : $download);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			$start = ((empty($start)) ? 'false' : $start);
@@ -4039,6 +4108,7 @@ if (!class_exists("s3bubble_audio")) {
 						AutoPlay:	' . $autoplay . ',
 						Download:	' . $download . ',
 						Aspect:	    "' . $aspect . '",
+						DisableSkip:"' . $disable_skip . '",
 						Twitter:    "' . $twitter . '",
 						TwitterText:    "' . $twitter_text . '",
 						TwitterHandler:	"' . $twitter_handler . '",
@@ -4080,6 +4150,7 @@ if (!class_exists("s3bubble_audio")) {
 					'autoplay'   => 'false',
 					'start'      => 'false',
 					'finish'     => 'false',
+					'disable_skip'     => 'false',
 					'playlist'   => '',
 					'height'     => '',
 					'track'      => '',
@@ -4098,6 +4169,7 @@ if (!class_exists("s3bubble_audio")) {
 					'autoplay'   => 'false',
 					'start'      => 'false',
 					'finish'     => 'false',
+					'disable_skip'     => 'false',
 					'playlist'   => '',
 					'height'     => '',
 					'track'      => '',
@@ -4106,12 +4178,13 @@ if (!class_exists("s3bubble_audio")) {
 					'cloudfront' => ''
 				), $atts, 's3videoSingle' ) );
 
-				$aspect    = ((empty($aspect)) ? '16:9' : $aspect);
-				$link_text = ((empty($text)) ? 'S3Bubble Video' : $text);
-				$download  = ((empty($download)) ? 'false' : $download);
-				$autoplay  = ((empty($autoplay)) ? 'false' : $autoplay);
-				$start     = ((empty($start)) ? 'false' : $start);
-				$finish    = ((empty($finish)) ? 'false' : $finish);
+				$aspect       = ((empty($aspect)) ? '16:9' : $aspect);
+				$disable_skip = ((empty($disable_skip)) ? 'false' : $disable_skip);
+				$link_text    = ((empty($text)) ? 'S3Bubble Video' : $text);
+				$download     = ((empty($download)) ? 'false' : $download);
+				$autoplay     = ((empty($autoplay)) ? 'false' : $autoplay);
+				$start        = ((empty($start)) ? 'false' : $start);
+				$finish       = ((empty($finish)) ? 'false' : $finish);
 				
 				// Check download
 				if($loggedin == 'true'){
@@ -4156,6 +4229,7 @@ if (!class_exists("s3bubble_audio")) {
 											AutoPlay:	' . $autoplay . ',
 											Download:	' . $download . ',
 											Aspect:	    "' . $aspect . '",
+											DisableSkip:"' . $disable_skip . '",
 											Twitter:    "' . $twitter . '",
 											TwitterText:    "' . $twitter_text . '",
 											TwitterHandler:	"' . $twitter_handler . '",
