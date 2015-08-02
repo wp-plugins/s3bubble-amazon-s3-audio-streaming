@@ -2681,7 +2681,7 @@ if (!class_exists("s3bubble_audio")) {
 									enableAutosize: true,
 									plugins: ["flash"],
 									features: ["playpause","volume","fullscreen"],
-									pluginPath: _wpmejsSettings.pluginPath,
+									pluginPath: "' . plugins_url('assets/mediaelementjs/build/',__FILE__ ) . '",
 									flashName: "flashmediaelement.swf",
 					    			success: function(mediaElement, node, player) {
 					    				$(".video-wrap-' . $player_id . ' .mejs-fullscreen-button").css("float","right");
