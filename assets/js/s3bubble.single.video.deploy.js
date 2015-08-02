@@ -110,9 +110,9 @@
                             $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-right-controls").prepend("<a href=\"https://s3bubble.com/?brand=plugin\" class=\"s3bubble-media-main-logo\"><i id=\"icon-S3\" class=\"icon-S3\"></i></a>");
                         }
                         if (options.Download) {
-                            if (options.Twitter) {
-                                $("#s3bubble-media-main-container-" + options.Pid).prepend("<a href=\"#\" class=\"s3bubble-cloud-download\" title=\"Free Download\"><i class=\"s3icon s3icon-cloud-download\"></i></a>");
-                                $(".s3bubble-cloud-download").tweetAction({
+                            if (options.Twitter === 'true') {
+                                $("#s3bubble-media-main-container-" + options.Pid).prepend("<a href=\"#\" class=\"s3bubble-cloud-download s3bubble-cloud-download-btn\"><i class=\"s3icon s3icon-cloud-download\"></i></a>");
+                                $(".s3bubble-cloud-download-btn").tweetAction({
                                     text: options.TwitterText,
                                     url: window.href,
                                     via: options.TwitterHandler,
@@ -121,7 +121,8 @@
                                     window.open(response.results[0].download);
                                 });
                             } else {
-                                $("#s3bubble-media-main-container-" + options.Pid + "").prepend("<a href=\"" + response.results[0].download + "\" class=\"s3bubble-cloud-download\" title=\"Free Download\"><i class=\"s3icon s3icon-cloud-download\"></i></a>");
+                                var dwn = response.results[0].download;
+                                $("#s3bubble-media-main-container-" + options.Pid + "").prepend("<a href='" + dwn + "'  onclick='var win = window.open(\""+dwn+"\");win.focus();return false;' target='_blank' class='s3bubble-cloud-download'><i class='s3icon s3icon-cloud-download'></i></a>");
                             }
                         }
                         $("video").bind("contextmenu", function(e) {

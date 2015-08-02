@@ -48,7 +48,7 @@ if (!class_exists("s3bubble_audio")) {
 		public  $responsive      = 'responsive';
 		public  $theme           = 's3bubble_clean';
 		public  $stream          = 'm4v';
-		public  $version         =  43;
+		public  $version         =  44;
 		public  $s3bubble_video_all_bar_colours = '#adadad';
 		public  $s3bubble_video_all_bar_seeks   = '#53bbb4';
 		public  $s3bubble_video_all_controls_bg = '#384049';
@@ -1346,6 +1346,7 @@ if (!class_exists("s3bubble_audio")) {
 				    'Bucket' => $_POST['Bucket'],
 				    'Folder' => $_POST['Folder'],
 				    'Cloudfront' => $_POST['Cloudfront'],
+				    'IsMobile' => $_POST['IsMobile'],
 				    'Server' => $_POST['Server']
 				),
 				'cookies' => array()
@@ -4095,6 +4096,7 @@ if (!class_exists("s3bubble_audio")) {
 			), $atts, 's3videoSingle' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$twitter   = ((empty($twitter)) ? 'false' : $twitter);
 			$disable_skip = ((empty($disable_skip)) ? 'false' : $disable_skip);
 			$download = ((empty($download)) ? 'false' : $download);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
@@ -4208,6 +4210,7 @@ if (!class_exists("s3bubble_audio")) {
 				), $atts, 's3videoSingle' ) );
 
 				$aspect       = ((empty($aspect)) ? '16:9' : $aspect);
+				$twitter   = ((empty($twitter)) ? 'false' : $twitter);
 				$disable_skip = ((empty($disable_skip)) ? 'false' : $disable_skip);
 				$link_text    = ((empty($text)) ? 'S3Bubble Video' : $text);
 				$download     = ((empty($download)) ? 'false' : $download);
