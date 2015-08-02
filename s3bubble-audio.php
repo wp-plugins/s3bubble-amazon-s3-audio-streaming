@@ -1344,7 +1344,9 @@ if (!class_exists("s3bubble_audio")) {
 				    'SecretKey' => $s3bubble_secret_key,
 				    'Timezone' => 'America/New_York',
 				    'Bucket' => $_POST['Bucket'],
-				    'Folder' => $_POST['Folder']
+				    'Folder' => $_POST['Folder'],
+				    'Cloudfront' => $_POST['Cloudfront'],
+				    'Server' => $_POST['Server']
 				),
 				'cookies' => array()
 			    )
@@ -1656,6 +1658,26 @@ if (!class_exists("s3bubble_audio")) {
 							html += '</select>';
 							$('#s3bubble-buckets-shortcode').html(html);
 						}
+						// Get Cloudfront ids if they are present
+						var data = {
+							AccessKey: '<?php echo $s3bubble_access_key; ?>'
+						};
+						$.post("<?php echo $this->endpoint; ?>main_plugin/list_cloudfront_distributions/", data, function(response) {
+							console.log(response);
+							var html = '<select class="form-control input-lg" tabindex="1" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">';	
+							if(response.error){
+								html += '<option value="">-- No Cloudfront Distributions --</option>';
+							}else{
+								html += '<option value="">-- Cloudfront ID --</option>';
+							    $.each(response.data.Items, function (i, item) {
+							    	var Cloudfront = item;
+							    	console.log(Cloudfront);
+							    	html += '<option value="' + Cloudfront.Id + '">' + Cloudfront.Id + ' - ' + Cloudfront.S3Origin.DomainName + ' - Enabled: ' + Cloudfront.Enabled + '</option>';
+								});
+							}
+							html += '</select>';
+							$('#s3bubble-cloudfrontid-container').html(html);
+					   	},'json');
 						$( "#s3bucket" ).change(function() {
 						   $('#s3bubble-folders-shortcode').html('<img src="<?php echo plugins_url('/assets/js/ajax-loader.gif',__FILE__); ?>"/> loading folders');
 						   var bucket = $(this).val();
@@ -1688,9 +1710,10 @@ if (!class_exists("s3bubble_audio")) {
 						$(".s3bubble-lightbox-wrap").height($("#TB_window").height());
 					},500);
 			        $('#s3bubble-mce-submit').click(function(){
-			        	var bucket     = $('#s3bucket').val();
-			        	var folder     = $('#s3folder').val();
-			        	var height     = $('#s3height').val();
+			        	var bucket       = $('#s3bucket').val();
+			        	var folder       = $('#s3folder').val();
+			        	var height       = $('#s3height').val();
+			        	var cloudfrontid = $('#s3bubble-cloudfrontid').val();
 			        	if($("#s3autoplay").is(':checked')){
 						    var autoplay = true;
 						}else{
@@ -1714,7 +1737,7 @@ if (!class_exists("s3bubble_audio")) {
 						if($('#s3aspect').val() != ''){
 						    aspect = $('#s3aspect').val();
 						}
-	        	        var shortcode = '[s3bubbleVideo bucket="' + bucket + '" folder="' + folder + '" aspect="' + aspect + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '"/]';
+	        	        var shortcode = '[s3bubbleVideo bucket="' + bucket + '" folder="' + folder + '" aspect="' + aspect + '"  height="' + height + '"  autoplay="' + autoplay + '" playlist="' + playlist + '" ' + order + ' download="' + download + '" cloudfront="' + cloudfrontid + '"/]';
 	                    tinyMCE.activeEditor.execCommand('mceInsertContent', 0, shortcode);
 	                    tb_remove();
 			        });
@@ -1741,6 +1764,12 @@ if (!class_exists("s3bubble_audio")) {
 				    	<div class="s3bubble-pull-right s3bubble-width-right">
 				    		<label for="fname">Set A Playlist Height:</label>
 				    		<input type="text" class="s3bubble-form-input" name="height" id="s3height">
+				    	</div>
+					</span>
+					<span>
+				    	<div class="s3bubble-pull-left s3bubble-width-left">
+				    		<label for="fname">Set Cloudfront Distribution Id:</label>
+				    		<span id="s3bubble-cloudfrontid-container">Select Cloudfront...</span>
 				    	</div>
 					</span>
 					<blockquote class="bs-callout-s3bubble"><strong>Extra options</strong> please just select any extra options from the list below and S3Bubble will automatically add it to the shortcode.</blockquote>

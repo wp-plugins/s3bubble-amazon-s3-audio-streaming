@@ -90,7 +90,10 @@
 					security : options.Security,
 					Timezone :"America/New_York",
 				    Bucket : options.Bucket,
-				    Folder : options.Folder
+				    Folder : options.Folder,
+				    Cloudfront: options.Cloudfront,
+                    IsMobile : IsMobile,
+                    Server: s3bubble_all_object.serveraddress
 				}
 				$.post(options.Ajax, sendData, function(response) {
 					if(response.error){
@@ -277,8 +280,8 @@
 			    }
 			  }
 			},
-			swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/latest.jplayer.swf",
-            supplied: "m4v",
+			swfPath: "https://s3.amazonaws.com/s3bubble.assets/flash/s3bubble.rtmp.swf",
+            supplied: ((IsMobile) ? "m4v" : ((options.Cloudfront) ? "rtmpv" : "m4v")),
             wmode: "window",
 			useStateClassSkin: true,
 			autoBlur: false,
