@@ -312,7 +312,9 @@
                 }
             },
             swfPath: options.Flash,
+            solution: "flash,html",
             supplied: ((IsMobile) ? "m4v" : options.Supplied),
+            preload: "metadata",
             keyEnabled: true,
             remainingDuration: true,
             size: {
