@@ -97,7 +97,6 @@
                         console.log(response.message);
                     } else {
                         videoSingleS3Bubble.setPlaylist(response.results);
-
                         $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-progress").css("margin", "12px 240px 0 40px");
                         if (IsMobile) {
                             $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-progress").css("margin", "12px 60px 0 40px");
@@ -141,9 +140,6 @@
                             $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
                             $(".s3bubble-media-main-gui").css("visibility", "visible");
                         }, 2000);
-                        if(options.Start){
-		            		$("#jquery_jplayer_" + options.Pid).jPlayer("playHead", options.Start);
-		            	}
                     }
                 }, "json");
             },
@@ -153,7 +149,7 @@
                 if (PlaylistKey.advert && IsMobile === false) {
 
                 }else{
-                	if(options.Finish){
+                	if(options.Finish != 'false'){
                 		var perc = event.jPlayer.status.currentPercentAbsolute;
                 		if(Math.round(perc) > options.Finish){
                 			$("#jquery_jplayer_" + options.Pid).jPlayer("pause");
@@ -312,11 +308,12 @@
                 }
             },
             swfPath: options.Flash,
-            solution: "flash,html",
             supplied: ((IsMobile) ? "m4v" : options.Supplied),
-            preload: "metadata",
-            keyEnabled: true,
             remainingDuration: true,
+            useStateClassSkin: true,
+            autoBlur: false,
+            smoothPlayBar: true,
+            keyEnabled: true,
             size: {
                 width: "100%",
                 height: aspect
@@ -327,11 +324,8 @@
                 hold: 3000
             }
         });
-
         return this.click(function(e) {
             e.preventDefault();
         });
-
     };
-
 })(jQuery);
