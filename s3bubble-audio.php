@@ -423,6 +423,20 @@ if (!class_exists("s3bubble_audio")) {
 						</div> 
 					</div>
 					<div class="postbox">
+						<h3 class="hndle">S3Bubble Support</h3>
+						<div class="inside">
+							<ul class="s3bubble-adverts">
+								<li>
+									<img src="<?php echo plugins_url('/assets/images/support.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
+									<h3>
+										Are you stuck and need help please read through our S3Bubble documentation.
+									</h3>
+									<a class="button button-s3bubble" href="https://s3bubble.com/documentation/" target="_blank">GO TO S3BUBBLE DOCUMENTATION</a>
+								</li>
+							</ul>        
+						</div> 
+					</div>
+					<div class="postbox">
 						<h3 class="hndle">S3Bubble Apps - Monitor Analytics</h3>
 						<div class="inside">
 							<ul class="s3bubble-adverts">
@@ -445,26 +459,11 @@ if (!class_exists("s3bubble_audio")) {
 							</ul>        
 						</div> 
 					</div>
-					<div class="postbox">
-						<h3 class="hndle">S3Bubble Support</h3>
-						<div class="inside">
-							<ul class="s3bubble-adverts">
-								<li>
-									<img src="<?php echo plugins_url('/assets/images/support.png',__FILE__); ?>" alt="S3Bubble iPhone" /> 
-									<h3>
-										Are you stuck upgraded and not happy?
-									</h3>
-									<p>If you are stuck at any point or preferred the old version please just click the download below and delete this version and re upload the plugin.</p>
-									<a class="button button-s3bubble" href="https://s3.amazonaws.com/s3bubble.assets/main.plugin/s3bubble-amazon-s3-audio-streaming.zip" target="_blank">DOWNLOAD OLD VERISON</a>
-								</li>
-							</ul>        
-						</div> 
-					</div>
 				</div>
 				<div id="post-body">
 					<div id="post-body-content" style="margin-right: 41%;">
 						<div class="postbox">
-							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/" target="_blank">Watch Video</a></h3>
+							<h3 class="hndle">Fill in details below if stuck please <a class="button button-s3bubble" style="float: right;margin: -5px -10px;" href="https://s3bubble.com/documentation/" target="_blank">Documentation</a></h3>
 							<div class="inside">
 								<form action="" method="post" class="s3bubble-video-popup-form" autocomplete="off">
 								    <table class="form-table">

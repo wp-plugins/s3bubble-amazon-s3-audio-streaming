@@ -40,11 +40,11 @@ pre.s3bubble-debug {
 	font-style: italic
 }
 .button-s3bubble {
-	background: #1abc9c !important;
-	border: #1abc9c !important;
-	color: #fff !important;
-	padding: 3px 10px !important;
-	border-radius: 5px !important
+	background: #1abc9c!important;
+    border: #1abc9c!important;
+    color: #fff!important;
+    padding: 1px 15px!important;
+    border-radius: 10px!important;
 }
 .s3bubble-video-form-alerts, .s3bubble-video-main-form-alerts {
 	width: 100%;
