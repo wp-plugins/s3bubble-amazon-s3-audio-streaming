@@ -754,7 +754,7 @@ if (!class_exists("s3bubble_audio")) {
 								}
 								html += '<tr>' +
 											'<td><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
-							                '<td class="s3bubble-key-ellipse">' + baseName(value.key) + '</td>' +
+							                '<td><div class="s3bubble-key-ellipse">' + baseName(value.key) + '</div></td>' +
 							                '<td><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
 							                '<td>' + value.user_city + '</td>' +
 							                '<td>' + value.user_ip + '</td>' +
@@ -766,6 +766,14 @@ if (!class_exists("s3bubble_audio")) {
 							});
 							$("#s3AnalyticsTable").append(html);
 							$(".s3bubble-analytics-loading").html("<small>" + response.message + "</small>");
+							$("#s3AnalyticsTable").tablesorter({
+								headers : {
+									1 : {
+										sorter : "remote"
+									}
+								},
+								sortList: [[1,1]] 
+							});
 						}
 					},'json');
 				});
@@ -904,7 +912,6 @@ if (!class_exists("s3bubble_audio")) {
 			wp_register_style( 's3bubble.video.all.admin', plugins_url('assets/css/s3bubble.video.all.admin.min.css', __FILE__), array(), $this->version );
 			wp_register_style( 's3bubble.video.all.plugin', plugins_url('assets/css/s3bubble.video.all.plugin.min.css', __FILE__), array(), $this->version );
 			
-			
 			wp_enqueue_style('s3bubble.video.all.admin');
 			wp_enqueue_style('s3bubble.video.all.plugin');
 			
@@ -913,7 +920,10 @@ if (!class_exists("s3bubble_audio")) {
 			wp_enqueue_style( 'wp-color-picker' );
 			// Javascript
 			wp_enqueue_script( 's3bubble.video.all.colour', plugins_url( 'assets/js/s3bubble.video.all.colour.min.js', __FILE__ ), array( 'wp-color-picker' ), false, true ); 
-			
+			// Include the table script
+			wp_register_script( 's3bubble-backup-stupidtable-js', plugins_url('assets/js/stupidtable.min.js', __FILE__) );
+			wp_enqueue_script('s3bubble-backup-stupidtable-js');
+
 		}
 		
 		/*
