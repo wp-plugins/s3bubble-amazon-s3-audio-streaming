@@ -1663,17 +1663,20 @@ if (!class_exists("s3bubble_audio")) {
 							AccessKey: '<?php echo $s3bubble_access_key; ?>'
 						};
 						$.post("<?php echo $this->endpoint; ?>main_plugin/list_cloudfront_distributions/", data, function(response) {
-							console.log(response);
 							var html = '<select class="form-control input-lg" tabindex="1" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">';	
 							if(response.error){
 								html += '<option value="">-- No Cloudfront Distributions --</option>';
 							}else{
-								html += '<option value="">-- Cloudfront ID --</option>';
-							    $.each(response.data.Items, function (i, item) {
-							    	var Cloudfront = item;
-							    	console.log(Cloudfront);
-							    	html += '<option value="' + Cloudfront.Id + '">' + Cloudfront.Id + ' - ' + Cloudfront.S3Origin.DomainName + ' - Enabled: ' + Cloudfront.Enabled + '</option>';
-								});
+								if(response.data.Items){
+									html += '<option value="">-- Cloudfront ID --</option>';
+								    $.each(response.data.Items, function (i, item) {
+								    	var Cloudfront = item;
+								    	console.log(Cloudfront);
+								    	html += '<option value="' + Cloudfront.Id + '">' + Cloudfront.Id + ' - ' + Cloudfront.S3Origin.DomainName + ' - Enabled: ' + Cloudfront.Enabled + '</option>';
+									});
+								}else{
+									html += '<option value="">-- No Cloudfront Distributions --</option>';
+								}
 							}
 							html += '</select>';
 							$('#s3bubble-cloudfrontid-container').html(html);
@@ -1835,17 +1838,20 @@ if (!class_exists("s3bubble_audio")) {
 							AccessKey: '<?php echo $s3bubble_access_key; ?>'
 						};
 						$.post("<?php echo $this->endpoint; ?>main_plugin/list_cloudfront_distributions/", data, function(response) {
-							console.log(response);
 							var html = '<select class="form-control input-lg" tabindex="1" name="s3bubble-cloudfrontid" id="s3bubble-cloudfrontid">';	
 							if(response.error){
 								html += '<option value="">-- No Cloudfront Distributions --</option>';
 							}else{
 								html += '<option value="">-- Cloudfront ID --</option>';
-							    $.each(response.data.Items, function (i, item) {
-							    	var Cloudfront = item;
-							    	console.log(Cloudfront);
-							    	html += '<option value="' + Cloudfront.Id + '">' + Cloudfront.Id + ' - ' + Cloudfront.S3Origin.DomainName + ' - Enabled: ' + Cloudfront.Enabled + '</option>';
-								});
+								if(response.data.Items){
+								    $.each(response.data.Items, function (i, item) {
+								    	var Cloudfront = item;
+								    	console.log(Cloudfront);
+								    	html += '<option value="' + Cloudfront.Id + '">' + Cloudfront.Id + ' - ' + Cloudfront.S3Origin.DomainName + ' - Enabled: ' + Cloudfront.Enabled + '</option>';
+									});
+								}else{
+									html += '<option value="">-- No Cloudfront Distributions --</option>';
+								}
 							}
 							html += '</select>';
 							$('#s3bubble-cloudfrontid-container').html(html);
