@@ -68,6 +68,10 @@
 		this.html(player);
 
 		var Current = -1;
+		var OldKey;
+		var OldEndTime;
+		var OldCurrentTime;
+		var MissFirst = false;
 		var aspects  = options.Aspect;
 		var aspects = aspects.split(":");
 		var aspect = $("#s3bubble-media-main-container-" + options.Pid).width()/aspects[0]*aspects[1];
@@ -147,14 +151,42 @@
 							$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
 							$(".s3bubble-media-main-gui").css("visibility", "visible");
 						},2000);
+						var CurrentState = videoPlaylistS3Bubble.current;
+						var PlaylistKey  = videoPlaylistS3Bubble.playlist[CurrentState];
+						window.s3bubbleAnalytics = {
+	                        app_id: s3bubble_all_object.s3appid,
+	                        server: s3bubble_all_object.serveraddress,
+	                        bucket: options.Bucket,
+	                        key: PlaylistKey.key,
+	                        type: "video",
+	                        advert: false,
+	                        time_watched: 0,
+	                        overall_watched: 0
+	                    };
 					}
 				},"json");
 
 			},
-			timeupdate : function(t) {
-				if (t.jPlayer.status.currentTime > 1) {
+			timeupdate : function(event) {
+				var CurrentTime = event.jPlayer.status.currentTime;
+                var EndTime = event.jPlayer.status.duration; 
+				if (CurrentTime > 1) {
 					$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
+					OldEndTime = EndTime;
+					OldCurrentTime = CurrentTime;
+                    var CurrentState = videoPlaylistS3Bubble.current;
+					var PlaylistKey  = videoPlaylistS3Bubble.playlist[CurrentState];
+					OldKey = PlaylistKey.key;
 				}
+			},
+			play: function() {
+				if(MissFirst){
+					window.s3bubbleAnalytics.time_watched = OldCurrentTime;
+	                window.s3bubbleAnalytics.overall_watched = OldEndTime;
+	                window.s3bubbleAnalytics.key = OldKey;
+					addListener(window.s3bubbleAnalytics);
+				}
+				MissFirst = true;
 			},
 			resize: function (event) {
 
@@ -200,32 +232,6 @@
 				// Reset search
 				$("#s3bubble-video-playlist-tsearch-" + options.Pid + "").removeAttr("value");
 				$("#s3bubble-media-main-container-" + options.Pid + " ul.s3bubble-video-playlist-ul-" + options.Pid + " > li").show(); 
-			},
-			play: function() {
-				$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-search").fadeOut();
-				$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut(); 
-				var CurrentState = videoPlaylistS3Bubble.current;
-				var PlaylistKey  = videoPlaylistS3Bubble.playlist[CurrentState];
-				if(IsMobile === false){
-					if(PlaylistKey.advert){
-						$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-skip").animate({
-						    left: "0"
-						}, 50, function() {
-						    // Animation complete.
-						});
-					}
-				}
-				if(Current !== CurrentState && PlaylistKey.advert !== true){
-					addListener({
-						app_id: s3bubble_all_object.s3appid,
-						server: s3bubble_all_object.serveraddress,
-						bucket: options.Bucket,
-						key: PlaylistKey.key,
-						type: "video",
-						advert: false
-					});
-					Current = CurrentState;
-				}
 			},
 			suspend: function() { 
 			    

@@ -27,6 +27,9 @@ S3Bubble offers secure, Media Streaming from Amazon S3 to WordPress.
 **Live Streaming Video On Demand.**
 * Video Live HLS or RTMP Streaming: (HLS RTMP VOD) - [View Example](https://s3bubble.com/s3bubble-live-streaming-example/ "View Example")
 
+**S3Bubble Official Documentation.**
+(Documentation) - [View Documentation](https://s3bubble.com/documentation/ "View Documentation")
+
 Please contact us if you require a full Live Streaming setup powered by Amazon Web Services [support@s3bubble.com](mailto:support@s3bubble.com "support@s3bubble.com")
 
 Now with WYSIWYG buttons [View more information on this](https://s3bubble.com/video_tutorials/s3bubble-lets-get-you-up-and-running-tutorial/ "View more information on this")

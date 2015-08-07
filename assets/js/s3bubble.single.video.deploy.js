@@ -65,6 +65,8 @@
 		this.html(player);
 
         var Current = -1;
+        var CurrentTime;
+        var EndTime; 
         var aspects = options.Aspect;
         var aspects = aspects.split(":");
         var aspect = $("#s3bubble-media-main-container-" + options.Pid).width() / aspects[0] * aspects[1];
@@ -144,6 +146,8 @@
                 }, "json");
             },
             timeupdate: function(event) {
+                var CurrentTime = event.jPlayer.status.currentTime;
+                var EndTime = event.jPlayer.status.duration;
                 var CurrentState = videoSingleS3Bubble.current;
                 var PlaylistKey = videoSingleS3Bubble.playlist[CurrentState];
                 if (PlaylistKey.advert && IsMobile === false) {
@@ -156,8 +160,13 @@
                             $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-preview-over-container").fadeIn();
                 		}
                 	}
+                    if (CurrentTime > 1) {
+                        // Update the current time
+                        window.s3bubbleAnalytics.time_watched = CurrentTime;
+                        window.s3bubbleAnalytics.overall_watched = EndTime;
+                    }
                 }
-                if (event.jPlayer.status.currentTime > 1) {
+                if (CurrentTime > 1) {
                     $("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
                 }
             },
@@ -230,14 +239,16 @@
                     });
                 }
                 if (Current !== CurrentState && PlaylistKey.advert !== true) {
-                    addListener({
+                    window.s3bubbleAnalytics = {
                         app_id: s3bubble_all_object.s3appid,
                         server: s3bubble_all_object.serveraddress,
                         bucket: options.Bucket,
                         key: PlaylistKey.key,
                         type: "video",
-                        advert: false
-                    });
+                        advert: false,
+                        time_watched: 0,
+                        overall_watched: 0
+                    };
                     Current = CurrentState;
                 }
 

@@ -105,9 +105,6 @@
 								height : "35px"
 							})
 						}
-						if(options.Start){
-		            		$("#jquery_jplayer_" + options.Pid).jPlayer("playHead", options.Start);
-		            	}
 					}
 				},"json");
             },
@@ -133,25 +130,34 @@
 				var CurrentState = audioSingleS3Bubble.current;
 				var PlaylistKey  = audioSingleS3Bubble.playlist[CurrentState];
 				if(Current !== CurrentState){
-					addListener({
-						app_id: s3bubble_all_object.s3appid,
-						server: s3bubble_all_object.serveraddress,
-						bucket: options.Bucket,
-						key: PlaylistKey.key,
-						type: "audio",
-						advert: false
-					});
+					window.s3bubbleAnalytics = {
+                        app_id: s3bubble_all_object.s3appid,
+                        server: s3bubble_all_object.serveraddress,
+                        bucket: options.Bucket,
+                        key: PlaylistKey.key,
+                        type: "audio",
+                        advert: false,
+                        time_watched: 0,
+                        overall_watched: 0
+                    };
 					Current = CurrentState;
 				}
 			},
-			timeupdate: function(event) { 
-				if(options.Finish){
+			timeupdate: function(event) {
+				var CurrentTime = event.jPlayer.status.currentTime;
+                var EndTime = event.jPlayer.status.duration; 
+				if(options.Finish != 'false'){
             		var perc = event.jPlayer.status.currentPercentAbsolute;
             		if(Math.round(perc) > options.Finish){
             			$("#jquery_jplayer_" + options.Pid).jPlayer("stop");
             			$("#jquery_jplayer_" + options.Pid).jPlayer("playHead", options.Start);
             		}
             	}
+            	if (CurrentTime > 1) {
+                    // Update the current time
+                    window.s3bubbleAnalytics.time_watched = CurrentTime;
+                    window.s3bubbleAnalytics.overall_watched = EndTime;
+                }
 			},
 			suspend: function() { 
 			    

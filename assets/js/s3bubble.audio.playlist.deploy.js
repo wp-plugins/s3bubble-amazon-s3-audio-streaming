@@ -59,6 +59,10 @@
 		this.html(player);
 
 		var Current = -1;
+		var OldKey;
+		var OldEndTime;
+		var OldCurrentTime;
+		var MissFirst = false;
 		var IsMobile = false;				
 		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
 			IsMobile = true;
@@ -134,13 +138,44 @@
 							$allListElements.hide();
    							$matchingListElements.show();
 						});
+						var CurrentState = audioPlaylistS3Bubble.current;
+						var PlaylistKey  = audioPlaylistS3Bubble.playlist[CurrentState];
+						window.s3bubbleAnalytics = {
+	                        app_id: s3bubble_all_object.s3appid,
+	                        server: s3bubble_all_object.serveraddress,
+	                        bucket: options.Bucket,
+	                        key: PlaylistKey.key,
+	                        type: "audio",
+	                        advert: false,
+	                        time_watched: 0,
+	                        overall_watched: 0
+	                    };
 					}
 				},"json");
 			},
-			timeupdate : function(t) {
-				if (t.jPlayer.status.currentTime > 1) {
+			timeupdate : function(event) {
+				var CurrentTime = event.jPlayer.status.currentTime;
+                var EndTime = event.jPlayer.status.duration; 
+				if (CurrentTime > 1) {
 					$("#s3bubble-media-main-container-" + options.Pid + " .s3bubble-media-main-video-loading").fadeOut();
+					OldEndTime = EndTime;
+					OldCurrentTime = CurrentTime;
+                    var CurrentState = audioPlaylistS3Bubble.current;
+					var PlaylistKey  = audioPlaylistS3Bubble.playlist[CurrentState];
+					OldKey = PlaylistKey.key;
 				}
+			},
+			play: function() { 
+				if(MissFirst){
+					window.s3bubbleAnalytics.time_watched = OldCurrentTime;
+	                window.s3bubbleAnalytics.overall_watched = OldEndTime;
+	                window.s3bubbleAnalytics.key = OldKey;
+					addListener(window.s3bubbleAnalytics);
+				}
+				MissFirst = true;
+			},
+			loadedmetadata: function() {
+
 			},
 			resize: function (event) {
 				
@@ -153,9 +188,6 @@
 		    	console.log(event.jPlayer.error);
 				console.log(event.jPlayer.error.type);
 		    },
-			loadedmetadata: function() {
-			
-			},
 			waiting: function() {
 				
 			},
@@ -168,29 +200,14 @@
 			playing: function() {
 
 			},
-			play: function() { 
-				var CurrentState = audioPlaylistS3Bubble.current;
-				var PlaylistKey  = audioPlaylistS3Bubble.playlist[CurrentState];
-				if(Current !== CurrentState){
-					addListener({
-						app_id: s3bubble_all_object.s3appid,
-						server: s3bubble_all_object.serveraddress,
-						bucket: options.Bucket,
-						key: PlaylistKey.key,
-						type: "audio",
-						advert: false
-					});
-					Current = CurrentState;
-				}
-			},
 			suspend: function() { 
 			    
 			},
 			stalled: function() { 
 			    
 			},
-			loadstart: function() { 
-			    
+			loadstart: function() {
+
 			},
 			keyBindings: {
 		        play: {

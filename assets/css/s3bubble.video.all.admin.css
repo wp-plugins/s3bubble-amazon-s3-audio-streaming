@@ -126,3 +126,25 @@ table.tablesorter thead tr .headerSortDown {
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
   background-color: #8dbdd8;
 }
+.s3bubble-percentage {
+  width: 140px;
+  background-color: #999;
+  color: #fff;
+  position: relative;
+  height: 20px;
+  padding: 0;
+  margin: -10px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.s3bubble-seekbar {
+  position: absolute;
+  left: 0;
+  height: 20px;
+  top: 0;
+  background-color: #61B3E4;
+}
+.s3bubble-total {
+  z-index: 1;
+  position: relative;
+}

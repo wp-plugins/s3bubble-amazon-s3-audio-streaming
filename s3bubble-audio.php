@@ -699,6 +699,8 @@ if (!class_exists("s3bubble_audio")) {
 							<th>Ip Address</th>
 							<th>Browser</th>
 							<th>Type</th>
+							<th>Watched</th>
+							<th>Stats</th>
 							<th>Created</th>
 							<th>Map</th>
 						</tr>
@@ -712,6 +714,8 @@ if (!class_exists("s3bubble_audio")) {
 							<th>Ip Address</th>
 							<th>Browser</th>
 							<th>Type</th>
+							<th>Watched</th>
+							<th>Stats</th>
 							<th>Created</th>
 							<th>Map</th>
 						</tr>
@@ -732,10 +736,25 @@ if (!class_exists("s3bubble_audio")) {
 					  return time;
 				}
 				function baseName(str){
-				   var base = new String(str).substring(str.lastIndexOf('/') + 1); 
+				    var base = new String(str).substring(str.lastIndexOf('/') + 1); 
 				    if(base.lastIndexOf(".") != -1)       
 				        base = base.substring(0, base.lastIndexOf("."));
-				   return decodeURIComponent(base);
+				    return decodeURIComponent(base.replace(/\+/gi, " "));
+				}
+				function isNumeric(n) {
+				  	return !isNaN(parseFloat(n)) && isFinite(n);
+				}
+				String.prototype.toHHMMSS = function () {
+				    var sec_num = parseInt(this, 10); // don't forget the second param
+				    var hours   = Math.floor(sec_num / 3600);
+				    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+				    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+				    if (hours   < 10) {hours   = "0"+hours;}
+				    if (minutes < 10) {minutes = "0"+minutes;}
+				    if (seconds < 10) {seconds = "0"+seconds;}
+				    var time    = hours+':'+minutes+':'+seconds;
+				    return time;
 				}
 				jQuery(document).ready(function($) {
 					var sendData = {
@@ -752,27 +771,46 @@ if (!class_exists("s3bubble_audio")) {
 								if(value.user_country){
 									country = value.user_country.toLowerCase();
 								}
+								var overall = value.overall_watched;
+								var watched = value.time_watched;
+								var total = Math.round(watched/overall*100);
+								total = (isNumeric(total)) ? total : '';
 								html += '<tr>' +
-											'<td><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
-							                '<td><div class="s3bubble-key-ellipse">' + baseName(value.key) + '</div></td>' +
-							                '<td><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
-							                '<td>' + value.user_city + '</td>' +
-							                '<td>' + value.user_ip + '</td>' +
-							                '<td>' + value.browser + '</td>' +
-							                '<td>' + value.type + '</td>' +
-							                '<td>' + timeNow(value.created) + '</td>' +
-							                '<td><a href="http://maps.google.com/maps?z=12&t=m&q=loc:' + value.user_loc_lat.replace(',', '+') + '" target="_blank">Open</a></td>' +
+											'<td align="center"><a href="' + value.location_href + '" target="_blank">Open</a></td>' +
+							                '<td align="left"><div class="s3bubble-key-ellipse">' + baseName(value.key) + '</div></td>' +
+							                '<td align="center"><img src="https://s3-eu-west-1.amazonaws.com/isdcloud/flags/' + country + '.png"></td>' +
+							                '<td align="center">' + value.user_city + '</td>' +
+							                '<td align="center">' + value.user_ip + '</td>' +
+							                '<td align="center"><div class="s3bubble-key-ellipse">' + value.browser.split(" ")[0] + '</div></td>' +
+							                '<td align="center">' + value.type + '</td>' +
+							                '<td align="center">' + watched.toHHMMSS() + '</td>' +
+							                '<td align="center"><div class="s3bubble-percentage"><span class="s3bubble-seekbar" style="width:' + total + '%;"></span><span class="s3bubble-total">' + total + '%</div></div></td>' +
+							                '<td align="center">' + timeNow(value.created) + '</td>' +
+							                '<td align="center"><a href="http://maps.google.com/maps?z=12&t=m&q=loc:' + value.user_loc_lat.replace(',', '+') + '" target="_blank">Open</a></td>' +
 							            '</tr>';
 							});
 							$("#s3AnalyticsTable").append(html);
 							$(".s3bubble-analytics-loading").html("<small>" + response.message + "</small>");
+							$.tablesorter.addParser({
+							    id: "customDate",
+							    is: function(s) {
+							        return /\d{1,4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}\.\d+/.test(s);
+							    },
+							    format: function(s) {
+							        s = s.replace(/\-/g," ");
+							        s = s.replace(/:/g," ");
+							        s = s.replace(/\./g," ");
+							        s = s.split(" ");
+							        return $.tablesorter.formatFloat(new Date(s[0], s[1]-1, s[2], s[3], s[4], s[5]).getTime()+parseInt(s[6]));
+							    },
+							    type: "numeric"
+							});
 							$("#s3AnalyticsTable").tablesorter({
 								headers : {
-									1 : {
-										sorter : "remote"
+									9 : {
+										sorter : "customDate"
 									}
-								},
-								sortList: [[1,1]] 
+								}
 							});
 						}
 					},'json');
@@ -2634,11 +2672,13 @@ if (!class_exists("s3bubble_audio")) {
 	        extract( shortcode_atts( array(
 				'aspect'     => '16:9',
 				'autoplay'   => 'false',
+				'comments' => 'false',
 				'stream'      => '',
 				'cloudfront' => ''
 			), $atts, 's3bubbleLiveStreamMedia' ) );
 
 			$aspect   = ((empty($aspect)) ? '16:9' : $aspect);
+			$comments = ((empty($comments)) ? 'false' : $comments);
 			$autoplay = ((empty($autoplay)) ? 'false' : $autoplay);
 			
 			$player_id = uniqid();
@@ -2670,6 +2710,18 @@ if (!class_exists("s3bubble_audio")) {
 				$poster = $large_image_url[0];
 			}
 			
+			$commentsOutput = '';
+			if($comments == 'facebook'){
+				$commentsOutput = '<div id="fb-root"></div><script>(function(d, s, id) {
+							  var js, fjs = d.getElementsByTagName(s)[0];
+							  if (d.getElementById(id)) return;
+							  js = d.createElement(s); js.id = id;
+							  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.4&appId=803844463017959";
+							  fjs.parentNode.insertBefore(js, fjs);
+							}(document, "script", "facebook-jssdk"));</script>
+							<div class="fb-comments" data-href="' . get_permalink( get_the_ID() ) . '" data-num-posts="5"></div>';
+			}
+
 			if(empty($stream)){
 				echo "No live steam url has been set";
 			}else{
@@ -2678,6 +2730,7 @@ if (!class_exists("s3bubble_audio")) {
 							<video id="video-' . $player_id . '" style="width:100%;" controls="controls" preload="none">
 								<source type="application/x-mpegURL" src="' . $url . '" />
 							</video>
+							' . $commentsOutput . ' 
 						</div>
 						<script>
 							jQuery(document).ready(function($) {
@@ -2712,9 +2765,7 @@ if (!class_exists("s3bubble_audio")) {
 						</script>';
 
 			}
-
-			
-			
+	
         }
 
        // -------------------------- HLS PLAYERS SETUPS BELOW ------------------------------ //
@@ -3000,6 +3051,10 @@ if (!class_exists("s3bubble_audio")) {
 
             return '<div class="single-video-' . $player_id . '"></div>
             <script type="text/javascript">
+            	window.onbeforeunload = confirmExit;
+			    function confirmExit(){
+			    	addListener(window.s3bubbleAnalytics);
+			    }
 				jQuery(document).ready(function($) {
 					$(".single-video-' . $player_id . '").singleVideo({
 						Ajax:       "' . admin_url('admin-ajax.php') . '",
@@ -3852,7 +3907,6 @@ if (!class_exists("s3bubble_audio")) {
 			return '<div class="audio-playlist-' . $player_id . '"></div>
             <script type="text/javascript">
 				jQuery(document).ready(function($) {
-
 					$(".audio-playlist-' . $player_id . '").audioPlaylist({
 						Ajax:       "' . admin_url('admin-ajax.php') . '",
 						Pid:		"' . $player_id . '",
@@ -3957,6 +4011,9 @@ if (!class_exists("s3bubble_audio")) {
 					},function(){
 						
 					});
+				});
+				jQuery( window ).on("beforeunload",function() {
+					addListener(window.s3bubbleAnalytics);
 				});
 			</script>';
 
@@ -4164,6 +4221,9 @@ if (!class_exists("s3bubble_audio")) {
 						
 					});
 				});
+				jQuery( window ).on("beforeunload",function() {
+					addListener(window.s3bubbleAnalytics);
+				});
 			</script>';
 
 		}
@@ -4290,6 +4350,9 @@ if (!class_exists("s3bubble_audio")) {
 					            }
 					        }
 						});
+					});
+					jQuery( window ).on("beforeunload",function() {
+						addListener(window.s3bubbleAnalytics);
 					});
 				</script>';
 
